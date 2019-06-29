@@ -568,7 +568,7 @@ a:active {
 --------------------------------------------------------------*/
 .site-header {
 	border-bottom: 0.1em solid silver;
-	background-color: #fefefe;
+	background-color: #212121;
 	width: 100%;
 	position: fixed;
 
@@ -740,6 +740,34 @@ a:active {
 .nav-menu .menu-item a {
 	color: #212121;
 }
+
+/*--------------------------------------------------------------
+## Footer
+--------------------------------------------------------------*/
+.site-footer {
+	background-color: #212121;
+	border-top: 0.1em solid silver;
+	padding: 1rem 0;
+	width: 100%;
+}
+
+.footer-nav,
+.site-info {
+	margin: auto;
+	text-align: left;
+	width: 700px;
+}
+
+.site-info {
+    background-color: #ffdb71;
+    border-radius: 0.2em;
+    line-height: 2;
+	text-align: center;
+    width: 700px;
+}
+
+.site-footer form { margin-bottom: 2rem; }
+
 
 /*--------------------------------------------------------------
 # Accessibility
