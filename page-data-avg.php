@@ -68,7 +68,9 @@ foreach ( $query->posts as $post ) {
                 }
             }
 
-            $count_results =  count( $pagespeed ); // Number of articles with results.
+            $count_results = count( $pagespeed ); // Number of articles with results.
+            $post_id       = $post->ID;
+            $post_meta     = get_post_meta( $post_id );
 
             $pubs_avgs .= '<tr>';
             $pubs_avgs .= '<td style="text-align: left;">' . $post->post_title . '</td>';
@@ -88,22 +90,22 @@ foreach ( $query->posts as $post ) {
             $pubs_avgs .= '<td>' . number_format( $requests, 1, '.', ',' ) . '</td>';
             $pubs_avgs .= '<td>' . number_format( $dom, 1, '.', ',' ) . '</td>';
 
-            $circ = ( get_post_meta( $post->ID, 'nn_pub_circ_ep', true) )
-                ? number_format( get_post_meta( $post->ID, 'nn_pub_circ_ep', true), 0, '.', ',' ) : '';
+            $circ = ( isset( $post_meta['nn_circ'] ) && $post_meta['nn_circ'][0] )
+                ? number_format( $post_meta['nn_circ'][0], 0, '.', ',' ) : 0;
+            // $circ = ( get_post_meta( $post->ID, 'nn_pub_circ_ep', true) ) ? number_format( get_post_meta( $post->ID, 'nn_pub_circ_ep', true), 0, '.', ',' ) : '';
 
             // Get site data (inclding Alexa and BuiltWith).
-            $nn_site  = get_post_meta( $post->ID, 'nn_site', true);
+            $nn_site  = get_post_meta( $post_id, 'nn_site', true);
+            // $rank = ( isset( $post_meta['nn_rank'] ) && $post_meta['nn_rank'][0] ) ? number_format( $post_meta['nn_rank'][0], 0, '.', ',' ) : null;
 
             // Get Alexa data.
-            $rank  = ( isset ( $nn_site['alexa']['rank'] ) && $nn_site['alexa']['rank'] )
-                ?  number_format( $nn_site['alexa']['rank'], 0, '.', ',' ) : '';
             $since = ( isset ( $nn_site['alexa']['since'] ) && $nn_site['alexa']['since'] )
                 ? date_parse_from_format( 'd-M-Y', $nn_site['alexa']['since'] ) : false;
             $year  = ( $since ) ? absint( $since['year'] ) : '';
 
-            $pubs_avgs .= '<td>' . $circ . '</td>';
-            $pubs_avgs .= '<td>' . $rank . '</td>';
-            $pubs_avgs .= '<td>' . get_post_meta( $post->ID, 'nn_pub_year', true) . '</td>';
+            $pubs_avgs .= '<td>' . get_post_meta( $post_id,'nn_circ', true ) . '</td>';
+            $pubs_avgs .= '<td>' . get_post_meta( $post_id,'nn_rank', true ) . '</td>';
+            $pubs_avgs .= '<td>' . get_post_meta( $post_id, 'nn_pub_year', true) . '</td>';
             $pubs_avgs .= '<td>' . $year . '</td>';
 
 
@@ -125,7 +127,7 @@ foreach ( $query->posts as $post ) {
             $pubs_avgs .= '<td>' . $scripts . '</td>';
             $pubs_avgs .= '<td>' . $count_results . '</td>';
             $pubs_avgs .= '<td>' . $post->ID . '</td>';
-            $pubs_avgs .= '<td style="text-align: left; padding-left: 1rem;">' . get_post_meta( $post->ID, 'nn_pub_url', true) . '</td>';
+            $pubs_avgs .= '<td style="text-align: left; padding-left: 1rem;">' . get_post_meta( $post_id, 'nn_pub_url', true) . '</td>';
             $pubs_avgs .= '</tr>';
 
         }

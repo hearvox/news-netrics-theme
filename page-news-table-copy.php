@@ -9,13 +9,6 @@
 get_header();
 
 ?>
-<style type="text/css">
-.info-link {
-    float: right;
-    font-weight: 900;
-    text-decoration: none;
-}
-</style>
 
     <div id="primary" class="content-area">
 
@@ -59,20 +52,17 @@ get_header();
 
             // JSON with sanitized data values for rows in Google chart.
             $json .= '[';
-            // Domain (external link) and name (internal link).
-            $json .= '{v:\'' . esc_html( $post->post_title ) .
-                '\',f:\'<a href="' . esc_url( $post_meta['nn_pub_url'][0] ) . '">' . esc_html( $post->post_title ) . '</a>\'},';
-            $json .= '\'' . esc_html( $post_meta['nn_pub_name'][0] ) . ' <a class="info-link" href="' . get_post_permalink( $post_id ) . '">&#9432;</a>\',';
-            // Circulation and rank meta.
+            $json .= '\'<a title="' . esc_html( $post->post_title ) . '" href="'
+                . esc_url( $post_meta['nn_pub_url'][0] ) . '">' . esc_html( $post->post_title ) . '</a>\',';
+            $json .= '\'' . esc_html( $post_meta['nn_pub_name'][0] ) . ' <a href="' . get_post_permalink( $post_id ) . '">&#9432;</a>\',';
+
             $json .= absint( get_post_meta( $post_id, 'nn_circ', true ) )  . ',';
             $json .= absint( get_post_meta( $post_id, 'nn_rank', true ) )  . ',';
-            // Region tax terms (linked): state, county, city and city population (term meta).
             $json .= ( $term_state && isset( $term_state->name ) )
                 ? '\'<a href="' . get_term_link( $term_state->term_id ) . '">' . esc_html( $term_state->name ) . '</a>\',' : ',';
             $json .= ( $term_city && isset( $term_city[0]->name ) )
                 ? '\'<a href="' . get_term_link( $term_city[0]->term_id ) . '">' . esc_html( $term_city[0]->name ) . '</a>\',' : ',';
             $json .= esc_html( $city_pop )  . ',';
-            // Owner and CMS tax terms (linked).
             $json .= ( $term_owner && isset( $term_owner[0]->name ) )
                 ? '\'<a href="' . get_term_link( $term_owner[0]->term_id ) . '">' . esc_html( $term_owner[0]->name ) . '</a>\',' : "'',";
             $json .=( $term_cms && isset( $term_cms[0]->name ) )
@@ -101,22 +91,11 @@ get_header();
                         break;
                 }
 
-                $json .= "{v:$num, f:'" . number_format( $num, 1 ) . '\'},';
+                $json .= $num . ',';
             }
-            $json .= "],\n";
+            $json .= "'" . esc_html( $post_meta['nn_pub_name'][0] ) . "'],\n";
 
         }
-    }
-
-    /**
-     * Format a Google Chart data cell with raw string value and HTML linked format.
-     *
-     *
-     */
-    function netrix_google_chart_link ( $string, $url ) {
-        $cell = "{v:'$string','<a href=\"$url\"'>$string</a>'},";
-
-        return $cell;
     }
 
     wp_reset_postdata();
@@ -145,9 +124,9 @@ function drawMainDashboard() {
         'controlType': 'StringFilter',
         'containerId': 'stringFilter_control_div',
         'options': {
-            'filterColumnIndex': 1,
+            'filterColumnIndex': 15,
             'ui': {
-                'label': 'Filter by name:',
+                'label': 'Search name:',
             }
         }
     });
@@ -164,32 +143,11 @@ function drawMainDashboard() {
             'width': '100%',
             'height': '100%',
         },
+        'view': {
+            'columns': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+        }
     });
 
-var data = google.visualization.arrayToDataTable([
-        [   {label: 'Domain', id: 'domain', type: 'string'},
-            {label: 'Name&mdash; results link: &#9432;', id: 'name', type: 'string'},
-            {label: 'Circulation', id: 'circ', type: 'number'},
-            {label: 'Site Rank', id: 'rank', type: 'number'},
-            {label: 'State', id: 'state', type: 'string'},
-            {label: 'City', id: 'city', type: 'string'},
-            {label: 'Population', id: 'pop', type: 'number'},
-            {label: 'Owner', id: 'owner', type: 'string'},
-            {label: 'CMS', id: 'cms', type: 'string'},
-            {label: 'DOM', id: 'dom', type: 'number'},
-            {label: 'Requests', id: 'requests', type: 'number'},
-            {label: 'Size (MB)', id: 'size', type: 'number'},
-            {label: 'Speed (s)', id: 'speed', type: 'number'},
-            {label: 'TTI (s)', id: 'tti', type: 'number'},
-            {label: 'Score', id: 'score', type: 'number'} ],
-<?php echo $json; ?>
-    ]);
-
-    // Attach controls to charts.
-    dashboard.bind(StringFilter, table);
-    dashboard.draw(data);
-
-/*
     // Data cols and rows.
     var data = new google.visualization.DataTable();
     data.addColumn('string', 'Domain');
@@ -209,7 +167,7 @@ var data = google.visualization.arrayToDataTable([
     data.addColumn('number', 'Score');
     data.addColumn('string', 'name');
     data.addRows([
-<?php // echo $json; ?>
+<?php echo $json; ?>
     ]);
 
     // Format number to one decimal place; apply to specified columns.
@@ -221,16 +179,9 @@ var data = google.visualization.arrayToDataTable([
     numdecFormat.format(data, 13);
     numdecFormat.format(data, 14);
 
-
-    $json .= '\'<a title="' . esc_html( $post->post_title ) . '" href="'
-        . esc_url( $post_meta['nn_pub_url'][0] ) . '">' . esc_html( $post->post_title ) . '</a>\',';
-
-    $json .= "'" . esc_html( $post_meta['nn_pub_name'][0] ) . "'],\n";
-    {label: 'name', id: 'name-val', type: 'string'} ],
-    'view': {'columns': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]}
-
-*/
-
+    // Attach controls to charts.
+    dashboard.bind(StringFilter, table);
+    dashboard.draw(data);
 
 }
 </script>

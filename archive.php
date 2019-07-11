@@ -124,7 +124,9 @@ get_header(); ?>
                  var_dump( $queried_object );
                  ?>
 
-                $pubs_data: <?php // if ( isset( $pubs_data ) ) { print_r( $pubs_data ); }; ?>
+                $pubs_data: <?php if ( isset( $pubs_data ) ) { print_r( $pubs_data ); }; ?>
+
+                $pubs_data_new: <?php print_r( netrics_get_pubs_query_data( $wp_query ) ); ?>
                 </pre>
             </details>
 

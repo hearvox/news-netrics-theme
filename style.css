@@ -48,7 +48,7 @@ Nicolas Gallagher and Jonathan Neal http://necolas.github.com/normalize.css/
 # Normalize
 --------------------------------------------------------------*/
 html {
-	font-family: sans-serif;
+	font-family: Tahoma, Geneva, sans-serif;
 	-webkit-text-size-adjust: 100%;
 	-ms-text-size-adjust:     100%;
 }
@@ -146,7 +146,7 @@ svg:not(:root) {
 }
 
 figure {
-	margin: 1em 40px;
+	margin: 0;
 }
 
 hr {
@@ -292,6 +292,7 @@ h1 {
 }
 
 h2 {
+	font-family: "Palatino Linotype", Georgia, sans-serif;
 	font-size: 1.75rem;
 	font-weight: 500;
 	margin-bottom: 0;
@@ -568,17 +569,21 @@ a:active {
 --------------------------------------------------------------*/
 .site-header {
 	border-bottom: 0.1em solid silver;
-	background-color: #212121;
+	background-color: #fff;
 	width: 100%;
 	position: fixed;
-
+	z-index: 1000;
 }
 
 .site-title {
-    margin-right: 2em;
-    background-color: #ffdb71;
-    padding: 0.25em;
-
+	color: #333333;
+	font-family: Georgia, serif;
+	font-size: 2.75rem;
+	font-weight: 600;
+	letter-spacing: 0.18rem;
+	word-spacing: 0.15rem;
+    padding: 0.1em;
+	text-shadow: 2px 2px 0px #FFFFFF, 5px 4px 0px rgba(0,0,0,0.15);
 }
 
 .site-title a {
@@ -591,12 +596,7 @@ a:active {
     border-radius: 0.2em;
 }
 
-.site-content { padding-top: 10rem; }
-
-.single .site-content,
-.page .site-content {
-	padding-top: 10em;
-}
+.content-area { padding-top: 130px; }
 
 .main-navigation .tabular {
 	margin-bottom: 0;
@@ -733,19 +733,19 @@ a:active {
 
 .nav-menu .menu-item {
 	margin-right: 2em;
-	background-color: #edf5ff;
+	background-color: #232323;
 	padding: 0.4em;
 }
 
 .nav-menu .menu-item a {
-	color: #212121;
+	color: #fff;
 }
 
 /*--------------------------------------------------------------
 ## Footer
 --------------------------------------------------------------*/
 .site-footer {
-	background-color: #212121;
+	background-color: #f7f7f7;
 	border-top: 0.1em solid silver;
 	padding: 1rem 0;
 	width: 100%;
@@ -759,8 +759,6 @@ a:active {
 }
 
 .site-info {
-    background-color: #ffdb71;
-    border-radius: 0.2em;
     line-height: 2;
 	text-align: center;
     width: 700px;
@@ -1077,7 +1075,7 @@ table.tabular {
 .tabular caption {
     background-color: #fbfbfb;
     border: 1px solid #fbfbfb;
-    font-family: "Gill Sans MT", Tahoma, "Microsoft Sans Serif", sans-serif;
+    font-family: "Gill Sans MT", Tahoma, Geneva, sans-serif;
 	font-size: 1.125rem;
 	font-weight: 500;
 	line-height: 1.7rem;
@@ -1088,7 +1086,7 @@ table.tabular {
 
 /* Table headings */
 .tabular th {
-    font-family: Tahoma, "Microsoft Sans Serif", sans-serif;
+    font-family: Tahoma, Geneva, sans-serif;
 	font-size: 1em;
     font-weight: 500;
     padding-left: 0.2rem;
@@ -1174,13 +1172,122 @@ table.tabular {
 }
 
 /* Google Chart Table */
-.he-google-sortable-table .headerCell.unsorted:hover,
-.he-google-sortable-table .headerCell.sort-ascending:hover,
-.he-google-sortable-table .headerCell.sort-descending:hover {
+.google-visualization-table-th.unsorted:hover,
+.google-visualization-table-th.sort-ascending:hover,
+.google-visualization-table-th.sort-descending:hover {
     cursor: pointer;
     text-decoration: underline;
 }
-.he-google-sortable-table .google-visualization-table-type-number { text-align: right; }
+
+.google-visualization-table-type-number { text-align: right; }
+
+.google-visualization-table-td { white-space: nowrap; }
+
+.chart-dashboard {
+    border: 1px solid #ccc;
+    font-size: 0.9rem;
+    padding: 1rem;
+    /* Flex styles */
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+    align-content: flex-start;
+}
+
+.chart-pie { margin-right: 2rem; }
+
+.chart-table { flex-grow: 2; }
+
+
+/* NumberRangeFilter: slider bar */
+.google-visualization-controls-slider-horizontal {
+    background-color: #e5e5e5;
+    border: 0;
+    outline: 0;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    position: relative;
+}
+
+.google-visualization-controls-slider-horizontal {
+    height: 5px;
+    top: -0.2em;
+    margin: 0 0.3em;
+}
+
+.google-visualization-controls-slider-horizontal:hover { background-color: #d1d1d1; }
+
+/* NumberRangeFilter: slider thumbs */
+.google-visualization-controls-slider-horizontal .google-visualization-controls-slider-thumb {
+    background-color: #69e;
+    border: 1px solid #999;
+    width: 16px;
+    height: 16px;
+    border-radius: 8px;
+    -moz-border-radius: 8px;
+    -webkit-border-radius: 8px;
+    -webkit-box-shadow: 0px 1px 1px rgba(0,0,0,0.1);
+    -moz-box-shadow: 0px 1px 1px rgba(0,0,0,0.1);
+    box-shadow: 0px 1px 1px rgba(0,0,0,0.1);
+}
+
+.google-visualization-controls-slider-horizontal { top: -6px; }
+
+
+.google-visualization-controls-slider-horizontal div.google-visualization-controls-slider-thumb:nth-last-of-type(2) {
+    width: 8px;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    -moz-border-top-right-radius: 0;
+    -moz-border-bottom-right-radius: 0;
+    -webkit-border-top-right-radius: 0;
+    -webkit-border-bottom-right-radius: 0;
+}
+
+.google-visualization-controls-slider-horizontal div:last-of-type {
+    width: 8px;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    -moz-border-top-left-radius: 0;
+    -moz-border-bottom-left-radius: 0;
+    -webkit-border-top-left-radius: 0;
+    -webkit-border-bottom-left-radius: 0;
+}
+
+.google-visualization-controls-slider-horizontal:hover .google-visualization-controls-slider-thumb {
+    background-color: #fff;
+    cursor: pointer;
+    cursor: col-resize;
+}
+
+/* NumberRangeFilter: slider central handle */
+.google-visualization-controls-slider-horizontal .google-visualization-controls-slider-handle {
+    background-color: #c6c6c6;
+    opacity: 1;
+    height: 5px;
+}
+
+.google-visualization-controls-slider-horizontal:hover .google-visualization-controls-slider-handle,
+.google-visualization-controls-slider-horizontal:focus .google-visualization-controls-slider-handle {
+    background-color: #535252;
+    cursor: pointer;
+}
+
+.google-visualization-controls-slider-horizontal:active .google-visualization-controls-slider-handle {
+    background-color:#999;
+    background-size:6px 6px;
+    background-position:left -1px;
+    background-repeat:repeat-x;
+    background-image:-webkit-linear-gradient(135deg, transparent, transparent 3px, #fff 3px, #fff 4px, transparent 4px, transparent);
+    background-image:-moz-linear-gradient(135deg, transparent, transparent 3px, #fff 3px, #fff 4px, transparent 4px, transparent);
+    background-image:-o-linear-gradient(135deg, transparent, transparent 3px, #fff 3px, #fff 4px, transparent 4px, transparent);
+    background-image:linear-gradient(135deg, transparent, transparent 3px, #fff 3px, #fff 4px, transparent 4px, transparent);
+}
+
+.google-visualization-controls-slider-horizontal:active .google-visualization-controls-slider-handle { background-repeat:repeat-x; }
 
 /*--------------------------------------------------------------
 ## Utility styles

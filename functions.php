@@ -169,12 +169,15 @@ require get_template_directory() . '/inc/jetpack.php';
 
 /* Sort by archives by title */
 function newstime_archive_sort( $query ) {
+    if ( is_admin() ) {
+        return;
+    }
 
-    if ( ! is_admin() && $query->is_main_query() ) {
+    if ( $query->is_main_query() ) {
         $query->set( 'orderby', array( 'title' => 'ASC' ) );
     }
 
-    if ( ! is_admin() && $query->is_main_query() && is_archive() ) {
+    if ( $query->is_main_query() && is_archive() ) {
         $query->set( 'post_type', array( 'publication' ) );
     }
 }

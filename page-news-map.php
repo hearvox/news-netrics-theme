@@ -14,6 +14,8 @@ $pub_data = newsstats_get_all_publications();
 // Gl: AIzaSyCkUOdZ5y7hMm0yrcCQoCvLwzdM6M8s5qk
 ?>
 
+    <div id="primary" class="content-area">
+
 <div id="map" style="border: 1px solid #f6f6f6; height: 1000px; width: 100%;"></div>
 
 
@@ -104,11 +106,22 @@ function news_map_set_markers(map) {
 }
 
 </script>
+
 <script async defer src="//maps.googleapis.com/maps/api/js?key=AIzaSyA5clgBbvCkszTpr0UjyF0cG_Hr21Kd9Pg&callback=news_map_init"></script>
         <article id="content" class="content">
             <h1>Map: U.S. Daily Newspapers</h1>
             <p><a href="https://mapicons.mapsmarker.com/markers/stores/newsagent/">Newspaper map marker</a> courtesy <a href="https://mapicons.mapsmarker.com">Maps Icons Collection</a>.</p>
         </article><!-- .content -->
+
+        <main id="main" class="site-main" role="main">
+
+            <?php while ( have_posts() ) : the_post(); ?>
+
+                <?php get_template_part( 'template-parts/content', 'page' ); ?>
+
+            <?php endwhile; // End of the loop. ?>
+        </main><!-- #main -->
+    </div><!-- #primary -->
 
 <!-- =file: page-news-map -->
 <?php get_footer(); ?>

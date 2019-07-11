@@ -19,8 +19,10 @@ $site_link = ( $site_url ) ? ' <a href="' . esc_url( $site_url ) . '">Website</a
 $pub_name    = ( isset( $custom_fields['nn_pub_name'][0] ) ) ? $custom_fields['nn_pub_name'][0] : '';
 $pub_year    = ( isset( $custom_fields['nn_pub_year'][0] ) && $custom_fields['nn_pub_year'][0] )
     ? absint( $custom_fields['nn_pub_year'][0] ) : '--';
-$pub_circ    = ( isset( $custom_fields['nn_pub_circ_ep'][0] ) && $custom_fields['nn_pub_circ_ep'][0] )
-	? number_format( floatval( $custom_fields['nn_pub_circ_ep'][0] ) ) : '--';
+$pub_circ    = ( isset( $custom_fields['nn_circ'][0] ) && $custom_fields['nn_circ'][0] )
+	? number_format( absint( $custom_fields['nn_circ'][0] ) ) : '--';
+$pub_rank    = ( isset( $custom_fields['nn_rank'][0] ) && $custom_fields['nn_rank'][0] )
+    ? number_format( absint( $custom_fields['nn_rank'][0] ) ) : '--';
 
 $term_region = get_the_terms( $post_id, 'region' );
 $term_id     = ($term_region) ? $term_region[0]->term_id : false;
@@ -80,14 +82,14 @@ if ( $psi_1905 ) {
     // Line chart data.
     $lines .= "['5/19', ";
     $lines .= round( $psi_1905['speed'] / 1000, 1 ) . ', ';
-    $lines .= round( $psi_1905['tti'] / 1000, 1 ) . "],\n";
+    $lines .= round( $psi_1905['tti'] / 1000, 1 ) . ",13.9,30.1],\n";
 }
 
 if ( $psi_1906 ) {
     // Line chart data.
     $lines .= "['6/19', ";
     $lines .= round( $psi_1906['speed'] / 1000, 1 ) . ', ';
-    $lines .= round( $psi_1906['tti'] / 1000, 1 ) . "],\n";
+    $lines .= round( $psi_1906['tti'] / 1000, 1 ) . ",13.7,29.5],\n";
 }
 
 $articles_1905 = get_post_meta( $post_id, 'nn_articles_201905', true );
@@ -170,7 +172,7 @@ if ( $articles_1906 && 1 < count( $articles_1906 ) ) {
 		<ul class="media-meta" style="list-style: none; margin: 0; padding: 0;">
             <li><strong><big><?php echo esc_html( $pub_name ) ?></big></strong><?php echo esc_html( $awis_desc ); ?></li>
             <li><?php echo trim( $regions, ' &gt; ' ); ?> <small>(pop. <?php echo esc_html( $term_pop ); ?>)</small></li>
-            <li><em>Circulation:</em> <?php echo esc_html( $pub_circ ); ?> / <em>Site rank:</em> <?php echo esc_html( $awis_rank ); ?></li>
+            <li><em>Circulation:</em> <?php echo esc_html( $pub_circ ); ?> / <em>Site rank:</em> <?php echo esc_html( $pub_rank ); ?></li>
             <li><?php the_terms( $post_id, 'owner', '<em>Owner:</em> ' ); ?></li>
 			<li><em>In print:</em> <?php echo esc_html( $pub_year ); ?> | <em>Online:</em> <?php echo esc_html( $awis_year ); ?></li>
 			<li><em>CMS:</em> <?php the_terms( $post_id, 'cms' ); ?> | <?php echo $site_link; ?><?php echo $rss_link; ?></li>
@@ -236,10 +238,10 @@ if ( $articles_1906 && 1 < count( $articles_1906 ) ) {
         ]);
 
         var options_score = {
-          width: 180, height: 180,
-          redFrom: 0, redTo: 50,
-          yellowFrom: 50, yellowTo: 90,
-          greenFrom: 90, greenTo: 100,
+            width: 180, height: 180,
+            redFrom: 0, redTo: 50,
+            yellowFrom: 50, yellowTo: 90,
+            greenFrom: 90, greenTo: 100,
         };
 
         var chart = new google.visualization.Gauge(document.getElementById('chart_div'));
@@ -247,14 +249,21 @@ if ( $articles_1906 && 1 < count( $articles_1906 ) ) {
         chart.draw(data_score, options_score);
 
         var data_history = google.visualization.arrayToDataTable([
-            ['Month', 'Speed', 'TTI'],
+            ['Month', 'Speed', 'TTI','All: TTI','All: Speed'],
             <?php echo $lines; ?>
         ]);
 
         var options_history = {
-          title: 'Speed Index and Time to Interactive (seconds)',
-          curveType: 'function',
-          legend: { position: 'bottom' }
+            title: 'Speed Index and Time to Interactive (seconds)',
+            colors: ['#e2431e', '#f1ca3a', '#e2431e','#f1ca3a'],
+            curveType: 'function',
+            legend: { position: 'bottom' },
+            series: {
+                0: { lineWidth: 4, pointSize: 5 },
+                1: { lineWidth: 4, pointSize: 5 },
+                2: { lineWidth: 1, pointSize: 2 },
+                3: { lineWidth: 1, pointSize: 2 }
+            },
         };
 
         var chart = new google.visualization.LineChart(document.getElementById('line_chart'));

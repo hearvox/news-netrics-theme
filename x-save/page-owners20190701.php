@@ -1,8 +1,8 @@
 <?php
 /**
- * The template for displaying CMS data and performance results.
+ * The template for displaying Owner Groups data and performance results.
  *
- * @link https://news.pubmedia.us/cms/
+ * @link https://news.pubmedia.us/owners/
  *
  * @package newsstats
  */
@@ -10,39 +10,41 @@
 get_header(); ?>
 
 <style type="text/css">
-/* https://jsfiddle.net/sivard/6t09jy69/ */
 
-.table .google-visualization-table-tr-odd, .table .google-visualization-table-tr-even {
-    background-color: transparent;
-}
-#ChartOverview .table {
-    margin-bottom: 0;
-}
-#ChartOverview .TotalRow {
-    background-color: #e4e9f4;
-}
-#ChartOverview .TotalRow td {
-    background-image:linear-gradient(to bottom, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.7) 30%, rgba(255, 255, 255, 0.5) 60%, rgba(255, 255, 255, 0) 100%);
-    font-weight : 700;
+#table_owners { margin: 1rem 0; }
+
+.google-visualization-table-td { white-space: nowrap; }
+
+.filter-results {
+    font-size: 0.85rem;
+    text-align: right;
+    width: 400px;
+
 }
 </style>
+
 	<div id="primary" class="content-area">
 
             <?php
-            $terms  = get_terms( 'cms' );
+            $terms  = get_terms( 'owner' );
             $num    = null;
-            $name   = '';
             $json   = '';
             $html   = '';
 
+            $count_owners = $total_circ = $total_papers = 0;
+
             foreach ( $terms as $term ) {
+                if ( $term->count < 2 ) {
+                    // continue;
+                }
+
                 // Get Owner score data.
                 $args = array(
                     'post_type'      => 'publication',
                     'posts_per_page' => 500,
                     'tax_query'      => array(
                         array(
-                            'taxonomy' => 'cms',
+                            'taxonomy' => 'owner',
                             'field'    => 'id',
                             'terms'    => $term->term_id,
                         )
@@ -50,10 +52,10 @@ get_header(); ?>
                 );
                 $query = new WP_Query( $args );
 
-                $pubs_data = netrics_get_pubs_query_data( $query, 1, 0 );
+                $pubs_data = netrics_get_pubs_query_data( $query );
 
-                if ( $pubs_data ) {
-                    $name = '<a href="' . get_term_link( $term->term_id ) . '">' . "{$term->name}</a>";
+                if ( $pubs_data && isset( $pubs_data['score'] ) ) {
+                    $num = null;
                     $json .= "['{$term->name}',{$term->count},";
 
                     // JSON data for each CMS, used by Google Chart visualizations.
@@ -65,7 +67,7 @@ get_header(); ?>
 
                         switch ( $key ) {
                             case 'circ':
-                                $num = array_sum( $data );
+                                $num = absint( array_sum( $data ) );
                                 break;
                             case 'rank':
                                 $num = nstats_mean( $data );
@@ -92,7 +94,7 @@ get_header(); ?>
                         $json .= $num . ',';
 
                     }
-                    $json .= "'$name'],\n";
+                    $json .= "],\n";
 
                     $html .= '<table class="tabular">';
                     $html .= '<caption><a href="' . get_term_link( $term ) . "\">{$term->name}</a>: ";
@@ -104,6 +106,11 @@ get_header(); ?>
                     $html .= " articles from {$query->found_posts} newspapers</td>";
                     $html .= '</tr></tfoot></table>';
                 } // if ( $pubs_data )
+
+                $count_owners++;
+                $total_circ   += array_sum( $pubs_data['circ'] );
+                $total_papers += $term->count;
+
                 wp_reset_postdata();
 
             } // foreach ( $terms as $term )
@@ -112,23 +119,57 @@ get_header(); ?>
             ?>
 
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-<section id="dashboard_div" class="chart-dashboard">
-    <figure class="chart-pie">
-        <div id="slider_div"></div>
-        <div id="chart_div"></div>
-    </figure>
-    <section class="chart-table">
-        <h2 style="margin-bottom: 0;">Daily Newspapers using identifiable CMS</h2>
-        <p style="margin: 0;">Total <strong>Papers</strong> and <strong>Circulation</strong> for each CMS.<br>
-            Average PageSpeed Insights results (2015-05 articles), sorted by <strong>Score</strong>.</p>
-        <ul style="margin-top: 0;">
-            <li>Total Papers: <span id="sum"></span></li>
-            <li>Total CMSs: <span id="cnt"></span></li>
-            <li>Avg. Score: <span id="avg"></span></li>
-        </ul>
-        <figure id="table_div" style="padding-top: 30px"></figure>
+<div id="dashboard_div" style="border: 1px solid #ccc; width: 100%">
+
+    <section class="controls" style="padding: 0 2rem; display: inline-block; width: 24rem; vertical-align: top;">
+        <h2 style="font-size: 1.2rem; margin-bottom: 0;">Owners: Daily Newspapers</h2>
+        <p id="slider_papers"></p>
+        <table class="tabular">
+            <thead>
+                <tr>
+                    <td></td>
+                    <th scope="col">Viewing</th>
+                    <th scope="col">of Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row">Papers</th>
+                    <td><span id="paper_sum"></span></td>
+                    <td><?php echo $total_papers; ?></td>
+                </tr>
+                <tr>
+                    <th scope="row">Owners</th>
+                    <td><span id="owner_cnt"></span></td>
+                    <td><?php echo $count_owners; ?></td>
+                </tr>
+                <tr>
+                    <th scope="row">Circ.</th>
+                    <td><span id="circ_sum"></span></td>
+                    <td><?php echo number_format( $total_circ ); ?></td>
+                </tr>
+                <tr>
+                    <th scope="row">Avg. Score</th>
+                    <td><span id="score_avg"></span></td>
+                    <td>--</td>
+                </tr>
+            </tbody>
+        </table>
+        <p id="slider_circ"></p>
+        <p id="slider_score"></p>
+        <p id="slider_rank"></p>
+        <p style="margin: 0;">Table has each owners's combined:
+            <ul style="margin: 0;">
+                <li><strong>Papers</strong> and <strong>Circulation</strong></li>
+                <li>Average global <strong>Rank</strong> (Alexa)</li>
+                <li>Average PageSpeed Insights results, sorted by <strong>Score</strong> (2015-05, 3 articles per paper).</li>
+            </ul>
+        </p>
     </section>
-</section>
+    <div id="chart_div" style="display: inline-block; width: 700px;"></div>
+    <div id="table_div" style="padding-top: 30px"></div>
+
+</div>
 <script type="text/javascript">
     google.charts.load('current', {'packages':['corechart', 'table', 'controls']});
     google.charts.setOnLoadCallback(drawMainDashboard);
@@ -140,15 +181,59 @@ get_header(); ?>
         // Dashboard filter: slider.
         var sliderPapers = new google.visualization.ControlWrapper({
             'controlType': 'NumberRangeFilter',
-            'containerId': 'slider_div',
+            'containerId': 'slider_papers',
+            'state': {'lowValue': 10},
             'options': {
                 'filterColumnIndex': 1,
+                'minValue': 1,
                 'ui': {
                     'labelStacking': 'vertical',
-                    'label': 'Filter by papers per CMS:',
+                    'label': 'Filter Owners by Papers owned:',
                     'format':  { 'pattern':'#,###' },
                 }
+            }
+        });
 
+        // Dashboard filter by curculaton: slider.
+        var sliderCirc = new google.visualization.ControlWrapper({
+            'controlType': 'NumberRangeFilter',
+            'containerId': 'slider_circ',
+            'options': {
+                'filterColumnIndex': 2,
+                'ui': {
+                    'labelStacking': 'vertical',
+                    'label': 'Filter Owners by total Circulation:',
+                    'format':  { 'pattern':'#,###' },
+                }
+            }
+        });
+
+        // Dashboard filter by score: slider.
+        var sliderScore = new google.visualization.ControlWrapper({
+            'controlType': 'NumberRangeFilter',
+            'containerId': 'slider_score',
+            'options': {
+                'filterColumnIndex': 9,
+                'ui': {
+                    'labelStacking': 'vertical',
+                    'label': 'Filter by average Score:',
+                    'format':  { 'pattern':'##.#' },
+                }
+            }
+        });
+
+
+        // Dashboard filter by score: slider.
+        var sliderRank = new google.visualization.ControlWrapper({
+            'controlType': 'NumberRangeFilter',
+            'containerId': 'slider_rank',
+            'options': {
+                'filterColumnIndex': 3,
+                'ui': {
+                    'labelStacking': 'vertical',
+                    'label': 'Filter by average Rank:',
+                    'format':  { 'pattern':'#,###' },
+                }
             }
         });
 
@@ -156,8 +241,8 @@ get_header(); ?>
             'chartType': 'PieChart',
             'containerId': 'chart_div',
             'options': {
-                'width': 360,
-                'height': 360,
+                'width': 680,
+                'height': 680,
                 'legend': 'none',
                 'chartArea': {'left': 15, 'top': 15, 'right': 0, 'bottom': 0},
                 'pieSliceText': 'label'
@@ -169,27 +254,25 @@ get_header(); ?>
             'chartType': 'Table',
             'containerId': 'table_div',
             'options': {
-                'allowHtml': true,
-                'sortColumn': 8,
-                'sortAscending': false,
-                'showRowNumber': true,
-                'width': '100%',
-                'height': 'auto',
-            },
-            'view': {'columns': [9, 1, 2, 3, 4, 5, 6, 7, 8]}
+                sortColumn: 9,
+                sortAscending: false,
+                showRowNumber: true,
+                 width: '100%',
+                height: '100%',
+            }
         });
 
         var data = new google.visualization.DataTable();
-            data.addColumn('string', 'CMS');
+            data.addColumn('string', 'Owner');
             data.addColumn('number', 'Papers');
             data.addColumn('number', 'Circ.');
+            data.addColumn('number', 'Rank');
             data.addColumn('number', 'DOM');
             data.addColumn('number', 'Requests');
             data.addColumn('number', 'Size (MB)');
             data.addColumn('number', 'Speed (s)');
             data.addColumn('number', 'TTI (s)');
             data.addColumn('number', 'Score');
-            data.addColumn('string', 'CMS');
             data.addRows([
 <?php echo $json; ?>
         ]);
@@ -202,8 +285,9 @@ get_header(); ?>
         numdecFormat.format(data, 6);
         numdecFormat.format(data, 7);
         numdecFormat.format(data, 8);
+        numdecFormat.format(data, 9);
 
-        dashboard.bind([sliderPapers], [pie, table]);
+        dashboard.bind([sliderPapers, sliderCirc, sliderScore, sliderRank], [pie, table]);
         dashboard.draw(data);
 
         // get average and sum
@@ -218,27 +302,36 @@ get_header(); ?>
                 }
             }], [{
                 // get the average
-                column: 8,
-                label: 'Average',
+                column: 9,
+                label: 'Score Average',
                 type: 'number',
                 aggregation: google.visualization.data.avg
             }, {
                 // get the sum
                 column: 1,
-                label: 'Count',
+                label: 'Owner Count',
                 type: 'number',
                 aggregation: google.visualization.data.count
             }, {
                 // get the sum
                 column: 1,
-                label: 'Sum',
+                label: 'Paper Sum',
+                type: 'number',
+                aggregation: google.visualization.data.sum
+            }, {
+                // get the sum
+                column: 2,
+                label: 'Circulation Sum',
                 type: 'number',
                 aggregation: google.visualization.data.sum
             }]);
-            document.getElementById('avg').innerHTML = group.getValue(0, 1).toFixed(1);
-            document.getElementById('cnt').innerHTML = group.getValue(0, 2);
-            document.getElementById('sum').innerHTML = group.getValue(0, 3);
+            document.getElementById('score_avg').innerHTML  = group.getValue(0, 1).toFixed(1);
+            document.getElementById('owner_cnt').innerHTML = group.getValue(0, 2);
+            document.getElementById('paper_sum').innerHTML = group.getValue(0, 3);
+            document.getElementById('circ_sum').innerHTML   =
+                group.getValue(0, 4).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
         });
+
 
     }
 
@@ -252,14 +345,14 @@ get_header(); ?>
 
             <?php endwhile; // End of the loop. ?>
 
-            <h2>Detailed PageSpeed Insights averages for daily newspapers using each CMS</h2>
+            <h2>Detailed PageSpeed Insights combined averages for each Owner's daily newspapers</h2>
             <?php echo $html; ?>
 
-            <details>
+            <!-- details>
                 <summary>(Test: data arrays)</summary>
                 <pre>
                 </pre>
-            </details>
+            </details -->
 
         </main><!-- #main -->
 
