@@ -31,7 +31,7 @@ get_header(); ?>
 				?>
 			<table class="tabular">
 				<caption>U.S. daily newspapers: Averages of Google Pagespeed results (2019-05)</caption>
-				<?php  netrics_pagespeed_mean( $pubs_data ); ?>
+				<?php netrics_pagespeed_mean( $pubs_data ); ?>
 				<tfoot>
         			<tr>
             			<th scope="row"><?php esc_attr_e( 'Results for:', 'newsnetrics' ); ?></th>

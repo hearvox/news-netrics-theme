@@ -335,20 +335,23 @@ function drawMainDashboard() {
 
             <?php endwhile; // End of the loop. ?>
 
-            <h2>Detailed PageSpeed Insights combined averages for each Owner's daily newspapers</h2>
-            <?php echo $html; ?>
+            <section class="content-col">
+                <h2>PSI averages by Owner</h2>
+                <p>Detailed PageSpeed Insights for combined averages of each Owner's daily newspapers</p>
+                <?php echo $html; ?>
 
-            <details>
-                <summary>(Test: data arrays)</summary>
-                <pre>
-                    <?php
-                    ksort( $count_arr );
-                    ksort( $count_vals );
-                    print_r( $count_arr );
-                    print_r( $count_vals );
-                    ?>
-                </pre>
-            </details>
+                <details>
+                    <summary>(Test: data arrays)</summary>
+                    <pre>
+                        <?php
+                        ksort( $count_arr );
+                        ksort( $count_vals );
+                        print_r( $count_arr );
+                        print_r( $count_vals );
+                        ?>
+                    </pre>
+                </details>
+            </section>
 
         </main><!-- #main -->
 

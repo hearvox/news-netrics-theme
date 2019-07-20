@@ -25,7 +25,7 @@ get_header();
     <caption><h1>U.S. Daily Newspapers</h1></caption>
     <thead>
         <tr>
-            <th>Site ID</th>
+            <th>Post ID</th>
             <th style="text-align: left;">Domain</th>
             <th style="text-align: left;">Name</th>
             <th style="text-align: left;">City</th>

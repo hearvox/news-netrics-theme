@@ -16,9 +16,16 @@ get_header(); ?>
 
 			<header class="page-header">
 				<?php
-					the_archive_title( '<h1 class="page-title">', ' <span class="found-count">(' . $wp_query->found_posts . ')</span></h1>' );
-					// the_archive_description( '<div class="taxonomy-description">', '</div>' );
+				the_archive_title( '<h1 class="page-title">', ' <span class="found-count">(' . $wp_query->found_posts . ')</span></h1>' );
+				// the_archive_description( '<div class="taxonomy-description">', '</div>' );
+
+                if ( is_tax( 'region' ) ) {
+                    $population   = get_term_meta( $wp_query->queried_object_id, 'nn_region_pop', true );
+
 				?>
+                <p><?php echo esc_html( $wp_query->queried_object->description ); ?> has a population of <output><?php echo number_format( $population ); ?></output> with <output><?php echo absint( $wp_query->found_posts ); ?></output> daily <?php echo _n( 'newspaper', 'newspapers', $wp_query->found_posts, 'newsnetrics' ) ?>.</p>
+                <?php } ?>
+
 			</header><!-- .page-header -->
 
 			<?php
@@ -67,6 +74,11 @@ get_header(); ?>
                 }
             }
 
+/*
+<th scope="row"><?php esc_attr_e( 'Results for:', 'newsnetrics' ); ?></th>
+<td colspan="6" style="text-align: left;"><?php echo count( $pubs_data['score'] ) ?> articles from <?php echo $wp_query->found_posts; ?> newspapers</td>
+
+ */
 
 			// On first page (only).
 			$paged = (get_query_var( 'paged' ) ) ? get_query_var( 'paged' ) : 1;
@@ -81,8 +93,8 @@ get_header(); ?>
 				<?php echo netrics_pagespeed_mean( $pubs_data ); ?>
 				<tfoot>
         			<tr>
-            			<th scope="row"><?php esc_attr_e( 'Results for:', 'newsnetrics' ); ?></th>
-            			<td colspan="6" style="text-align: left;"><?php echo count( $pubs_data['score'] ) ?> articles from <?php echo $wp_query->found_posts; ?> newspapers</td>
+            			<th scope="row"><?php esc_attr_e( 'Results from:', 'newsnetrics' ); ?></th>
+            			<td colspan="6" style="text-align: left;"><?php echo $wp_query->found_posts; ?> newspapers</td>
         			</tr>
                     <?php if ( is_tax( 'owner' ) ) { ?>
                     <tr>

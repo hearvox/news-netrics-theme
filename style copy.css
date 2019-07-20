@@ -261,13 +261,7 @@ th {
 /*--------------------------------------------------------------
 # Typography
 --------------------------------------------------------------*/
-body {
-	color: #202020;
-	font-family: "Palatino Linotype", Georgia, sans-serif;
-	font-size: 20px;
-	line-height: 1.6;
-}
-
+body,
 button,
 input,
 select,
@@ -276,7 +270,7 @@ textarea {
 	font-family: Verdana, Geneva, sans-serif;
 	font-size: 16px;
 	font-size: 1rem;
-	line-height: 1.4;
+	line-height: 1.5;
 }
 
 h1,
@@ -285,7 +279,6 @@ h3,
 h4,
 h5,
 h6 {
-	font-family: "Arial Black", Gadget, sans-serif;
 	clear: both;
 }
 
@@ -299,6 +292,7 @@ h1 {
 }
 
 h2 {
+	font-family: "Palatino Linotype", Georgia, sans-serif;
 	font-size: 1.75rem;
 	font-weight: 500;
 	margin-bottom: 0;
@@ -343,7 +337,7 @@ address {
 
 pre {
 	background: #eee;
-	font-family: "Lucida Console", Monaco, Consolas, "Andale Mono", "DejaVu Sans Mono", monospace;
+	font-family: "Courier 10 Pitch", Courier, monospace;
 	font-size: 15px;
 	font-size: 0.9375rem;
 	line-height: 1.6;
@@ -357,7 +351,7 @@ code,
 kbd,
 tt,
 var {
-	font-family: "Lucida Console", Monaco, Consolas, "Andale Mono", "DejaVu Sans Mono", monospace;
+	font-family: Monaco, Consolas, "Andale Mono", "DejaVu Sans Mono", monospace;
 	font-size: 15px;
 	font-size: 0.9375rem;
 }
@@ -381,7 +375,7 @@ big {
 output {
     color: #E86A37;
     background: #edf5ff;
-    font-family: "Lucida Console", Monaco, Consolas, "Andale Mono", "DejaVu Sans Mono", monospace;
+    font-family: "Lucida Console", Monaco, monospace;
     font-weight: 600;
     padding: 2px 5px;
     border-radius: 3px;
@@ -579,19 +573,19 @@ a:active {
 	outline: 0;
 }
 
-.nav-links {
-	font-family: Tahoma, Geneva, sans-serif;
-    font-size: 1rem;
-}
-
 /*--------------------------------------------------------------
 ## Header
 --------------------------------------------------------------*/
 .site-header {
 	border-bottom: 0.1em solid silver;
 	background-color: #fff;
+	position: fixed;
 	width: 100%;
 	z-index: 1000;
+}
+
+.main-navigation {
+
 }
 
 .site-title {
@@ -607,7 +601,6 @@ a:active {
 
 .site-title a {
 	color: #212121;
-	display: inline-block;
 	text-decoration: none;
 }
 
@@ -615,6 +608,8 @@ a:active {
 .nav-menu .menu-item {
     border-radius: 0.2em;
 }
+
+.content-area { padding-top: 130px; }
 
 .main-navigation .tabular {
 	margin-bottom: 0;
@@ -629,34 +624,22 @@ a:active {
 	margin: 0;
 }
 
-.post .entry-meta {
-	margin: 0;
-	font-family: Tahoma, Geneva, sans-serif;
-    font-size: 1rem;
-}
-
-	font-family: Verdana, Geneva, sans-serif;
-    font-size: 1rem;
-
 .single-publication .entry-title {
 	clear: none;
 	margin-bottom: 0.5rem;
 }
-.site-branding,
-.site-title { display: inline-block; }
-
-.site-title { width: 24rem; }
 
 /*--------------------------------------------------------------
 ## Menus
 --------------------------------------------------------------*/
-
-
-.main-navigation {
-	font-family: "Arial Black", Gadget, sans-serif;
-	font-size: 0.95rem;
+.site-branding,
+.main-navigation,
+.site-footer {
+	clear: both;
+	display: block;
+	margin: auto;
+	width: 700px;
 }
-
 
 .main-navigation ul {
 	display: none;
@@ -682,13 +665,9 @@ a:active {
 	top: 2.1em;
 	left: -999em;
 	z-index: 99999;
-	width: 10rem;
 }
 
-.main-navigation .sub-menu .menu-item {
-	background-color: #efefef;
-	width: 10rem;
-}
+.main-navigation .sub-menu .menu-item { background-color: #505050; }
 
 .main-navigation ul ul ul {
 	left: -999em;
@@ -696,7 +675,7 @@ a:active {
 }
 
 .main-navigation ul ul a {
-	/*width: 200px;*/
+	width: 200px;
 }
 
 .main-navigation ul ul li {
@@ -736,17 +715,13 @@ a:active {
 	display: block;
 }
 
-/* Wide-screens */
-@media screen and (min-width: 54rem) {
-	.menu-toggle { display: none; }
-
-	.main-navigation ul { display: block; }
-
-	.main-navigation { display: inline-block; }
-
-	.site-header { position: fixed; }
-
-	.content-area { padding-top: 110px; }
+@media screen and (min-width: 37.5em) {
+	.menu-toggle {
+		display: none;
+	}
+	.main-navigation ul {
+		display: block;
+	}
 }
 
 .site-main .comment-navigation,
@@ -773,13 +748,13 @@ a:active {
 
 .nav-menu .menu-item {
 	margin-right: 2em;
-	background-color: #3f3f3f;
+	background-color: #232323;
 	padding: 0.4em;
 }
 
-.nav-menu .menu-item a { color: #fff; }
-
-.nav-menu .sub-menu a { color: #404040; }
+.nav-menu .menu-item a {
+	color: #fff;
+}
 
 /*--------------------------------------------------------------
 ## Footer
@@ -787,18 +762,21 @@ a:active {
 .site-footer {
 	background-color: #f7f7f7;
 	border-top: 0.1em solid silver;
-	margin-top: 2rem;
 	padding: 1rem 0;
 	width: 100%;
 }
 
 .footer-nav,
-.site-info { text-align: left; }
+.site-info {
+	margin: auto;
+	text-align: left;
+	width: 700px;
+}
 
 .site-info {
     line-height: 2;
 	text-align: center;
-    width: 1020px;
+    width: 700px;
 }
 
 .site-footer form { margin-bottom: 2rem; }
@@ -923,7 +901,7 @@ a:active {
 }
 
 .hentry {
-	margin: 0;
+	margin: 0 0 1.5em;
 }
 
 .byline,
@@ -939,7 +917,7 @@ a:active {
 .page-content,
 .entry-content,
 .entry-summary {
-	margin: 1rem 0 0;
+	margin: 1.5em 0 0;
 }
 
 .page-links {
@@ -948,29 +926,9 @@ a:active {
 }
 
 .site-main {
-/*	max-width: 1020px;
-	margin: auto;*/
-}
-
-
-/*--------------------------------------------------------------
-## Layout
---------------------------------------------------------------*/
-.site-header-items,
-.entry-header,
-.entry-content,
-.entry-footer,
-.page-header,
-.content-col,
-.archive .site-main,
-.footer-nav,
-.site-info {
-	clear: both;
-	display: block;
+	max-width: 700px;
 	margin: auto;
-	width: 1020px;
 }
-
 /*--------------------------------------------------------------
 ## Asides
 --------------------------------------------------------------*/
@@ -1132,7 +1090,7 @@ table.tabular {
 .tabular caption {
     background-color: #fbfbfb;
     border: 1px solid #fbfbfb;
-    font-family: Tahoma, Geneva, sans-serif;
+    font-family: "Gill Sans MT", Tahoma, Geneva, sans-serif;
 	font-size: 1.125rem;
 	font-weight: 500;
 	line-height: 1.7rem;
@@ -1243,7 +1201,7 @@ table.tabular {
 .chart-dashboard {
     border: 1px solid #ccc;
     font-size: 0.9rem;
-    padding: 0 1rem;
+    padding: 1rem;
     /* Flex styles */
     display: flex;
     flex-direction: row;
@@ -1356,15 +1314,6 @@ table.tabular {
 
 .page-id-6097 td.google-visualization-table-td:nth-child(3) { min-width: 13rem; }
 
-
-figure,
-table,
-.chart-controls {
-	font-family: Verdana, Geneva, sans-serif;
-	font-size: 1rem;
-	line-height: 1.4;
-}
-
 /*--------------------------------------------------------------
 ## Utility styles
 --------------------------------------------------------------*/
@@ -1384,14 +1333,12 @@ table,
 
 
 /*--------------------------------------------------------------
-## Sitemap (.page-id-7610) form
+## Sitemap form
 --------------------------------------------------------------*/
-.page-id-7610 { font-family: Verdana, Geneva, sans-serif; }
-
 .pub-form {
 	background: #fff;
 	color: rgb(22,100,128);
-	font-family: Verdana, Geneva, sans-serif;
+	font-family: 'Open Sans', 'Gill Sans MT', Tahoma, 'Microsoft Sans Serif', sans-serif;
 	margin-top: 1rem;
 	padding: 1rem;
 	text-transform: uppercase;
@@ -1406,7 +1353,7 @@ table,
 
 .pub-form-heading,
 .pub-tax-name {
-	font-family: Verdana, Geneva, sans-serif;
+	font-family: 'Open Sans', 'Gill Sans MT', Tahoma, 'Microsoft Sans Serif', sans-serif;
 	font-weight: 600;
 	margin: 0;
 }

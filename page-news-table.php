@@ -9,13 +9,6 @@
 get_header();
 
 ?>
-<style type="text/css">
-.info-link {
-    float: right;
-    font-weight: 900;
-    text-decoration: none;
-}
-</style>
 
     <div id="primary" class="content-area">
 

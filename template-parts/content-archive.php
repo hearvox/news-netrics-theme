@@ -55,6 +55,8 @@ if ( $site_ps  && isset( $site_ps['score'] ) ) {
 
 ?>
 
+
+
 <article id="post-<?php the_ID(); ?>" <?php post_class( 'clear' ); ?> style="border-top: 1px solid #c9cdda;">
 	<header class="entry-header">
 		<a href="<?php esc_url( the_permalink() ); ?>"><img class="alignright" src="https://s.wordpress.com/mshots/v1/http%3A%2F%2F<?php echo get_the_title() ?>?w=140&h=105" width="140" height="105" alt="<?php the_title(); ?>" /></a>
@@ -66,5 +68,6 @@ if ( $site_ps  && isset( $site_ps['score'] ) ) {
 			<li><?php echo $pgspeed; ?></li>
 		</ul>
 	</header><!-- .entry-header -->
-
+<!-- img class="" src="https://s.wordpress.com/mshots/v1/http%3A%2F%2F<?php echo get_the_title() ?>?w=200&h=150" width="200" height="150" alt="<?php the_title(); ?>" /></a -->
 </article><!-- #post-## -->
+<!-- =file: content-archive -->

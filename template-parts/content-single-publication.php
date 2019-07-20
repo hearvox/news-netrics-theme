@@ -164,7 +164,6 @@ if ( $articles_1906 && 1 < count( $articles_1906 ) ) {
 <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 
 	<header class="entry-header">
-        <p style="text-align: center;"><?php previous_post_link(); ?> &nbsp; | &nbsp; <?php next_post_link(); ?></p>
         <?php if ( $psi_1905 ) { ?>
         <figure id="chart_div" class="alignright" style="width: 180px; height: 180px; margin-right: 0;"></figure>
         <?php } ?>
@@ -178,23 +177,27 @@ if ( $articles_1906 && 1 < count( $articles_1906 ) ) {
 			<li><em>CMS:</em> <?php the_terms( $post_id, 'cms' ); ?> | <?php echo $site_link; ?><?php echo $rss_link; ?></li>
 		</ul>
 	</header><!-- .entry-header -->
+
+    <section class="content-col">
     <?php
     $pubs_data = netrics_get_pubs_pagespeed_query( $wp_query );
     if ( $pubs_data ) {
             ?>
-    <figure id="line_chart" class="alignnone" style="width: 700px; height: 400px; margin: 0;"></figure>
-    <table class="tabular">
-        <caption>PageSpeed Insights average results for <?php echo count( $pubs_data['score'] ) ?> articles (2019-05)</caption>
-            <?php echo netrics_pagespeed_mean( $pubs_data, $tbody = false ); ?>
-            <?php echo netrics_articles_results_table( $post_id, $articles_1905 ); ?>
-        </tbody>
-    </table>
+        <table class="tabular">
+            <caption>PageSpeed Insights average results for <?php echo count( $pubs_data['score'] ) ?> articles (2019-05)</caption>
+                <?php echo netrics_pagespeed_mean( $pubs_data, $tbody = false ); ?>
+                <?php echo netrics_articles_results_table( $post_id, $articles_1905 ); ?>
+            </tbody>
+        </table>
 
-    <?php } // if ( $pubs_data )
-    ?>
+        <figure id="line_chart" class="alignnone" style="width: 700px; height: 400px; margin: 0;"></figure>
 
-    <p><em>Articles 2019-06:</em>
-    <?php echo netrics_articles_results( $post_id, $articles_1906 ); ?></p>
+        <?php } // if ( $pubs_data )
+        ?>
+
+        <p><em>Articles 2019-06:</em>
+        <?php echo netrics_articles_results( $post_id, $articles_1906 ); ?></p>
+    </section><!-- .content-col -->
 
 	<footer class="entry-footer">
 
@@ -202,6 +205,7 @@ if ( $articles_1906 && 1 < count( $articles_1906 ) ) {
 
 		<iframe width="700" height="700" frameborder="0" style="border:0" src="<?php echo esc_url( $map_src ); ?>"></iframe>
 
+        <?php the_post_navigation( array( 'prev_text' => '&laquo; %title', 'next_text' => '%title &raquo;' ) ); ?>
         <details>
             <summary>(Test: data arrays)</summary>
                 <pre>

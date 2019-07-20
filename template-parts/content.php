@@ -73,6 +73,4 @@ $cms = ( $cms_obj )
 		</tbody>
 	</table>
 </article><!-- #post-## -->
-<!--
-					<a href="//<?php esc_url( the_title() ) ?>"><img class="alignright" src="http://s.wordpress.com/mshots/v1/http%3A%2F%2F<?php echo get_the_title() ?>?w=100&h=75" width="100" height="75" alt="Homepage screenshot" /></a>
--->
+<!-- =file: content -->

@@ -42,9 +42,12 @@ function newsstats_setup() {
 	 */
 	add_theme_support( 'post-thumbnails' );
 
+    /* Add Excerpt field to Pages */
+    add_post_type_support( 'page', 'excerpt' );
+
 	// This theme uses wp_nav_menu() in one location.
 	register_nav_menus( array(
-		'primary' => esc_html__( 'Primary Menu', 'newsstats' ),
+		'primary' => esc_html__( 'Menu', 'newsstats' ),
 	) );
 
 	/*
@@ -173,13 +176,18 @@ function newstime_archive_sort( $query ) {
         return;
     }
 
-    if ( $query->is_main_query() ) {
+    if ( $query->is_main_query() && ! is_post_type_archive( 'post' ) ) {
         $query->set( 'orderby', array( 'title' => 'ASC' ) );
     }
 
     if ( $query->is_main_query() && is_archive() ) {
-        $query->set( 'post_type', array( 'publication' ) );
+        // $query->set( 'post_type', array( 'publication' ) );
     }
+
+    add_filter('get_next_post_sort', 'filter_next_post_sort');
+    add_filter('get_next_post_where', 'filter_next_post_where');
+    add_filter('get_previous_post_sort', 'filter_previous_post_sort');
+    add_filter('get_previous_post_where', 'filter_previous_post_where');
 }
 add_action( 'pre_get_posts', 'newstime_archive_sort' );
 
@@ -187,6 +195,71 @@ add_action( 'pre_get_posts', 'newstime_archive_sort' );
  *
  * @link http://codeandme.net/how-to-set-adjacent-post-by-alphabetical-order/
  */
+function filter_next_post_sort( $sort ) {
+    $sort = ( is_singular( 'publication' ) ) ? 'ORDER BY p.post_title ASC LIMIT 1' : 'ORDER BY p.post_date DESC LIMIT 1';
+    return $sort;
+}
+
+function filter_next_post_where( $where ) {
+    global $post, $wpdb;
+
+    if ( is_singular( 'publication' ) ) {
+        return $wpdb->prepare( "WHERE p.post_title > '%s' AND p.post_type = 'publication' AND p.post_status = 'publish'", $post->post_title );
+    } else {
+        return $wpdb->prepare( "WHERE p.post_date > '%s' AND p.post_type = '%s' AND p.post_status = 'publish'", $post->post_date, $post->post_type );
+    }
+}
+
+function filter_previous_post_sort( $sort ) {
+    $sort = ( is_singular( 'publication' ) ) ? 'ORDER BY p.post_title DESC LIMIT 1' : 'ORDER BY p.post_date ASC LIMIT 1';
+    return $sort;
+}
+
+function filter_previous_post_where( $where ) {
+    global $post, $wpdb;
+
+    if ( is_singular( 'publication' ) ) {
+        return $wpdb->prepare( "WHERE p.post_title < '%s' AND p.post_type = 'publication' AND p.post_status = 'publish'", $post->post_title );
+    } else {
+        return $wpdb->prepare( "WHERE p.post_date < '%s' AND p.post_type = '%s' AND p.post_status = 'publish'", $post->post_date, $post->post_type );
+    }
+}
+
+/*
+
+add_filter('get_next_post_sort', 'filter_next_post_sort');
+add_filter('get_next_post_where', 'filter_next_post_where');
+add_filter('get_previous_post_sort', 'filter_previous_post_sort');
+add_filter('get_previous_post_where', 'filter_previous_post_where');
+
+
+
+function filter_next_post_where( $where ) {
+    global $post, $wpdb;
+
+    if ( is_singular( 'publication' ) ) {
+        return $wpdb->prepare( "WHERE p.post_title > '%s' AND p.post_type = 'publication' AND p.post_status = 'publish'", $post->post_title );
+    } else {
+        return $wpdb->prepare( "WHERE p.post_date < '%s' AND p.post_type = '%s' AND p.post_status = 'publish'", $post->post_date, $post->post_type );
+    }
+}
+
+function filter_previous_post_sort( $sort ) {
+    $sort = ( is_singular( 'publication' ) ) ? 'ORDER BY p.post_title DESC LIMIT 1' : 'ORDER BY p.post_date ASC LIMIT 1';
+    return $sort;
+}
+
+function filter_previous_post_where( $where ) {
+    global $post, $wpdb;
+
+    if ( is_singular( 'publication' ) ) {
+        $wpdb->prepare( "WHERE p.post_title < '%s' AND p.post_type = 'publication' AND p.post_status = 'publish'", $post->post_title );
+    } else {
+        return $wpdb->prepare( "WHERE p.post_date > '%s' AND p.post_type = '%s' AND p.post_status = 'publish'", $post->post_date, $post->post_type );
+    }
+}
+
+
 function filter_next_post_sort($sort) {
   $sort = "ORDER BY p.post_title ASC LIMIT 1";
   return $sort;
@@ -203,11 +276,12 @@ function filter_previous_post_where($where) {
   global $post, $wpdb;
   return $wpdb->prepare("WHERE p.post_title < '%s' AND p.post_type = 'publication' AND p.post_status = 'publish'",$post->post_title);
 }
-add_filter('get_next_post_sort',   'filter_next_post_sort');
-add_filter('get_next_post_where',  'filter_next_post_where');
-add_filter('get_previous_post_sort',  'filter_previous_post_sort');
-add_filter('get_previous_post_where', 'filter_previous_post_where');
 
+
+
+
+
+*/
 
 /*******************************
  =REGISTER SCRIPTS
@@ -569,16 +643,109 @@ function nstats_correlation( $array1, $array2) {
     $b2  = 0;
 
     for ( $i=0; $i < $length; $i++ ) {
-        $a1  = $array1[ $i ] - $mean1;
-        $b1  = $array2[ $i ] - $mean2;
-        $axb = $axb + ( $a1 * $b1 );
-        $a2  = $a2 + pow( $a1,2 );
-        $b2  = $b2 + pow( $b1, 2 );
+        // if ( ( isset( $array1[ $i ] )&& $array1[ $i ] ) && ( isset( $array2[ $i ] ) && $array2[ $i ] ) ) {
+            $a1  = $array1[ $i ] - $mean1;
+            $b1  = $array2[ $i ] - $mean2;
+            $axb = $axb + ( $a1 * $b1 );
+            $a2  = $a2 + pow( $a1, 2 );
+            $b2  = $b2 + pow( $b1, 2 );
+        // }
     }
+
 
     $correlation = $axb / sqrt( $a2 * $b2 );
 
     return $correlation;
+}
+
+
+function Correlation($arr1, $arr2)
+{
+    $correlation = 0;
+
+    $k = SumProductMeanDeviation($arr1, $arr2);
+    $ssmd1 = SumSquareMeanDeviation($arr1);
+    $ssmd2 = SumSquareMeanDeviation($arr2);
+
+    $product = $ssmd1 * $ssmd2;
+
+    $res = sqrt($product);
+
+    $correlation = $k / $res;
+
+    return $correlation;
+}
+
+function SumProductMeanDeviation($arr1, $arr2)
+{
+    $sum = 0;
+
+    $num = count($arr1);
+
+    for($i=0; $i<$num; $i++)
+    {
+        $sum = $sum + ProductMeanDeviation($arr1, $arr2, $i);
+    }
+
+    return $sum;
+}
+
+function ProductMeanDeviation($arr1, $arr2, $item)
+{
+    return (MeanDeviation($arr1, $item) * MeanDeviation($arr2, $item));
+}
+
+function SumSquareMeanDeviation($arr)
+{
+    $sum = 0;
+
+    $num = count($arr);
+
+    for($i=0; $i<$num; $i++)
+    {
+        $sum = $sum + SquareMeanDeviation($arr, $i);
+    }
+
+    return $sum;
+}
+
+function SquareMeanDeviation($arr, $item)
+{
+    return MeanDeviation($arr, $item) * MeanDeviation($arr, $item);
+}
+
+function SumMeanDeviation($arr)
+{
+    $sum = 0;
+
+    $num = count($arr);
+
+    for($i=0; $i<$num; $i++)
+    {
+        $sum = $sum + MeanDeviation($arr, $i);
+    }
+
+    return $sum;
+}
+
+function MeanDeviation($arr, $item)
+{
+    $average = Average($arr);
+
+    return $arr[$item] - $average;
+}
+
+function Average($arr)
+{
+    $sum = Sum($arr);
+    $num = count($arr);
+
+    return $sum/$num;
+}
+
+function Sum($arr)
+{
+    return array_sum($arr);
 }
 
 

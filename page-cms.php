@@ -252,14 +252,16 @@ get_header(); ?>
 
             <?php endwhile; // End of the loop. ?>
 
-            <h2>Detailed PageSpeed Insights averages for daily newspapers using each CMS</h2>
-            <?php echo $html; ?>
+            <section class="content-col">
+                <p>Detailed PageSpeed Insights averages for daily newspapers using each CMS.</p>
+                <?php echo $html; ?>
 
-            <details>
-                <summary>(Test: data arrays)</summary>
-                <pre>
-                </pre>
-            </details>
+                <details>
+                    <summary>(Test: data arrays)</summary>
+                    <pre>
+                    </pre>
+                </details>
+            </section>
 
         </main><!-- #main -->
 

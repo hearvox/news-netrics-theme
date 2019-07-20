@@ -14,7 +14,7 @@
 		<?php the_title( '<h1 class="entry-title">', '</h1>' ); ?>
 	</header><!-- .entry-header -->
 
-	<div class="entry-content">
+	<section class="entry-content">
 		<?php the_content(); ?>
 		<?php
 			wp_link_pages( array(
@@ -22,7 +22,7 @@
 				'after'  => '</div>',
 			) );
 		?>
-	</div><!-- .entry-content -->
+	</section><!-- .entry-content -->
 
 	<footer class="entry-footer">
 		<?php
@@ -39,4 +39,4 @@
 		*/
 		?>
 	</footer><!-- .entry-footer -->
-</article><!-- #post-## -->
+</article><!-- #post-## --><!-- =file: content-page -->

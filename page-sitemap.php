@@ -10,7 +10,7 @@
 get_header(); ?>
 
 	<div id="primary" class="content-area">
-        <main id="main" class="site-main" role="main">
+        <main id="main" class="site-main content-col" role="main">
 
             <?php while ( have_posts() ) : the_post(); ?>
 
@@ -58,6 +58,11 @@ get_header(); ?>
 			</nav>
 
 			<nav class="tax-dropdown">
+				<h2 class="widget-title"><?php esc_html_e( 'References', 'newsstats' ); ?></h2>
+				<ul style="margin-left: 0.5rem;">
+				<?php wp_list_pages( array( 'title_li'   => '' ) ); ?>
+				</ul>
+
 				<h2 class="widget-title"><?php esc_html_e( 'CMS', 'newsstats' ); ?></h2>
 				<ul style="margin-left: 0.5rem;">
 				<?php
@@ -94,7 +99,8 @@ get_header(); ?>
 
 	</div><!-- #primary -->
 
-<?php // get_sidebar(); ?>
 <!-- =file: page-sitemap -->
+<?php // get_sidebar(); ?>
 <?php get_footer(); ?>
+
 
