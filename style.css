@@ -1229,6 +1229,11 @@ table.tabular {
 }
 
 /* Google Chart Table */
+.google-table {
+	display: block;
+	max-width: 99%
+}
+
 .google-visualization-table-th.unsorted:hover,
 .google-visualization-table-th.sort-ascending:hover,
 .google-visualization-table-th.sort-descending:hover {

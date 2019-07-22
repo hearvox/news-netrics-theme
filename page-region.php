@@ -21,7 +21,9 @@ get_header();
             <?php endwhile; // End of the loop. ?>
         </main><!-- #main -->
 
-<figure id="table_div" style="display: block; width: 100%"></figure>
+        <figure id="table_div" class="google-table">
+            <p>Loading… <img src="https://news.pubmedia.us/wp-content/themes/newsstats/img/ajax-loader.gif" width="220" height="19"></p>
+        </figure>
 
 
 
@@ -62,13 +64,25 @@ foreach ( $states_data as $state ) {
     // Data calculations: ratios and precentages.
     $counties_with_pub = $counties - $state['county_0_count'];
     $counties_with_pop = $population - $state['county_0_pop'];
-    $pub_per_pop       = $publications / $population * 1000000; // Pub/Pop.-10K.
+    $pub_per_pop       = $publications / $population * 1000000; // Pub/Pop.-1M.
     $pop_per_circ      = $population / $circulation;
     $county_pub_pc     = ($counties) ? $counties_with_pub / $counties * 100 : 0; // Count % of Counties with Pub.
     $county_pub_pop_pc = $counties_with_pop / $population * 100; // Pop. % of Counties with Pub.
-    $circ_per_pub      = $circulation / $publications / 1000;
+    $circ_per_pub      = $circulation / $publications / 1000; // Circ.-1K/Pub.
     $circ_pop_pc       = $circulation / $population * 100;
-    $news_power        = $pub_per_pop * $circ_per_pub * $circ_pop_pc * $county_pub_pc * $county_pub_pop_pc / 1000000;
+    $news_power        =
+        ( $pub_per_pop * 6 + // Adjust range/weight.
+        $circ_pop_pc   * 2 + // Adjust range/weight.
+        $county_pub_pc / 2 + // Adjust weight.
+        $circ_per_pub      +
+        $county_pub_pop_pc ) / 5;
+
+
+
+
+
+
+        // $pub_per_pop * $circ_per_pub * $circ_pop_pc * $county_pub_pc * $county_pub_pop_pc / 1000000;
 
     // Rows for Google Table chart.
     $json .= '[{v:\'' . $state['name'] . '\',f:\'<a href="' . $state['term_link'] . '">' . $state['name'] . '</a>\'},';
@@ -89,7 +103,7 @@ $g_chart_cols = array(
     'cnty_pub_pc'     => array( 'label' => 'County-w/%', 'type' => 'number', 'format' => 'numpcFormat' ),
     'cnty_pub_pop'    => array( 'label' => 'Pop-w/Paper', 'type' => 'number', 'format' => 'numdecFormat' ),
     'cnty_pub_pop_pc' => array( 'label' => 'Pop-w/Paper', 'type' => 'number', 'format' => 'numpcFormat' ),
-    'power'           => array( 'label' => 'Power', 'type' => 'number', 'format' => 'numdecFormat' ),
+    'cover'           => array( 'label' => 'Cover%', 'type' => 'number', 'format' => 'numdecFormat' ),
 );
 
 function mk_g_chart() {
@@ -139,7 +153,7 @@ function drawChart() {
         data.addColumn('number', 'County-w/%'); // Format.
         data.addColumn('number', 'Pop-w/Paper');
         data.addColumn('number', 'Pop-w/%'); // Format.
-        data.addColumn('number', 'Power'); // Format.
+        data.addColumn('number', 'Cover%'); // Format.
         data.addRows([
 <?php echo $json; ?>
     ]);

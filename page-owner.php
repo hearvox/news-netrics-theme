@@ -164,7 +164,9 @@ get_header(); ?>
                 </p>
             </section>
             <figure id="chart_div"></figure>
-            <figure id="table_div" style="display: block; padding-top: 30px; width: 100%"></figure>
+            <figure id="table_div" style="display: block; padding-top: 30px; width: 100%">
+                <p>Loading… <img src="https://news.pubmedia.us/wp-content/themes/newsstats/img/ajax-loader.gif" width="220" height="19"></p>
+            </figure>
 
         </div><!-- #dashboard_div -->
 

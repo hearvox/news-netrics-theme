@@ -17,6 +17,14 @@ $args = array(
 );
 $query = new WP_Query( $args );
 ?>
+<style type="text/css">
+.content-area .alignnone {
+    height: 225px;
+    width: 300px;
+    margin: 0;
+    padding: 0;
+}
+</style>
     <div id="primary" class="content-area" style="background-color: #efefef;">
         <main id="main" class="site-main" role="main">
 
@@ -28,5 +36,5 @@ $query = new WP_Query( $args );
 
     </div><!-- #primary -->
 
-<!-- =file: page-homepagess -->
+<!-- =file: page-front-pages -->
 <?php get_footer(); ?>

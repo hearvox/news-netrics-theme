@@ -37,7 +37,7 @@ function drawChart() {
     // Data cols and rows.
     var data = new google.visualization.DataTable();
         data.addColumn('string', 'Domain');
-        data.addColumn('string', 'Paper');
+        data.addColumn('string', 'Paper&nbsp;&nbsp;&nbsp; &mdash; &nbsp;&nbsp;results link: &#9432;');
         data.addColumn('number', 'Circ.');
         data.addColumn('number', 'Rank');
         data.addColumn('string', 'State');

@@ -122,7 +122,7 @@ get_header();
         <h1>U.S. Daily Newspapers</h1>
         <div id="stringFilter_control_div" style="margin: 1rem 3rem;"></div>
         <figure id="table_div" style="display: block; padding-top: 30px; width: 100%">
-            Loading… <img src="https://news.pubmedia.us/wp-content/themes/newsstats/img/ajax-loader.gif" width="220" height="19">
+            <p>Loading… <img src="https://news.pubmedia.us/wp-content/themes/newsstats/img/ajax-loader.gif" width="220" height="19"></p>
         </figure>
     </div><!-- #dashboard_div -->
 <script type="text/javascript">
@@ -152,16 +152,17 @@ function drawMainDashboard() {
         'options': {
             'allowHtml': true,
             'sortColumn': 0,
+            'frozenColumns': 1,
             'sortAscending': true,
             'showRowNumber': true,
             'width': '100%',
-            'height': '100%',
+            'height': '1000px',
         },
     });
 
 var data = google.visualization.arrayToDataTable([
         [   {label: 'Domain', id: 'domain', type: 'string'},
-            {label: 'Name&mdash; results link: &#9432;', id: 'name', type: 'string'},
+            {label: 'Name&nbsp;&nbsp;&nbsp; &mdash; &nbsp;&nbsp;results link: &#9432;', id: 'name', type: 'string'},
             {label: 'Circulation', id: 'circ', type: 'number'},
             {label: 'Site Rank', id: 'rank', type: 'number'},
             {label: 'State', id: 'state', type: 'string'},
@@ -183,27 +184,6 @@ var data = google.visualization.arrayToDataTable([
     dashboard.draw(data);
 
 /*
-    // Data cols and rows.
-    var data = new google.visualization.DataTable();
-    data.addColumn('string', 'Domain');
-    data.addColumn('string', 'Name (results &raquo;)');
-    data.addColumn('number', 'Circulation');
-    data.addColumn('number', 'Site Rank');
-    data.addColumn('string', 'State');
-    data.addColumn('string', 'City');
-    data.addColumn('number', 'Population');
-    data.addColumn('string', 'Owner');
-    data.addColumn('string', 'CMS');
-    data.addColumn('number', 'DOM');
-    data.addColumn('number', 'Requests');
-    data.addColumn('number', 'Size (MB)');
-    data.addColumn('number', 'Speed (s)');
-    data.addColumn('number', 'TTI (s)');
-    data.addColumn('number', 'Score');
-    data.addColumn('string', 'name');
-    data.addRows([
-<?php // echo $json; ?>
-    ]);
 
     // Format number to one decimal place; apply to specified columns.
     var numdecFormat = new google.visualization.NumberFormat({fractionDigits: 1});

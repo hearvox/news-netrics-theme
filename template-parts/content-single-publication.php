@@ -165,9 +165,9 @@ if ( $articles_1906 && 1 < count( $articles_1906 ) ) {
 
 	<header class="entry-header">
         <?php if ( $psi_1905 ) { ?>
-        <figure id="chart_div" class="alignright" style="width: 180px; height: 180px; margin-right: 0;"></figure>
         <?php } ?>
         <?php the_title( '<h1 class="entry-title">', '</h1>' ); ?>
+        <figure id="chart_div" class="alignright" style="width: 180px; height: 180px; margin-right: 0;"></figure>
 		<ul class="media-meta" style="list-style: none; margin: 0; padding: 0;">
             <li><strong><big><?php echo esc_html( $pub_name ) ?></big></strong><?php echo esc_html( $awis_desc ); ?></li>
             <li><?php echo trim( $regions, ' &gt; ' ); ?> <small>(pop. <?php echo esc_html( $term_pop ); ?>)</small></li>
