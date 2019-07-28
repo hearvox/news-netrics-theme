@@ -1,7 +1,8 @@
 <?php
 /**
- * Test code
+ * List articles with their PSI results.
  *
+ * https://news.pubmedia.us/data/data-list-articles/
  *
  * @package newsstats
  */
@@ -59,23 +60,27 @@ foreach ( $query->posts as $post ) {
     $urls    = "<small>(<a href=\"{$post->guid}\">$post_id</a> | <a href=\"$site\">site</a>$feed$edit)$tags$flags</small>";
 
     $list  .= "<li>{$post->post_title} $urls";
-    $items  = get_post_meta( $post_id, 'nn_articles_201905', true );
 
+    $items  = get_post_meta( $post_id, 'nn_articles_201907', true );
     if ( $items && 1 < count( $items ) ) {
-        $list .= '</li>2019-05<ol>';
+        $list .= '</li>2019-07<ol>';
         $list .= netrics_pagespeed_results_list( $query, $items );
         $list .= '</ol>';
     }
 
-
     $items  = get_post_meta( $post_id, 'nn_articles_201906', true );
-
     if ( $items && 1 < count( $items ) ) {
         $list .= '</li>2019-06<ol>';
         $list .= netrics_pagespeed_results_list( $query, $items );
         $list .= '</ol>';
     }
 
+    $items  = get_post_meta( $post_id, 'nn_articles_201905', true );
+    if ( $items && 1 < count( $items ) ) {
+        $list .= '</li>2019-05<ol>';
+        $list .= netrics_pagespeed_results_list( $query, $items );
+        $list .= '</ol>';
+    }
 
 }
 

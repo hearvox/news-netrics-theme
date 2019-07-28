@@ -76,6 +76,7 @@ $map_src = $map_api .$map_loc . $map_ctr ;
 
 $psi_1905 = netrics_site_pagespeed( $post_id, 'nn_articles_201905' );
 $psi_1906 = netrics_site_pagespeed( $post_id, 'nn_articles_201906' );
+$psi_1907 = netrics_site_pagespeed( $post_id, 'nn_articles_201907' );
 
 $lines = '';
 if ( $psi_1905 ) {
@@ -92,8 +93,16 @@ if ( $psi_1906 ) {
     $lines .= round( $psi_1906['tti'] / 1000, 1 ) . ",13.7,29.5],\n";
 }
 
+if ( $psi_1907 ) {
+    // Line chart data.
+    $lines .= "['7/19', ";
+    $lines .= round( $psi_1907['speed'] / 1000, 1 ) . ', ';
+    $lines .= round( $psi_1907['tti'] / 1000, 1 ) . ",13.7,29.5],\n";
+}
+
 $articles_1905 = get_post_meta( $post_id, 'nn_articles_201905', true );
 $articles_1906 = get_post_meta( $post_id, 'nn_articles_201906', true );
+$articles_1907 = get_post_meta( $post_id, 'nn_articles_201907', true );
 
 /*$date_1 = $date_2 = '';
 $item_1 = $errors_1  = 0; // Array element.
@@ -184,9 +193,9 @@ if ( $articles_1906 && 1 < count( $articles_1906 ) ) {
     if ( $pubs_data ) {
             ?>
         <table class="tabular">
-            <caption>PageSpeed Insights average results for <?php echo count( $pubs_data['score'] ) ?> articles (2019-05)</caption>
+            <caption>PageSpeed Insights average results for <?php echo count( $pubs_data['score'] ) ?> articles (2019-06)</caption>
                 <?php echo netrics_pagespeed_mean( $pubs_data, $tbody = false ); ?>
-                <?php echo netrics_articles_results_table( $post_id, $articles_1905 ); ?>
+                <?php echo netrics_articles_results_table( $post_id, $articles_1906 ); ?>
             </tbody>
         </table>
 
@@ -197,6 +206,9 @@ if ( $articles_1906 && 1 < count( $articles_1906 ) ) {
 
         <p><em>Articles 2019-06:</em>
         <?php echo netrics_articles_results( $post_id, $articles_1906 ); ?></p>
+        <p><em>Articles 2019-05:</em>
+        <?php echo netrics_articles_results( $post_id, $articles_1905 ); ?></p>
+
     </section><!-- .content-col -->
 
 	<footer class="entry-footer">
@@ -228,7 +240,7 @@ if ( $articles_1906 && 1 < count( $articles_1906 ) ) {
 </article><!-- #post-## -->
 
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-<?php if ( $psi_1905 ) { ?>
+<?php if ( $psi_1906 ) { ?>
 <script type="text/javascript">
 	// @see https://developers.google.com/chart/interactive/docs/gallery/gauge
     google.charts.load('current', {'packages':['gauge','corechart']});
@@ -238,7 +250,7 @@ if ( $articles_1906 && 1 < count( $articles_1906 ) ) {
 
         var data_score = google.visualization.arrayToDataTable([
           ['Label', 'Value'],
-          ['Score', <?php echo round( $psi_1905['score'] * 100, 1 ); ?>],
+          ['Score', <?php echo round( $psi_1906['score'] * 100, 1 ); ?>],
         ]);
 
         var options_score = {
@@ -258,7 +270,7 @@ if ( $articles_1906 && 1 < count( $articles_1906 ) ) {
         ]);
 
         var options_history = {
-            title: 'Speed Index and Time to Interactive (seconds)',
+            title: 'Speed-Index and Time-to-Interactive averages (seconds)',
             colors: ['#e2431e', '#f1ca3a', '#e2431e','#f1ca3a'],
             curveType: 'function',
             legend: { position: 'bottom' },

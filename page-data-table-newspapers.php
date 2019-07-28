@@ -9,7 +9,12 @@
 get_header();
 
 ?>
-
+<style type="text/css">
+thead th {
+  position: sticky;
+  top: 95px;
+}
+</style>
     <div id="primary" class="content-area">
         <main id="main" class="site-main" role="main">
 
