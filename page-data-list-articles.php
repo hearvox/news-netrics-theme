@@ -12,7 +12,7 @@ get_header();
 $pubs_data = newsstats_get_pubs_pagespeed();
 ?>
 
-	<div id="primary" class="content-area">
+	<div id="primary" class="content-area" style="margin: 0 1rem;">
 
 		<main id="main" class="site-main" role="main">
 

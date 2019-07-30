@@ -9,12 +9,7 @@
 get_header();
 
 ?>
-<style type="text/css">
-thead th {
-  position: sticky;
-  top: 95px;
-}
-</style>
+
     <div id="primary" class="content-area">
         <main id="main" class="site-main" role="main">
 
@@ -26,7 +21,7 @@ thead th {
 
         </main><!-- #main -->
 
-<table class="tabular">
+<table class="tabular thead-sticky">
     <caption><h1>U.S. Daily Newspapers</h1></caption>
     <thead>
         <tr>

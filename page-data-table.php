@@ -21,7 +21,7 @@ get_header();
 
         </main><!-- #main -->
 
-<table class="tabular">
+<table class="tabular thead-sticky">
     <caption><h1>U.S. Daily Newspapers</h1></caption>
     <thead>
         <tr>

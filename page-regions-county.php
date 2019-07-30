@@ -10,6 +10,13 @@
 get_header();
 ?>
 
+<style type="text/css">
+.google-visualization-table-table thead tr th {
+  position: sticky;
+}
+
+</style>
+
 	<div id="primary" class="content-area">
         <main id="main" class="site-main" role="main">
 
@@ -36,73 +43,73 @@ Set post meta (/news-netrics/includes/taxonomies.php): netrics_get_region_data()
 https://www.cjr.org/local_news/american-news-deserts-donuts-local.php
 https://www.usnewsdeserts.com/
 
-https://developers.google.com/speed/pagespeed/insights/?url=https%3A%2F%2Fnews.pubmedia.us%2Fregion%2F&tab=mobile
-71 mobile / 93 desktop
+https://developers.google.com/speed/pagespeed/insights/?url=https%3A%2F%2Fnews.pubmedia.us%2Fregion-county%2F&tab=mobile
 
 
-3 States have different State pops than the sum of their County pops:
-st  diff   st-pop  counties-pop
-___________________________
-nd   1903   760077   758174
-ri  48649  1057315  1008666
-va  23933  8517685  8493752
 
-{$state['pub_per_pop']}
+
+[179] => Array
+        (
+            [term_id] => 1587
+            [name] => Mohave County
+            [slug] => mohave-county-az
+            [term_group] => 0
+            [term_taxonomy_id] => 1587
+            [taxonomy] => region
+            [description] => Mohave County, Arizona
+            [parent] => 1398
+            [count] => 3
+            [filter] => raw
+            [geoid] => 0500000US04015
+            [population] => 209550
+            [pop_density] => 15
+            [circ_sum] => 23610
+        )
+
+/region/bedford-county-pa/
+
 */
 
-$states_data = get_post_meta( 7594, 'nn_states', true );
+
+
+$counties_data = get_post_meta( 7594, 'nn_counties', true );
 $json   = '';
 
-foreach ( $states_data as $state ) {
+foreach ( $counties_data as $county ) {
     // Data.
-    $population   = $state['population'];
-    $publications = $state['count'];
-    $circulation  = $state['circ_sum'];
-    $counties     = $state['counties'];
+    $population   = $county['population'];
+    $pop_density  = $county['pop_density'];
+    $publications = $county['count'];
+    $circulation  = ( $county['circ_sum'] ) ? $county['circ_sum'] : null;
 
     // Data calculations: ratios and precentages.
-    $counties_with_pub = $counties - $state['county_0_count'];
-    $counties_with_pop = $population - $state['county_0_pop'];
-    $pub_per_pop       = $publications / $population * 1000000; // Pub/Pop.-1M.
-    $pop_per_circ      = $population / $circulation;
-    $county_pub_pc     = ($counties) ? $counties_with_pub / $counties * 100 : 0; // Count % of Counties with Pub.
-    $county_pub_pop_pc = $counties_with_pop / $population * 100; // Pop. % of Counties with Pub.
-    $circ_per_pub      = $circulation / $publications / 1000; // Circ.-1K/Pub.
-    $circ_pop_pc       = $circulation / $population * 100;
-    $news_power        =
+    $pub_per_pop       = ( $publications ) ? $publications / ( $population / 1000000 ) : null; // Pub/Pop.-1M.
+    // $pop_per_circ      = ( $circulation ) ? $population / $circulation : null;
+    $circ_per_pub      = ( $circulation ) ? ( $circulation / 1000 ) / $publications : null; // Circ.-1K/Pub.
+    $circ_pop_pc       = ( $circulation ) ? ( $circulation / $population ) * 100 : null;
+    $news_cover        =
         ( $pub_per_pop * 6 + // Adjust range/weight.
         $circ_pop_pc   * 2 + // Adjust range/weight.
-        $county_pub_pc / 2 + // Adjust weight.
-        $circ_per_pub      +
-        $county_pub_pop_pc ) / 5;
+        $circ_per_pub ) / 5;
 
-
-
-
-
-
-        // $pub_per_pop * $circ_per_pub * $circ_pop_pc * $county_pub_pc * $county_pub_pop_pc / 1000000;
-
-    // Rows for Google Table chart.
-    $json .= '[{v:\'' . $state['name'] . '\',f:\'<a href="' . $state['term_link'] . '">' . $state['name'] . '</a>\'},';
-    $json .= "$publications,$population,$pub_per_pop,$circulation,$circ_pop_pc,$circ_per_pub,";
-    $json .= "$counties,$counties_with_pub,$county_pub_pc,$counties_with_pop,$county_pub_pop_pc,$news_power],\n";
+    // Rows for Google Table chart (use double quotes to avoid single-quotes in county names).
+    $json .= ( $publications ) // Link if county has paper.
+        ? "[{v:\"{$county['name']}\",f:\"<a href='/region/{$county['slug']}'>{$county['name']}</a>\"},"
+        : "[\"{$county['name']}\",";
+    $json .= "\"{$county['state']}\",$publications,$population,$pop_density,$pub_per_pop,$circulation,$circ_pop_pc,$circ_per_pub,$news_cover],\n";
 }
 
 $g_chart_cols = array(
     'name'            => array( 'label' => 'Name', 'type' => 'string', 'format' => null ),
+    'state'           => array( 'label' => 'State', 'type' => 'string', 'format' => null ),
     'paper'           => array( 'label' => 'Population', 'type' => 'number', 'format' => 'numdecFormat' ),
     'pop'             => array( 'label' => 'Population', 'type' => 'number', 'format' => 'numpcFormat' ),
+    'pop_density'     => array( 'label' => 'Pop/sq-mi', 'type' => 'number', 'format' => 'numdecFormat' ),
     'pub_per_pop'     => array( 'label' => 'Papers/Pop-1M', 'type' => 'number', 'format' => 'numdecFormat' ),
     'circ'            => array( 'label' => 'Circulation', 'type' => 'number', 'format' => 'numdecFormat' ),
     'circ_pop_pc'     => array( 'label' => 'Circ/Pop%', 'type' => 'number', 'format' => 'numpcFormat' ),
     'circ_per_pub'    => array( 'label' => 'Circ/Paper', 'type' => 'number', 'format' => 'numKFormat' ),
-    'counties'        => array( 'label' => 'Counties', 'type' => 'number', 'format' => 'numdecFormat' ),
-    'cnty_pub'        => array( 'label' => 'Counties-w/Paper', 'type' => 'number', 'format' => 'numdecFormat' ),
-    'cnty_pub_pc'     => array( 'label' => 'County-w/%', 'type' => 'number', 'format' => 'numpcFormat' ),
-    'cnty_pub_pop'    => array( 'label' => 'Pop-w/Paper', 'type' => 'number', 'format' => 'numdecFormat' ),
-    'cnty_pub_pop_pc' => array( 'label' => 'Pop-w/Paper', 'type' => 'number', 'format' => 'numpcFormat' ),
-    'cover'           => array( 'label' => 'Cover%', 'type' => 'number', 'format' => 'numdecFormat' ),
+    'news_cover'      => array( 'label' => 'Cover%', 'type' => 'number', 'format' => 'numdecFormat' ),
 );
 
 function mk_g_chart() {
@@ -140,18 +147,15 @@ function drawChart() {
 
     // Data cols and rows.
     var data = new google.visualization.DataTable();
+        data.addColumn('string', 'County');
         data.addColumn('string', 'State');
         data.addColumn('number', 'Papers');
         data.addColumn('number', 'Population');
+        data.addColumn('number', 'Pop/sq-mi');
         data.addColumn('number', 'Papers/Pop-1M'); // Format.
         data.addColumn('number', 'Circulation');
         data.addColumn('number', 'Circ/Pop%'); // Format.
         data.addColumn('number', 'Circ/Paper'); // Format.
-        data.addColumn('number', 'Counties');
-        data.addColumn('number', 'Counties-w/Paper');
-        data.addColumn('number', 'County-w/%'); // Format.
-        data.addColumn('number', 'Pop-w/Paper');
-        data.addColumn('number', 'Pop-w/%'); // Format.
         data.addColumn('number', 'Cover%'); // Format.
         data.addRows([
 <?php echo $json; ?>
@@ -159,20 +163,16 @@ function drawChart() {
 
     // Format number to one decimal place; apply to specified columns.
     var numdecFormat = new google.visualization.NumberFormat({fractionDigits: 1});
-    numdecFormat.format(data, 3);
-    numdecFormat.format(data, 12);
+    numdecFormat.format(data, 4);
+    numdecFormat.format(data, 5);
+    numdecFormat.format(data, 8);
+    numdecFormat.format(data, 9);
 
     var numpcFormat = new google.visualization.NumberFormat({fractionDigits: 1, suffix: '%'});
-    numpcFormat.format(data, 5);
-    numpcFormat.format(data, 9);
-    numpcFormat.format(data, 11);
+    numpcFormat.format(data, 7);
 
     var numKFormat = new google.visualization.NumberFormat({fractionDigits: 1, suffix: 'K'});
-    numKFormat.format(data, 6);
-
-    // var numdecFormat = new google.visualization.NumberFormat({fractionDigits: 0});
-    // numdecFormat.format(data, 6);
-
+    numKFormat.format(data, 8);
 
     // Google Visualization: Table chart.
     var wrapper = new google.visualization.ChartWrapper({
@@ -181,11 +181,15 @@ function drawChart() {
         dataTable: data,
         options: {
             'allowHtml': true,
-            'sortColumn': 1,
+            'sortColumn': 2,
             'sortAscending': false,
             'showRowNumber': true,
             'width': '100%',
-            'height': '100%',
+            /*
+            'page': 'enable',
+            'pageSize': 50,
+            'pagingButtons': 'both',
+            */
         },
     });
     // Attach controls to charts.

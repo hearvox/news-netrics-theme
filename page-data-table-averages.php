@@ -24,7 +24,7 @@ thead th {
             <?php endwhile; // End of the loop. ?>
         </main><!-- #main -->
 
-<table class="tabular">
+<table class="tabular thead-sticky">
     <caption>Newspaper average PageSpeed results, with Alexa rank and BuiltWith counts</caption>
     <thead>
         <tr style="font-style: italic;">

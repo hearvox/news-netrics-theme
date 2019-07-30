@@ -19,7 +19,7 @@ get_header();
             <?php endwhile; // End of the loop. ?>
         </main><!-- #main -->
 
-<table class="tabular">
+<table class="tabular thead-sticky">
     <caption>Articles with PageSpeed results</caption>
     <thead>
         <tr style="font-style: italic;">

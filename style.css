@@ -475,7 +475,6 @@ table {
 /*--------------------------------------------------------------
 =Colors: light d6d2d1, orange f89d13, red 8f1d14,  dark 1b120f, light blue #e86a37 color: #E86A37;
 --------------------------------------------------------------*/
-
 .site-header { background-color: #8f1d14; } /* dark red */
 
 .site-header,
@@ -552,6 +551,7 @@ a:active {
 --------------------------------------------------------------*/
 .site-header {
 	border-bottom: 0.1em solid silver;
+	box-shadow: 0 2px 40px -10px rgba(44,44,44,.6);
 	width: 100%;
 	z-index: 1000;
 }
@@ -956,6 +956,12 @@ table.tabular {
 
 .tabular .hover-none:hover {
 	background-color: transparent;
+}
+
+/* Other table styles */
+.thead-sticky thead th {
+    position: sticky;
+    top: 80px;
 }
 
 /* Google Chart Table */
