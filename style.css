@@ -473,22 +473,21 @@ table {
 
 
 /*--------------------------------------------------------------
-=Colors: light d6d2d1, orange f89d13, red 8f1d14,  dark 1b120f, light blue #e86a37 color: #E86A37;
+=Colors: light #d6d2d1, orange #f89d13, red 8f1d14,  dark #1b120f, light blue #e86a37 color: #E86A37;
 --------------------------------------------------------------*/
-.site-header { background-color: #8f1d14; } /* dark red */
+.site-header,
+.site-footer { background-color: #fff; } /* dark red */
 
 .site-header,
-.nav-menu .sub-menu a:hover,
-.site-footer a,
-.site-footer a:visited { color: #8f1d14; }
+.nav-menu .sub-menu a:hover { color: #212121; }
 
 .site-title a,
 .site-title a:visited,
 .nav-menu .menu-item a,
-.nav-menu .menu-item a:visited { color: #d6d2d1; } /* light grey-red */
+.nav-menu .menu-item a:visited { color: #212121; } /* light grey-red */
 
 .main-navigation .sub-menu .menu-item,
-.site-footer { background-color: #d6d2d1; }
+.site-footer { background-color: #fff; }
 
 h1,
 h2,
@@ -498,19 +497,22 @@ h5,
 h6,
 .nav-menu .sub-menu a,
 .nav-menu .sub-menu a:visited,
-.site-footer { color: #1b120f; } /* dark black-red */
+.site-footer { color: #323232; } /* dark black-red */
 
 .site-title a:hover,
-.nav-menu .menu-item a:hover { color: #fff; }
+.nav-menu .menu-item a:hover { color: #4168e1; }
 
-.site-footer a:hover,
-output { color: #b55502;; } /* dark orange */
+.site-footer a,
+.site-footer a:visited,
+.site-footer a:hover {}
+
+output { color: #cc0f0f;; } /* dark orange */
 
 output,
 .tabular thead th,
 .tabular th,
 .tabular tfoot tr,
-.tabular tbody tr:hover { background-color: #f3f0f0;	} /* lighter grey-red */
+.tabular tbody tr:hover { background-color: #ececec; } /* lighter grey-red */
 
 /*--------------------------------------------------------------
 =Navigation
@@ -738,13 +740,14 @@ a:active {
 ==Footer light e6dedd, red 8f1d14, dark 1b120f, orange f89d13
 --------------------------------------------------------------*/
 .site-footer {
-	background-color: #e6dedd;
 	border-top: 0.1em solid silver;
-	color: #1b120f;
+	box-shadow: inset 0 2px 40px -10px rgba(44,44,44,.6);
 	margin-top: 2rem;
 	padding: 1rem 0;
 	width: 100%;
 }
+
+
 
 .footer-nav,
 .site-info { text-align: left; }
@@ -756,9 +759,6 @@ a:active {
 }
 
 .site-footer form { margin-bottom: 2rem; }
-
-.site-footer a { color: #8f1d14; }
-
 
 /*--------------------------------------------------------------
 =Accessibility

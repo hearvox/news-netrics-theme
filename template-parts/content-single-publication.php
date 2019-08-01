@@ -204,6 +204,8 @@ if ( $articles_1906 && 1 < count( $articles_1906 ) ) {
         <?php } // if ( $pubs_data )
         ?>
 
+        <p><em>Articles 2019-07:</em>
+        <?php echo netrics_articles_results( $post_id, $articles_1907 ); ?></p>
         <p><em>Articles 2019-06:</em>
         <?php echo netrics_articles_results( $post_id, $articles_1906 ); ?></p>
         <p><em>Articles 2019-05:</em>
