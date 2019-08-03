@@ -80,6 +80,8 @@ get_header(); ?>
 
  */
 
+            $map_data = array();
+
 			// On first page (only).
 			$paged = (get_query_var( 'paged' ) ) ? get_query_var( 'paged' ) : 1;
 			// Output HTML tables of site-wide Pagespeed averages:.
@@ -104,12 +106,57 @@ get_header(); ?>
                 <?php } ?>
     			</tfoot>
 			</table>
+            <div id="map" style="border: 1px solid #f6f6f6; height: 600px; width: 100%;"></div>
 				<?php } ?>
 			<?php } ?>
 
 		<?php while ( have_posts() ) : the_post(); ?>
 
 			<?php get_template_part( 'template-parts/content', 'archive' ); ?>
+
+            <?php
+
+            if ( is_tax( 'owner' ) ) {
+                $post_id   = $post->ID;
+                $post_meta = get_post_meta( $post_id );
+
+                $term_owner  = get_the_terms( $post_id, 'owner' );
+                $pub_owner   = ( $term_owner && isset( $term_owner[0]->name ) ) ? $term_owner[0]->name : 'ERROR:owner';
+
+                $term_city   = get_the_terms( $post_id, 'region' );
+                $city        = ( $term_city && isset( $term_city[0]->name ) ) ? $term_city[0]->name : 'ERROR:city';
+                $city_meta   = ( $term_city && isset( $term_city[0]->term_id ) )
+                    ? get_term_meta( $term_city[0]->term_id ) : false;
+                $city_pop    = ( $city_meta && isset( $city_meta['nn_region_pop'][0] ) )
+                    ? $city_meta['nn_region_pop'][0] : 0;
+                $city_latlon = ( $city_meta && isset( $city_meta['nn_region_latlon'][0] ) )
+                    ? $city_meta['nn_region_latlon'][0] : '';
+                $term_county = ( $term_city && isset( $term_city[0]->parent ) )
+                    ? get_term( $term_city[0]->parent ) : false;
+                $county      = ( $term_county && isset( $term_county->name ) ) ? $term_county->name : 'ERROR:county';
+                $term_state  = ( $term_county && isset( $term_county->parent ) )
+                    ? get_term( $term_county->parent ) : false;
+                $state       = ( $term_state && isset( $term_state->name ) ) ? $term_state->name : 'ERROR:state';
+
+                $map_data[] = array(
+                    'pub_id'      => $post_id,
+                    'pub_title'   => $post->post_title,
+                    'pub_link'    => get_permalink( $post_id ),
+                    'pub_domain'  => $post_meta['nn_pub_site'][0],
+                    'pub_name'    => $post_meta['nn_pub_name'][0],
+                    'pub_circ'    => $post_meta['nn_circ'][0],
+                    'pub_url'     => $post_meta['nn_pub_url'][0],
+                    'pub_rss'     => $post_meta['nn_pub_rss'][0],
+                    'pub_year'    => $post_meta['nn_pub_year'][0],
+                    'pub_owner'   => $pub_owner,
+                    'city'        => $city,
+                    'county'      => $county,
+                    'state'       => $state,
+                    'city_pop'    => $city_pop,
+                    'city_latlon' => $city_latlon,
+                );
+            }
+            ?>
 
 		<?php endwhile; // End of the loop. ?>
 
@@ -118,6 +165,103 @@ get_header(); ?>
 			<?php get_template_part( 'template-parts/content', 'none' ); ?>
 
 		<?php endif; ?>
+
+        <?php rewind_posts(); ?>
+        <?php
+        if ( is_tax( 'owner' ) ) { ?>
+
+<script>
+/* Load map (called by <script> callback) */
+function news_map_init() {
+    var map = new google.maps.Map(
+        document.getElementById('map'), {
+            center: new google.maps.LatLng(39.8283,-98.5795), // Geo center of the 48 States.
+            zoom: 4.5,
+            mapTypeId: 'terrain',
+    });
+
+    news_map_set_markers(map);
+    // soundmap_set_markers(map);
+}
+
+/*
+Data for the markers:
+[{"pub_id":4031,"pub_title":"adn.com","pub_link":"https:\/\/news.pubmedia.us\/publication\/adn-com\/","pub_domain":"adn.com","pub_name":"Alaska Dispatch News","pub_circ":"3520","pub_url":"https:\/\/www.adn.com\/","pub_rss":"https:\/\/news.google.com\/rss\/search?hl=en-US&gl=US&ceid=US=en&num=5&q=site=adn.com","pub_year":"2014","pub_owner":"Alaska Dispatch Publishing LLC","city":"Anchorage","county":"Anchorage Municipality","state":"AK","city_pop":"253421","city_latlon":"61.1508|-149.1091"},{...}]
+*/
+var news_map_data = <?php echo json_encode( $map_data ); ?>;
+var lists_html    = "";
+var gmarkers      = [];
+var map_html      = [];
+
+
+/* Adds markers to the map */
+function news_map_set_markers(map) {
+
+    // Origins, anchor positions and coordinates increase in directions X right and Y down.
+    // Size in of X,Y originating from top-left of image, at (0,0).
+    var image = {
+        url:    'https://news.pubmedia.us/wp-content/themes/newsstats/img/map/newsagent-no-pin-op85-21x22.png',
+        size:   new google.maps.Size(21, 22),
+        origin: new google.maps.Point(0, 0),
+        anchor: new google.maps.Point(0, 22)
+    };
+
+    for (var i = 0; i < news_map_data.length; i++) {
+    // for (var i = 0; i < 2; i++) {
+        var data = news_map_data[i]; // Get data for Info Window
+
+        // Info Window content
+        var pub_circ = ( data['pub_circ'] ) ? parseFloat(data['pub_circ']).toLocaleString() : '';
+        var city_pop = ( data['city_pop'] ) ? parseFloat(data['city_pop']).toLocaleString() : '';
+        var map_html =
+            '<section id="news-map-' + i + '" class="news-map-info">' +
+            '<img src="https://s.wordpress.com/mshots/v1/' +
+            encodeURIComponent(data['pub_url']) + '?w=200&h=150" width="200" height="150" alt="' + data['pub_name'] + '" />' +
+            '<div><a href="' + data['pub_link'] + '">' + data['pub_name'] + '</a></div>' +
+            '<div>' + data['pub_domain'] + '</div>' +
+            '<div>Circ.: ' + pub_circ + '</div>' + // Convert str to num, add commas.
+            '<div>' + data['city'] + ' ' + data['state'] + '</div>' +
+            '<div>Pop.: ' + city_pop + '</div>' +
+            '</section>';
+
+        infoWindow = new google.maps.InfoWindow({ content: map_html });
+
+        var latlon = data["city_latlon"].split('|');
+
+        var marker = new google.maps.Marker({
+            position: {lat: parseFloat(latlon[0]), lng: parseFloat(latlon[1])},
+            map:      map,
+            icon:     image,
+            id:       i,
+            title:    data['pub_domain'],
+            info:     map_html,
+        });
+
+
+        // document.getElementById('txt').innerHTML = news_map_data;
+
+        // Save Markers in an array.
+        gmarkers.push(marker);
+
+        // Add content to user-clicked Info Window.
+        google.maps.event.addListener( marker, 'click', function() {
+            infoWindow.setContent( this.info );
+            infoWindow.open( map, this );
+        });
+
+
+    }
+
+}
+
+//  https://developers.google.com/maps/documentation/javascript/heatmaplayer#add_weighted_data_points
+//  https://developers.google.com/maps/documentation/javascript/examples/marker-remove
+
+</script>
+
+<script async defer src="//maps.googleapis.com/maps/api/js?key=AIzaSyA5clgBbvCkszTpr0UjyF0cG_Hr21Kd9Pg&callback=news_map_init"></script>
+
+        <?php } ?>
 
             <nav class="nav-pagination justify">
                 <?php echo paginate_links(); ?>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 16.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="180px" height="180px" viewBox="0 0 180 180" enable-background="new 0 0 180 180" xml:space="preserve">
+    <g>
+        <circle cx="89.5" cy="89.5" r="81" stroke="#333333" stroke-width="1" fill="#cccccc"></circle>
+        <circle cx="89.5" cy="89.5" r="72" stroke="#e0e0e0" stroke-width="2" fill="#f7f7f7"></circle>
+        <path d="M154.67184310807045,111.01315561749641A68,68,0,0,1,138.08326112068522,138.08326112068522L126.06244584051396,126.06244584051387A51,51,0,0,0,138.50388233105284,105.75986671312232Z" stroke="none" stroke-width="0" fill="#109618"></path>
+        <path d="M89.99999999999999,22A68,68,0,0,1,154.67184310807045,111.01315561749642L138.50388233105284,105.7598667131223A51,51,0,0,0,90,39Z" stroke="none" stroke-width="0" fill="#ff9900"></path>
+        <path d="M41.91673887931477,138.08326112068522A68,68,0,0,1,90,22L89.99999999999999,39A51,51,0,0,0,53.937554159486076,126.06244584051393Z" stroke="none" stroke-width="0" fill="#dc3912"></path>
+        <text text-anchor="middle" x="90" y="72.3" font-family="arial" font-size="18" stroke="none" stroke-width="0" fill="#333333">Score</text>
+        <text text-anchor="start" x="55.06892500938455" y="128.43107499061546" font-family="arial" font-size="10" stroke="none" stroke-width="0" fill="#333333">0</text>
+        <text text-anchor="end" x="124.93107499061549" y="128.4310749906154" font-family="arial" font-size="10" stroke="none" stroke-width="0" fill="#333333">100</text>
+        <path d="M29.9759408393223,101.93952770738704L23.306600932580324,103.26614189709672M55.9991017392003,39.11405972708425L52.221224154667,33.460066363426954M124.00089826079963,39.11405972708422L127.77877584533292,33.46006636342691M150.0240591606777,101.93952770738704L156.69339906741968,103.26614189709672" stroke="#666666" stroke-width="1" fill-opacity="1" fill="none"></path>
+        <path d="M51.53339110345181,128.4666088965482L41.91673887931477,138.08326112068522M39.74095343138598,69.18202127933914L27.17619178923249,63.97752659917393M89.99999999999999,35.599999999999994L89.99999999999999,22M140.259046568614,69.18202127933912L152.8238082107675,63.97752659917391M128.46660889654822,128.46660889654814L138.08326112068528,138.08326112068517" stroke="#333333" stroke-width="2" fill-opacity="1" fill="none"></path>
+    </g>
+</svg>

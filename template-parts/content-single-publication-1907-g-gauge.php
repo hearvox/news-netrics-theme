@@ -78,79 +78,105 @@ $psi_1905 = netrics_site_pagespeed( $post_id, 'nn_articles_201905' ); // si: 13.
 $psi_1906 = netrics_site_pagespeed( $post_id, 'nn_articles_201906' ); // si: 13.3, tti: 30.3, speed: 18.8
 $psi_1907 = netrics_site_pagespeed( $post_id, 'nn_articles_201907' ); // si: 13.5, tti: 29.7, speed: 20.4
 
-$lines = $bars = '';
+$lines = '';
 if ( $psi_1905 ) {
-    // Column chart data.
-    $bars .= "['5/19', ";
-    $bars .= round( $psi_1905['speed'] / 1000, 1 ) . ', ';
-    $bars .= round( $psi_1905['tti'] / 1000, 1 ) . ",30.1],\n";
-
+    // Line chart data.
+    $lines .= "['5/19', ";
+    $lines .= round( $psi_1905['speed'] / 1000, 1 ) . ', ';
+    $lines .= round( $psi_1905['tti'] / 1000, 1 ) . ",13.9,30.1],\n";
 }
 
 if ( $psi_1906 ) {
-    // Column chart data.
-    $bars .= "['6/19', ";
-    $bars .= round( $psi_1906['speed'] / 1000, 1 ) . ', ';
-    $bars .= round( $psi_1906['tti'] / 1000, 1 ) . ",30.3],\n";
+    // Line chart data.
+    $lines .= "['6/19', ";
+    $lines .= round( $psi_1906['speed'] / 1000, 1 ) . ', ';
+    $lines .= round( $psi_1906['tti'] / 1000, 1 ) . ",13.3,30.3],\n";
 }
 
 if ( $psi_1907 ) {
-    // Column chart data.
-    $bars .= "['7/19', ";
-    $bars .= round( $psi_1907['speed'] / 1000, 1 ) . ', ';
-    $bars .= round( $psi_1907['tti'] / 1000, 1 ) . ",29.7],\n";
+    // Line chart data.
+    $lines .= "['7/19', ";
+    $lines .= round( $psi_1907['speed'] / 1000, 1 ) . ', ';
+    $lines .= round( $psi_1907['tti'] / 1000, 1 ) . ",13.5,29.7],\n";
 }
 
 $articles_1905 = get_post_meta( $post_id, 'nn_articles_201905', true );
 $articles_1906 = get_post_meta( $post_id, 'nn_articles_201906', true );
 $articles_1907 = get_post_meta( $post_id, 'nn_articles_201907', true );
 
-$score = ( isset( $psi_1907['score'] ) ) ? number_format( $psi_1907['score'] * 100, 1, '.', ',' ) : '?';
-$deg   = ( isset( $psi_1907['score'] ) ) ? ( $score - 50 ) * 2.7 : -160;
+/*$date_1 = $date_2 = '';
+$item_1 = $errors_1  = 0; // Array element.
+$g_metrics = array(
+    'score' => null,
+    'speed' => null,
+    'tti' => null,
+    'size' => null,
+    'dom' => null,
+    'requests' => null,
+);
+
+
+if ( $articles_1905 && 1 < count( $articles_1905 ) ) {
+
+    foreach ( $articles_1905 as $article ) {
+
+        if ( isset( $article['pagespeed']['error'] ) ) {
+
+            $pgspeed = $article['pagespeed'];
+
+            if ( ! $pgspeed['error'] ) {
+                $date_1 = $article['pagespeed']['date'];
+
+
+                foreach ($g_metrics as $key => $value) {
+                    $g_metrics[$key][$item_1] = $pgspeed[$key];
+                } // foreach $g_metrics
+                $item_1++;
+            } else {
+                $errors_1++;
+            } // if ! $pgspeed['error']
+
+        } // if $article['pagespeed']['error']
+    } // foreach $articles_1905
+
+} // if $articles_1905
+
+$item_2   = 0;
+$errors_2 = 0;
+if ( $articles_1906 && 1 < count( $articles_1906 ) ) {
+
+    foreach ( $articles_1906 as $article ) {
+
+        if ( isset( $article['pagespeed']['error'] ) ) {
+
+            $pgspeed = $article['pagespeed'];
+
+            if ( ! $pgspeed['error'] ) {
+                $date_2 = $article['pagespeed']['date'];
+
+                foreach ($g_metrics as $key => $value) {
+                    $g_metrics[$key][$item_2] = $pgspeed[$key];
+                }
+
+            } else {
+                $errors_2++;
+            } // if ! $pgspeed['error']
+
+            $item_2++;
+        }
+    }
+}*/
+
 
 ?>
 
-<style type="text/css">
-    #score {
-        background-image: url('/wp-content/themes/newsstats/img/guage_new.svg');
-        background-repeat: no-repeat;
-        position: relative;
-        text-align: center;
-    }
-
-    .score-needle {
-        height: 60px;
-        position: absolute;
-        top: 32px;
-        left: 84px;
-        transform-origin: 5px 55px;
-        transform: rotate(0deg);
-    }
-
-    #score-num {
-        background-color: transparent;
-        color: #333333;
-        display: block;
-        font-family: Arial, sans-serif;
-        font-size: 1.1rem;
-        font-weight: 500;
-        margin: auto;
-        padding-top: 128px;
-        padding-bottom: 1rem;
-        width: 4rem;
-    }
-</style>
 <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+
 	<header class="entry-header">
         <?php if ( $psi_1905 ) { ?>
         <?php } ?>
         <?php the_title( '<h1 class="entry-title">', '</h1>' ); ?>
-        <figure id="score" class="alignright" style="width: 180px; height: 200px; margin-right: 0;">
-            <img class="score-needle" src="/wp-content/themes/newsstats/img/gauge-needle.svg" alt="" style="transform: rotate(<?php echo $deg; ?>deg); z-index: 10;">
-            <!-- img class="score-needle" src="/wp-content/themes/newsstats/img/gauge-needle-avg.svg" alt="" style="transform: rotate(<?php echo '-80'; ?>deg);" -->
-            <output id="score-num"><?php echo $score; ?></output>
-            <figcaption class="score-all">All papers: <output>20.4</output></figcaption>
-        </figure>
+        <figure id="chart_div" class="alignright" style="width: 180px; height: 180px; margin-right: 0;"></figure>
 		<ul class="media-meta" style="list-style: none; margin: 0; padding: 0;">
             <li><strong><big><?php echo esc_html( $pub_name ) ?></big></strong><?php echo esc_html( $awis_desc ); ?></li>
             <li><?php echo trim( $regions, ' &gt; ' ); ?> <small>(pop. <?php echo esc_html( $term_pop ); ?>)</small></li>
@@ -167,13 +193,13 @@ $deg   = ( isset( $psi_1907['score'] ) ) ? ( $score - 50 ) * 2.7 : -160;
     if ( $pubs_data ) {
             ?>
         <table class="tabular">
-            <caption>PageSpeed Insights average results for <?php echo count( $pubs_data['score'] ) ?> articles (2019-07)</caption>
+            <caption>PageSpeed Insights average results for <?php echo count( $pubs_data['score'] ) ?> articles (2019-06)</caption>
                 <?php echo netrics_pagespeed_mean( $pubs_data, $tbody = false ); ?>
-                <?php echo netrics_articles_results_table( $post_id, $articles_1907 ); ?>
+                <?php echo netrics_articles_results_table( $post_id, $articles_1906 ); ?>
             </tbody>
         </table>
 
-        <figure id="col_chart" class="alignnone" style="width:100%; height: 400px; margin: 0;"></figure>
+        <figure id="line_chart" class="alignnone" style="width: 700px; height: 400px; margin: 0;"></figure>
 
         <?php } // if ( $pubs_data )
         ?>
@@ -201,7 +227,6 @@ $deg   = ( isset( $psi_1907['score'] ) ) ? ( $score - 50 ) * 2.7 : -160;
 <details>
     <summary><small>(Test: data arrays)</small></summary>
         <pre>
-        averages 2019-07 <?php print_r( netrics_site_pagespeed( $post_id, 'nn_articles_201907' ) ) ?><br>
         averages 2019-06 <?php print_r( netrics_site_pagespeed( $post_id, 'nn_articles_201906' ) ) ?><br>
         averages 2019-05 <?php print_r( netrics_site_pagespeed( $post_id, 'nn_articles_201905' ) ) ?><br>
         articles 2019-06: <?php print_r( $articles_1906 ); ?><br>
@@ -221,32 +246,50 @@ $deg   = ( isset( $psi_1907['score'] ) ) ? ( $score - 50 ) * 2.7 : -160;
 <?php if ( $psi_1906 ) { ?>
 <script type="text/javascript">
 	// @see https://developers.google.com/chart/interactive/docs/gallery/gauge
-    google.charts.load('current', {'packages':['corechart']});
+    google.charts.load('current', {'packages':['gauge','corechart']});
     google.charts.setOnLoadCallback(drawChart);
 
     function drawChart() {
-        bar_width = 30; // NOTE: Decrease or remove after a year to better fit more months.
 
-        var data_trend = google.visualization.arrayToDataTable([
-            ['Month', 'Speed', 'TTI','TTI avg. for all papers'],
-            <?php echo $bars; ?>
+        var data_score = google.visualization.arrayToDataTable([
+          ['Label', 'Value'],
+          ['Score', <?php echo round( $psi_1906['score'] * 100, 1 ); ?>],
         ]);
 
-        // Gauge: #dc3811, #ff9901, #0f9617. New PSI: #ff4e41 #ffa400 #0cce6b
-        var options_trend = {
-            title: 'Speed-Index and Time-to-Interactive averages (seconds)',
-            // vAxis: {title: 'Seconds'},
-            // hAxis: {title: 'Month'},
-            bar: {groupWidth: bar_width},
-            colors: ['#ffa400', '#ff4e41', '#696969'],
-            legend: { position: 'bottom' },
-            isStacked: true,
-            seriesType: 'bars',
-            series: {2: {type: 'line', lineWidth: 3, pointSize: 4}},
+        var options_score = {
+            width: 180, height: 180,
+            redFrom: 0, redTo: 50,
+            yellowFrom: 50, yellowTo: 90,
+            greenFrom: 90, greenTo: 100,
         };
 
-        var bar_chart = new google.visualization.ComboChart(document.getElementById('col_chart'));
-        bar_chart.draw(data_trend, options_trend);
+        var chart = new google.visualization.Gauge(document.getElementById('chart_div'));
+
+        chart.draw(data_score, options_score);
+
+        var data_history = google.visualization.arrayToDataTable([
+            ['Month', 'Speed', 'TTI','All: TTI','All: Speed'],
+            <?php echo $lines; ?>
+        ]);
+
+        var options_history = {
+            title: 'Speed-Index and Time-to-Interactive averages (seconds)',
+            colors: ['#e2431e', '#f1ca3a', '#de6649','#f9da6a'],
+            curveType: 'function',
+            legend: { position: 'bottom' },
+            series: {
+                0: { lineWidth: 4, pointSize: 5 },
+                1: { lineWidth: 4, pointSize: 5 },
+                2: { lineWidth: 1, pointSize: 2 },
+                3: { lineWidth: 1, pointSize: 2 }
+            },
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('line_chart'));
+
+        chart.draw(data_history, options_history);
+
+
     }
 
 </script>
