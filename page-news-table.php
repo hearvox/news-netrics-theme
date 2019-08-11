@@ -118,13 +118,14 @@ get_header();
 
 
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <div id="dashboard_div" class="chart-dashboard" style="border: 1px solid #ccc; width: 100%">
+    <section id="dashboard_div" class="chart-dashboard" style="border: 1px solid #ccc; width: 100%">
         <h1>U.S. Daily Newspapers</h1>
         <div id="stringFilter_control_div" style="margin: 1rem 3rem;"></div>
         <figure id="table_div" style="display: block; padding-top: 30px; width: 100%">
             <p>Loading… <img src="https://news.pubmedia.us/wp-content/themes/newsstats/img/ajax-loader.gif" width="220" height="19"></p>
+            <div class="loader"</div>
         </figure>
-    </div><!-- #dashboard_div -->
+    </section><!-- #dashboard_div -->
 <script type="text/javascript">
 google.charts.load('current', {'packages':['table', 'controls']});
 google.charts.setOnLoadCallback(drawMainDashboard);
@@ -160,7 +161,7 @@ function drawMainDashboard() {
         },
     });
 
-var data = google.visualization.arrayToDataTable([
+    var data = google.visualization.arrayToDataTable([
         [   {label: 'Domain', id: 'domain', type: 'string'},
             {label: 'Name&nbsp;&nbsp;&nbsp; &mdash; &nbsp;&nbsp;results link: &#9432;', id: 'name', type: 'string'},
             {label: 'Circulation', id: 'circ', type: 'number'},

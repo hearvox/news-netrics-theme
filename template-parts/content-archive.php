@@ -70,4 +70,4 @@ if ( $site_ps  && isset( $site_ps['score'] ) ) {
 	</header><!-- .entry-header -->
 <!-- img class="" src="https://s.wordpress.com/mshots/v1/http%3A%2F%2F<?php echo get_the_title() ?>?w=200&h=150" width="200" height="150" alt="<?php the_title(); ?>" /></a -->
 </article><!-- #post-## -->
-<!-- =file: content-archive -->
+<!-- =part: content-archive -->

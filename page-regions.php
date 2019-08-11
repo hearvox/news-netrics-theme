@@ -63,7 +63,7 @@ foreach ( $states_data as $state ) {
     // Data calculations: ratios and precentages.
     $counties_with_pub = $counties - $state['county_0_count'];
     $counties_with_pop = $population - $state['county_0_pop'];
-    $pub_per_pop       = $publications / ( $population * 1000000 ); // Pub/Pop.-1M.
+    $pub_per_pop       = ( $publications ) ? $publications / ( $population / 1000000 ) : null; // Pub/Pop.-1M.
     $pop_per_circ      = $population / $circulation;
     $county_pub_pc     = ($counties) ? ( $counties_with_pub / $counties ) * 100 : 0; // Count % of Counties with Pub.
     $county_pub_pop_pc = ( $counties_with_pop / $population ) * 100; // Pop. % of Counties with Pub.

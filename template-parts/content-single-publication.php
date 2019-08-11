@@ -111,34 +111,7 @@ $deg   = ( isset( $psi_1907['score'] ) ) ? ( $score - 50 ) * 2.7 : -160;
 ?>
 
 <style type="text/css">
-    #score {
-        background-image: url('/wp-content/themes/newsstats/img/guage_new.svg');
-        background-repeat: no-repeat;
-        position: relative;
-        text-align: center;
-    }
 
-    .score-needle {
-        height: 60px;
-        position: absolute;
-        top: 32px;
-        left: 84px;
-        transform-origin: 5px 55px;
-        transform: rotate(0deg);
-    }
-
-    #score-num {
-        background-color: transparent;
-        color: #333333;
-        display: block;
-        font-family: Arial, sans-serif;
-        font-size: 1.1rem;
-        font-weight: 500;
-        margin: auto;
-        padding-top: 128px;
-        padding-bottom: 1rem;
-        width: 4rem;
-    }
 </style>
 <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 	<header class="entry-header">
@@ -149,7 +122,7 @@ $deg   = ( isset( $psi_1907['score'] ) ) ? ( $score - 50 ) * 2.7 : -160;
             <img class="score-needle" src="/wp-content/themes/newsstats/img/gauge-needle.svg" alt="" style="transform: rotate(<?php echo $deg; ?>deg); z-index: 10;">
             <!-- img class="score-needle" src="/wp-content/themes/newsstats/img/gauge-needle-avg.svg" alt="" style="transform: rotate(<?php echo '-80'; ?>deg);" -->
             <output id="score-num"><?php echo $score; ?></output>
-            <figcaption class="score-all">All papers: <output>20.4</output></figcaption>
+            <figcaption class="score-all">All papers: <output>27.6</output></figcaption>
         </figure>
 		<ul class="media-meta" style="list-style: none; margin: 0; padding: 0;">
             <li><strong><big><?php echo esc_html( $pub_name ) ?></big></strong><?php echo esc_html( $awis_desc ); ?></li>
@@ -198,25 +171,6 @@ $deg   = ( isset( $psi_1907['score'] ) ) ? ( $score - 50 ) * 2.7 : -160;
 	</footer><!-- .entry-footer -->
 </article><!-- #post-## -->
 
-<details>
-    <summary><small>(Test: data arrays)</small></summary>
-        <pre>
-        averages 2019-07 <?php print_r( netrics_site_pagespeed( $post_id, 'nn_articles_201907' ) ) ?><br>
-        averages 2019-06 <?php print_r( netrics_site_pagespeed( $post_id, 'nn_articles_201906' ) ) ?><br>
-        averages 2019-05 <?php print_r( netrics_site_pagespeed( $post_id, 'nn_articles_201905' ) ) ?><br>
-        articles 2019-06: <?php print_r( $articles_1906 ); ?><br>
-        <?php if ( is_user_logged_in() ) { ?>
-        <?php echo get_the_term_list( $post_id, 'post_tag', $post_id . ' tags: ', '/', '<br>' ) ?>
-        <?php echo get_the_term_list( $post_id, 'flag', 'Flags: ', '/', '<br>' ) ?>
-        <?php echo $lines; ?>
-        <?php } ?>
-        <?php // print_r( get_post_meta( $post_id, 'nn_error', false ) ); ?>
-        <!--
-        site info: <?php // print_r( $nn_site ); ?>
-        articles 2019-05: <?php // print_r( $articles_1905 ); ?>
-        -->
-        </pre>
-</details>
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <?php if ( $psi_1906 ) { ?>
 <script type="text/javascript">

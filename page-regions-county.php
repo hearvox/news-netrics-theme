@@ -11,9 +11,7 @@ get_header();
 ?>
 
 <style type="text/css">
-.google-visualization-table-table thead tr th {
-  position: sticky;
-}
+
 
 </style>
 
@@ -28,10 +26,9 @@ get_header();
         </main><!-- #main -->
 
         <figure id="table_div" class="google-table">
-            <p>Loading… <img src="https://news.pubmedia.us/wp-content/themes/newsstats/img/ajax-loader.gif" width="220" height="19"></p>
+            <p>Loading… (3K counties takes a few seconds) <img src="https://news.pubmedia.us/wp-content/themes/newsstats/img/ajax-loader.gif" width="220" height="19"><br>
+            <div class="loader"></div></p>
         </figure>
-
-
 
 	</div><!-- #primary -->
 
@@ -84,7 +81,6 @@ foreach ( $counties_data as $county ) {
 
     // Data calculations: ratios and precentages.
     $pub_per_pop       = ( $publications ) ? $publications / ( $population / 1000000 ) : null; // Pub/Pop.-1M.
-    // $pop_per_circ      = ( $circulation ) ? $population / $circulation : null;
     $circ_per_pub      = ( $circulation ) ? ( $circulation / 1000 ) / $publications : null; // Circ.-1K/Pub.
     $circ_pop_pc       = ( $circulation ) ? ( $circulation / $population ) * 100 : null;
     $news_cover        =
@@ -102,7 +98,7 @@ foreach ( $counties_data as $county ) {
 $g_chart_cols = array(
     'name'            => array( 'label' => 'Name', 'type' => 'string', 'format' => null ),
     'state'           => array( 'label' => 'State', 'type' => 'string', 'format' => null ),
-    'paper'           => array( 'label' => 'Population', 'type' => 'number', 'format' => 'numdecFormat' ),
+    'paper'           => array( 'label' => 'Papers', 'type' => 'number', 'format' => 'numdecFormat' ),
     'pop'             => array( 'label' => 'Population', 'type' => 'number', 'format' => 'numpcFormat' ),
     'pop_density'     => array( 'label' => 'Pop/sq-mi', 'type' => 'number', 'format' => 'numdecFormat' ),
     'pub_per_pop'     => array( 'label' => 'Papers/Pop-1M', 'type' => 'number', 'format' => 'numdecFormat' ),
@@ -183,8 +179,10 @@ function drawChart() {
             'allowHtml': true,
             'sortColumn': 2,
             'sortAscending': false,
+            'frozenColumns': 1,
             'showRowNumber': true,
             'width': '100%',
+            'height': '1500px',
             /*
             'page': 'enable',
             'pageSize': 50,

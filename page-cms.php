@@ -98,7 +98,7 @@ get_header(); ?>
                     $html .= '<caption><a href="' . get_term_link( $term ) . "\">{$term->name}</a>: ";
                     $html .= 'PageSpeed average results (2019-05)</caption>';
                     $html .= '<thead><td style=\"width: 11rem;\"></td>' . netrics_pagespeed_thead() . '</thead>';
-                    $html .= '<tbody>' . netrics_pagespeed_tbody( $pubs_data ) . '</tbody>';
+                    $html .= '<tbody>' . netrics_pagespeed_tbody( $pubs_data, 0 ) . '</tbody>';
                     $html .= '<tfoot><tr><th scope="row">Results for:</th>';
                     $html .= '<td colspan="6" style="text-align: left;">' . array_sum( $pubs_data['results'] );
                     $html .= " articles from {$query->found_posts} newspapers</td>";
@@ -255,18 +255,17 @@ get_header(); ?>
             <section class="content-col">
                 <p>Detailed PageSpeed Insights averages for daily newspapers using each CMS.</p>
                 <?php echo $html; ?>
-
-                <details>
-                    <summary>(Test: data arrays)</summary>
-                    <pre>
-                    </pre>
-                </details>
             </section>
 
         </main><!-- #main -->
 
 	</div><!-- #primary -->
 
+<details>
+    <summary><small>(Test: data arrays)</small></summary>
+    <pre>
+    </pre>
+</details>
 <?php // get_sidebar(); ?>
 <!-- =file: page-cms -->
 <?php get_footer(); ?>

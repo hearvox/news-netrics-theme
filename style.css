@@ -506,9 +506,14 @@ h6,
 .site-footer a:visited,
 .site-footer a:hover {}
 
-output { color: #cc0f0f;; } /* dark orange */
+output {
+	background-color: #f0eeee;
+	color: darkred;
+}
 
-output,
+output a,
+output a:visited { color: royalblue; }
+
 .tabular thead th,
 .tabular th,
 .tabular tfoot tr,
@@ -1104,6 +1109,60 @@ table,
 	font-family: Verdana, Geneva, sans-serif;
 	font-size: 1rem;
 	line-height: 1.4;
+}
+
+/* Score gauge */
+#score {
+    background-image: url('/wp-content/themes/newsstats/img/guage_new.svg');
+    background-repeat: no-repeat;
+    position: relative;
+    text-align: center;
+}
+
+.score-needle {
+    height: 60px;
+    position: absolute;
+    top: 32px;
+    left: 84px;
+    transform-origin: 5px 55px;
+    transform: rotate(0deg);
+}
+
+#score-num {
+    background-color: transparent;
+    color: #333333;
+    display: block;
+    font-family: Arial, sans-serif;
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin: auto;
+    padding-top: 128px;
+    padding-bottom: 1rem;
+    width: 4rem;
+}
+
+/* Loading animation */
+.loader {
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 16px solid blue;
+  border-right: 16px solid green;
+  border-bottom: 16px solid red;
+  border-left: 16px solid pink;
+  width: 120px;
+  height: 120px;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+}
+
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 /*--------------------------------------------------------------

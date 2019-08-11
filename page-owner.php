@@ -58,7 +58,7 @@ get_header(); ?>
             // JSON data for each CMS, used by Google Chart visualizations.
             foreach ( $pubs_data as $key => $data ) {
 
-                if ( 'results' === $key ) {
+                if ( 'results' === $key ) { // Slip 'results' column.
                     continue;
                 }
 
@@ -95,18 +95,20 @@ get_header(); ?>
 
             $html .= '<table class="tabular">';
             $html .= '<caption><a href="' . get_term_link( $term ) . "\">{$term->name}</a>: ";
-            $html .= 'PageSpeed average results (2019-05)</caption>';
+            $html .= 'PageSpeed average results (2019-07)</caption>';
             $html .= '<thead><td style=\"width: 11rem;\"></td>' . netrics_pagespeed_thead() . '</thead>';
-            $html .= '<tbody>' . netrics_pagespeed_tbody( $pubs_data ) . '</tbody>';
+            $html .= '<tbody>' . netrics_pagespeed_tbody( $pubs_data, 0 ) . '</tbody>';
             $html .= '<tfoot><tr><th scope="row">Results for:</th>';
             $html .= '<td colspan="6" style="text-align: left;">' . array_sum( $pubs_data['results'] );
             $html .= " articles from {$query->found_posts} newspapers</td>";
             $html .= '</tr></tfoot></table>';
-        } // if ( $pubs_data )
 
-        $count_owners++;
-        $total_circ   += array_sum( $pubs_data['circ'] );
-        $total_papers += $term->count;
+            $count_owners++;
+            $total_circ   += array_sum( $pubs_data['circ'] );
+            $total_papers += $term->count;
+
+
+        } // if ( $pubs_data )
 
         wp_reset_postdata();
 
@@ -300,7 +302,7 @@ function drawMainDashboard() {
             type: 'number',
             aggregation: google.visualization.data.avg
         }, {
-            // get the sum
+            // get the COUNT
             column: 1,
             label: 'Owner Count',
             type: 'number',
@@ -339,26 +341,29 @@ function drawMainDashboard() {
 
             <section class="content-col">
                 <h2>PSI averages by Owner</h2>
-                <p>Detailed PageSpeed Insights for combined averages of each Owner's daily newspapers</p>
+                <p>PageSpeed Insights result combined averages for each Owner's daily newspapers</p>
                 <?php echo $html; ?>
 
-                <details>
-                    <summary>(Test: data arrays)</summary>
-                    <pre>
-                        <?php
-                        ksort( $count_arr );
-                        ksort( $count_vals );
-                        print_r( $count_arr );
-                        print_r( $count_vals );
-                        ?>
-                    </pre>
-                </details>
+
             </section>
 
         </main><!-- #main -->
 
 	</div><!-- #primary -->
 
+<details>
+    <summary><small>(Test: data arrays)</small></summary>
+    <pre>
+        <?php
+        ksort( $count_arr );
+        ksort( $count_vals );
+        print_r( $count_arr );
+        print_r( $count_vals );
+        print_r( $pubs_data );
+
+        ?>
+    </pre>
+</details>
 <?php // get_sidebar(); ?>
 <!-- =file: page-cms -->
 <?php get_footer(); ?>
