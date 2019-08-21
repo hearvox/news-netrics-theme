@@ -260,7 +260,7 @@ th {
 }
 
 /*--------------------------------------------------------------
-=Typography
+=TYPOGRAPHY
 --------------------------------------------------------------*/
 body {
 	color: #202020;
@@ -382,7 +382,7 @@ output {
 }
 
 /*--------------------------------------------------------------
-=Elements
+=ELEMENTS
 --------------------------------------------------------------*/
 html {
 	box-sizing: border-box;
@@ -473,7 +473,7 @@ table {
 
 
 /*--------------------------------------------------------------
-=Colors: light #d6d2d1, orange #f89d13, red 8f1d14,  dark #1b120f, light blue #e86a37 color: #E86A37;
+=COLORS
 --------------------------------------------------------------*/
 .site-header,
 .site-footer { background-color: #fff; } /* dark red */
@@ -507,20 +507,30 @@ h6,
 .site-footer a:hover {}
 
 output {
-	background-color: #f0eeee;
+	background-color: #fbfbfb;
 	color: darkred;
 }
 
 output a,
 output a:visited { color: royalblue; }
 
-.tabular thead th,
-.tabular th,
+/* Tables */
+/* Match Google Chart: Table column heading gradient */
+.tabular thead th { background-color: #ebeff8; }
+table.tabular {	background-color: #fff; }
+
+.tabular thead td, /* No heading in col */
+.tabular caption { background-color: #fbfbfb; }
+
+.tabular tbody th,
 .tabular tfoot tr,
-.tabular tbody tr:hover { background-color: #ececec; } /* lighter grey-red */
+.tabular tbody tr:hover { background-color: #efefef; } /* lighter grey-red */
+
+/* Row stripes */
+.tabular .even { background-color:#e5e5e5; }
 
 /*--------------------------------------------------------------
-=Navigation
+=NAVIGATION
 --------------------------------------------------------------*/
 /*--------------------------------------------------------------
 ==Links
@@ -766,7 +776,7 @@ a:active {
 .site-footer form { margin-bottom: 2rem; }
 
 /*--------------------------------------------------------------
-=Accessibility
+=ACCESSIBILITY
 --------------------------------------------------------------*/
 /* Text meant only for screen readers. */
 .screen-reader-text {
@@ -833,7 +843,7 @@ a:active {
 }
 
 /*--------------------------------------------------------------
-=Clearings
+=CLEARINGS
 --------------------------------------------------------------*/
 .clear:before,
 .clear:after,
@@ -862,17 +872,14 @@ a:active {
 }
 
 /*--------------------------------------------------------------
-=Tables .tabular
+=TABLES .tabular (also see =COLORS section)
 --------------------------------------------------------------*/
 table.tabular {
-	background-color: #fff;
 	border-collapse: collapse;
 	width: 100%;
 }
 
 .tabular caption {
-    background-color: #fbfbfb;
-    border: 1px solid #fbfbfb;
     font-family: Tahoma, Geneva, sans-serif;
 	font-size: 1.125rem;
 	font-weight: 500;
@@ -898,12 +905,6 @@ table.tabular {
 
 .tabular th.sub-head { font-size: 1em; }
 
-/* No heading in col */
-.tabular thead td {
-    background-color: #f6f6f6;
-    border-bottom: 1px solid #a5a5a5;
-}
-
 /* Row sub-headings */
 .tabular tbody th.sub-head {
 	font-size: 0.9em;
@@ -914,22 +915,6 @@ table.tabular {
 	font-size: 0.9em;
     font-weight: 500;
     padding-left: 2em;
-}
-
-/* Columns */
-.tabular col { border-right: 1px solid #ccc; }
-
-.tabular thead tr > th:first-child,
-.tabular thead tr > td:first-child { border-right: 2px solid #ccc; }
-
-.tabular tbody th {
-	border-right: 2px solid #ccc;
-	padding-right: 0.5rem;
-}
-
-/* Rows */
-.tabular .even {
-  background-color:#e5e5e5;
 }
 
 /* Data */
@@ -966,8 +951,10 @@ table.tabular {
 /* Other table styles */
 .thead-sticky thead th {
     position: sticky;
-    top: 80px;
+    top: 50px;
 }
+
+.tabular tbody th { padding-right: 0.5rem; }
 
 /* Google Chart Table */
 .google-table {
@@ -1004,7 +991,7 @@ table.tabular {
 .chart-table { flex-grow: 2; }
 
 
-/* NumberRangeFilter: slider bar */
+/* NumberRangeFilter: slider bar
 .google-visualization-controls-slider-horizontal {
     background-color: #e5e5e5;
     border: 0;
@@ -1022,8 +1009,8 @@ table.tabular {
 }
 
 .google-visualization-controls-slider-horizontal:hover { background-color: #d1d1d1; }
-
-/* NumberRangeFilter: slider thumbs */
+*/
+/* NumberRangeFilter: slider thumbs
 .google-visualization-controls-slider-horizontal .google-visualization-controls-slider-thumb {
     background-color: #69e;
     border: 1px solid #999;
@@ -1065,6 +1052,7 @@ table.tabular {
     cursor: pointer;
     cursor: col-resize;
 }
+*/
 
 /* NumberRangeFilter: slider central handle */
 .google-visualization-controls-slider-horizontal .google-visualization-controls-slider-handle {
@@ -1143,14 +1131,14 @@ table,
 
 /* Loading animation */
 .loader {
-  border: 16px solid #f3f3f3;
+  border: 48px solid #f3f3f3;
   border-radius: 50%;
-  border-top: 16px solid blue;
-  border-right: 16px solid green;
-  border-bottom: 16px solid red;
-  border-left: 16px solid pink;
-  width: 120px;
-  height: 120px;
+  border-top: 48px solid blue;
+  border-right: 48px solid green;
+  border-bottom: 48px solid red;
+  border-left: 48px solid pink;
+  width: 270px;
+  height: 270px;
   -webkit-animation: spin 2s linear infinite;
   animation: spin 2s linear infinite;
 }
@@ -1166,7 +1154,7 @@ table,
 }
 
 /*--------------------------------------------------------------
-=Forms
+=FORMS
 --------------------------------------------------------------*/
 button,
 input[type="button"],
@@ -1239,7 +1227,7 @@ textarea {
 }
 
 /*--------------------------------------------------------------
-=Widgets
+=WIDGETS
 --------------------------------------------------------------*/
 .widget {
 	margin: 0 0 1.5em;
@@ -1251,7 +1239,7 @@ textarea {
 }
 
 /*--------------------------------------------------------------
-=Content
+=CONTENT
 --------------------------------------------------------------*/
 /*--------------------------------------------------------------
 ==Posts and pages

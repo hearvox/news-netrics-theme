@@ -40,7 +40,7 @@ get_header();
             <th>Errors</th>
             <th>CMS</th>
             <th style="text-align: left;">Site URL</th>
-            <th style="text-align: left;">RSS Feed URL</th>
+            <!-- <th style="text-align: left;">RSS Feed URL</th> -->
         </tr>
     </thead>
     <tbody>
@@ -105,7 +105,7 @@ foreach ( $query->posts as $post ) {
         $pubs_info .= '<td>' . $errors . '</td>';
         $pubs_info .= '<td style="text-align: left; white-space: nowrap;">' . $pub_cms . '</td>';
         $pubs_info .= '<td style="text-align: left; white-space: nowrap;">' . $post_meta['nn_pub_url'][0] . '</td>';
-        $pubs_info .= '<td style="text-align: left; white-space: nowrap;">' . $post_meta['nn_pub_rss'][0] . '</td>';
+        // $pubs_info .= '<td style="text-align: left; white-space: nowrap;">' . $post_meta['nn_pub_rss'][0] . '</td>';
         $pubs_info .= '</tr>';
 
 }

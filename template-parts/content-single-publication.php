@@ -80,25 +80,31 @@ $psi_1907 = netrics_site_pagespeed( $post_id, 'nn_articles_201907' ); // si: 13.
 
 $lines = $bars = '';
 if ( $psi_1905 ) {
+    $tti = round( ( $psi_1905['tti'] - $psi_1905['speed'] ) / 1000, 1 );
+
     // Column chart data.
     $bars .= "['5/19', ";
     $bars .= round( $psi_1905['speed'] / 1000, 1 ) . ', ';
-    $bars .= round( $psi_1905['tti'] / 1000, 1 ) . ",30.1],\n";
+    $bars .= "{v:$tti,f:" . round( $psi_1905['tti'] / 1000, 1 ) . "}, 30.1],\n";
 
 }
 
 if ( $psi_1906 ) {
+    $tti = round( ( $psi_1906['tti'] - $psi_1906['speed'] ) / 1000, 1 );
+
     // Column chart data.
     $bars .= "['6/19', ";
     $bars .= round( $psi_1906['speed'] / 1000, 1 ) . ', ';
-    $bars .= round( $psi_1906['tti'] / 1000, 1 ) . ",30.3],\n";
+    $bars .= "{v:$tti,f:" . round( $psi_1906['tti'] / 1000, 1 ) . "}, 30.3],\n";
 }
 
 if ( $psi_1907 ) {
+    $tti = round( ( $psi_1907['tti'] - $psi_1907['speed'] ) / 1000, 1 );
+
     // Column chart data.
     $bars .= "['7/19', ";
     $bars .= round( $psi_1907['speed'] / 1000, 1 ) . ', ';
-    $bars .= round( $psi_1907['tti'] / 1000, 1 ) . ",29.7],\n";
+    $bars .= "{v:$tti,f:" . round( $psi_1907['tti'] / 1000, 1 ) . "}, 29.7],\n";
 }
 
 $articles_1905 = get_post_meta( $post_id, 'nn_articles_201905', true );
@@ -122,7 +128,7 @@ $deg   = ( isset( $psi_1907['score'] ) ) ? ( $score - 50 ) * 2.7 : -160;
             <img class="score-needle" src="/wp-content/themes/newsstats/img/gauge-needle.svg" alt="" style="transform: rotate(<?php echo $deg; ?>deg); z-index: 10;">
             <!-- img class="score-needle" src="/wp-content/themes/newsstats/img/gauge-needle-avg.svg" alt="" style="transform: rotate(<?php echo '-80'; ?>deg);" -->
             <output id="score-num"><?php echo $score; ?></output>
-            <figcaption class="score-all">All papers: <output>27.6</output></figcaption>
+            <figcaption class="score-all">All papers: <output>21.2</output></figcaption>
         </figure>
 		<ul class="media-meta" style="list-style: none; margin: 0; padding: 0;">
             <li><strong><big><?php echo esc_html( $pub_name ) ?></big></strong><?php echo esc_html( $awis_desc ); ?></li>

@@ -171,12 +171,12 @@ require get_template_directory() . '/inc/customizer.php';
 require get_template_directory() . '/inc/jetpack.php';
 
 /* Sort by archives by title */
-function newstime_archive_sort( $query ) {
+function netrcis_archive_sort( $query ) {
     if ( is_admin() ) {
         return;
     }
 
-    if ( $query->is_main_query() && ! is_post_type_archive( 'post' ) ) {
+    if ( $query->is_main_query() && is_post_type_archive( 'publication' ) ) {
         $query->set( 'orderby', array( 'title' => 'ASC' ) );
     }
 
@@ -189,7 +189,7 @@ function newstime_archive_sort( $query ) {
     add_filter('get_previous_post_sort', 'filter_previous_post_sort');
     add_filter('get_previous_post_where', 'filter_previous_post_where');
 }
-add_action( 'pre_get_posts', 'newstime_archive_sort' );
+add_action( 'pre_get_posts', 'netrcis_archive_sort' );
 
 /* Sort single post previous/next links by title
  *

@@ -1,7 +1,7 @@
 <?php
 /**
  * Data for Region: Couty (taxonomy)
- * https://news.pubmedia.us/regions/regions-county/
+ * https://news.pubmedia.us/regions/regions-city/
  *
  *
  * @package newsstats
@@ -42,37 +42,37 @@ get_header();
 </style>
 
 <?php
-$counties_data = get_post_meta( 7594, 'nn_counties', true );
-$total_paper = $total_county = $total_circ = $total_pop = 0;
+$city_data = get_post_meta( 7594, 'nn_cities', true );
+$total_paper = $total_city = $total_circ = $total_pop = 0;
 $json   = '';
 
-foreach ( $counties_data as $county ) {
+foreach ( $city_data as $city ) {
     // Data.
-    $population   = $county['population'];
-    $pop_density  = $county['pop_density'];
-    $publications = $county['count'];
-    $circulation  = ( $county['circ_sum'] ) ? $county['circ_sum'] : 0;
+    $population   = $city['population'];
+    $pop_density  = $city['pop_density'];
+    $publications = $city['count'];
+    $circulation  = ( $city['circ_sum'] ) ? $city['circ_sum'] : 0;
 
     // Data calculations: ratios and precentages.
     $pub_per_pop       = ( $publications ) ? $publications / ( $population / 1000000 ) : null; // Pub/Pop.-1M.
-    $circ_per_pub      = ( $circulation ) ? ( $circulation / 1000 ) / $publications : null; // Circ.-1K/Pub.
+    $circ_per_pub      = ( $circulation && $publications ) ? ( $circulation / 1000 ) / $publications : null; // Circ.-1K/Pub.
     $circ_pop_pc       = ( $circulation ) ? ( $circulation / $population ) * 100 : null;
     $news_cover        =
         ( $pub_per_pop * 6 + // Adjust range/weight.
         $circ_pop_pc   * 2 + // Adjust range/weight.
         $circ_per_pub ) / 5;
 
-    // Rows for Google Table chart (use double quotes to avoid single-quotes in county names).
-    $json .= ( $publications ) // Link if county has paper.
-        ? "[{v:\"{$county['name']}\",f:\"<a href='/region/{$county['slug']}'>{$county['name']}</a>\"},"
-        : "[\"{$county['name']}\",";
-    $json .= "\"{$county['state']}\",$publications,$population,$pop_density,$pub_per_pop,$circulation,$circ_pop_pc,$circ_per_pub,$news_cover],\n";
+    // Rows for Google Table chart (use double quotes to avoid single-quotes in city names).
+    $json .= ( $publications ) // Link if city has paper.
+        ? "[{v:\"{$city['name']}\",f:\"<a href='/region/{$city['slug']}'>{$city['name']}</a>\"},"
+        : "[\"{$city['name']}\",";
+    $json .= "\"{$city['state']}\",$publications,$population,$pop_density,$pub_per_pop,$circulation,$circ_pop_pc,$circ_per_pub,$news_cover],\n";
 
     // Sum totals.
     $total_paper += $publications;
     $total_circ  += $circulation;
     $total_pop   += $population;
-    $total_county++;
+    $total_city++;
 }
 
 $g_chart_cols = array(
@@ -126,9 +126,9 @@ function mk_g_chart() {
                     </thead>
                     <tbody>
                         <tr>
-                            <th scope="row">Counties</th>
-                            <td><output id="count_county"></output></td>
-                            <td><?php echo number_format( $total_county ); ?></td>
+                            <th scope="row">Cities</th>
+                            <td><output id="count_city"></output></td>
+                            <td><?php echo number_format( $total_city ); ?></td>
                         </tr>
                         <tr>
                             <th scope="row">Papers</th>
@@ -147,12 +147,13 @@ function mk_g_chart() {
                         </tr>
                     </tbody>
                 </table>
-                <div>Filter Counties <em>(keyboard arrows step by 1K)</em> by:</strong></div>
+                <div>Filter Cities <em>(keyboard arrows step by 1K)</em> by:</strong></div>
                 <p id="slider_papers"></p>
+                <p id="slider_circ" style="width: 100%"></p>
                 <p id="slider_pop" style="width: 100%"></p>
             </aside>
             <figure id="table_div" style="display: block; padding-top: 30px; width: 100%">
-                <p>Loading… (3K counties takes a few seconds)</p>
+                <p>Loading… (1K cities takes a few seconds) <img src="https://news.pubmedia.us/wp-content/themes/newsstats/img/ajax-loader.gif" width="220" height="19"></p>
                 <div class="loader"></div>
             </figure>
         </section><!-- #dashboard_div -->
@@ -178,7 +179,7 @@ function drawMainDashboard() {
             'ui': {
                 'format': { 'pattern':'#,###' },
                 'labelStacking': 'vertical',
-                'label': 'Papers per County',
+                'label': 'Papers per City',
                 'unitIncrement': 1,
             }
         }
@@ -226,14 +227,14 @@ function drawMainDashboard() {
             'sortAscending': false,
             'frozenColumns': 1,
             'showRowNumber': true,
-            'width': '95%',
-            'height': '800px',
+            'width': '100%',
+            'height': '1500px',
         },
     });
 
     // Data cols and rows.
     var data = new google.visualization.DataTable();
-        data.addColumn('string', 'County');
+        data.addColumn('string', 'City');
         data.addColumn('string', 'State');
         data.addColumn('number', 'Papers');
         data.addColumn('number', 'Population');
@@ -261,7 +262,7 @@ function drawMainDashboard() {
     numKFormat.format(data, 8);
 
     // Attach controls to charts.
-    dashboard.bind([sliderPapers, sliderPop], [table]);
+    dashboard.bind([sliderPapers, sliderCirc, sliderPop], [table]);
     dashboard.draw(data);
 
     // Dynamically recalculate user-filtered aggregations: average, sum, and count.
@@ -282,7 +283,7 @@ function drawMainDashboard() {
             aggregation: google.visualization.data.sum
         }, {
             column: 0,
-            label: 'County Count',
+            label: 'City Count',
             type: 'number',
             aggregation: google.visualization.data.count
         }, {
@@ -299,45 +300,12 @@ function drawMainDashboard() {
 
         // Write aggregations.
         document.getElementById('sum_paper').innerHTML  = group.getValue(0, 1).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
-        document.getElementById('count_county').innerHTML = group.getValue(0, 2).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+        document.getElementById('count_city').innerHTML = group.getValue(0, 2).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
         document.getElementById('sum_pop').innerHTML = group.getValue(0, 3).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
         document.getElementById('sum_circ').innerHTML = group.getValue(0, 4).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
     });
 }
 </script>
-
-<?php
-/*
-
-Set post meta (/news-netrics/includes/taxonomies.php): netrics_get_region_data();
-
-https://www.cjr.org/local_news/american-news-deserts-donuts-local.php
-https://www.usnewsdeserts.com/
-
-https://developers.google.com/speed/pagespeed/insights/?url=https%3A%2F%2Fnews.pubmedia.us%2Fregion-county%2F&tab=mobile
-
-[179] => Array
-        (
-            [term_id] => 1587
-            [name] => Mohave County
-            [slug] => mohave-county-az
-            [term_group] => 0
-            [term_taxonomy_id] => 1587
-            [taxonomy] => region
-            [description] => Mohave County, Arizona
-            [parent] => 1398
-            [count] => 3
-            [filter] => raw
-            [geoid] => 0500000US04015
-            [population] => 209550
-            [pop_density] => 15
-            [circ_sum] => 23610
-        )
-
-/region/bedford-county-pa/
-
-*/
-?>
 
 <?php // get_sidebar(); ?>
 <?php get_footer(); ?>

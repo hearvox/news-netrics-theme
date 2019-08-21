@@ -23,7 +23,7 @@ $pubs_data = newsstats_get_pubs_pagespeed();
 		<?php endwhile; // End of the loop. ?>
 
             <table class="tabular" style="">
-                <caption>U.S. daily newspapers: Averages of Google Pagespeed results (2019-05)</caption>
+                <caption>U.S. daily newspapers: Averages of Google Pagespeed results (2019-07)</caption>
                 <?php netrics_pagespeed( $pubs_data ); ?>
                 <tfoot>
                     <tr>
@@ -60,6 +60,13 @@ foreach ( $query->posts as $post ) {
     $urls    = "<small>(<a href=\"{$post->guid}\">$post_id</a> | <a href=\"$site\">site</a>$feed$edit)$tags$flags</small>";
 
     $list  .= "<li>{$post->post_title} $urls";
+
+    $items  = get_post_meta( $post_id, 'nn_articles_201908', true );
+    if ( $items && 1 < count( $items ) ) {
+        $list .= '</li>2019-08<ol>';
+        $list .= netrics_pagespeed_results_list( $query, $items );
+        $list .= '</ol>';
+    }
 
     $items  = get_post_meta( $post_id, 'nn_articles_201907', true );
     if ( $items && 1 < count( $items ) ) {

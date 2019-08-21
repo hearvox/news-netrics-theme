@@ -150,7 +150,7 @@ get_header(); ?>
                         <tr>
                             <th scope="row">Avg. Score</th>
                             <td><span id="score_avg"></span></td>
-                            <td>--</td>
+                            <td>27.6</td>
                         </tr>
                     </tbody>
                 </table>
