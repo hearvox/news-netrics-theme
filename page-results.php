@@ -23,14 +23,14 @@ get_header();
         <figure id="table_div" style="display: block; padding-top: 30px; width: 100%"></figure>
 
         <?php endwhile; // End of the loop. ?>
-            <?php $pubs_data = newsstats_get_pubs_pagespeed(); ?>
+            <?php $pubs_data = netrics_get_pubs_query_data(); ?>
             <table class="tabular" style="margin-top: 2rem;">
-                <caption>All U.S. daily newspapers: Averages of Google Pagespeed results (2019-07)</caption>
+                <caption>All U.S. daily newspapers: Averages of Google Pagespeed results (2019-08)</caption>
                 <?php netrics_pagespeed_mean( $pubs_data ); ?>
                 <tfoot>
                     <tr>
                         <th scope="row"><?php esc_attr_e( 'Results for:', 'newsnetrics' ); ?></th>
-                        <td colspan="6" style="text-align: left;">3,070 articles from 1,126 newspapers</td>
+                        <td colspan="6" style="text-align: left;">3,073 articles from 1,043 newspapers</td>
                     </tr>
                 </tfoot>
             </table>

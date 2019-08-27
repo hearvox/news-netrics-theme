@@ -20,7 +20,7 @@ get_header();
         </main><!-- #main -->
 
 <table class="tabular thead-sticky">
-    <caption>Articles with PageSpeed results</caption>
+    <caption>Articles with PageSpeed results (2019-07)</caption>
     <thead>
         <tr style="font-style: italic;">
             <th style="text-align: left;">Domain</th>
@@ -50,18 +50,13 @@ $args = array(
 $query = new WP_Query( $args );
 
 foreach ( $query->posts as $post ) {
-
     $post_id = $post->ID;
     $html   .= "";
-    $articles = get_post_meta( $post_id, 'nn_articles_201905', true );
+    $articles = get_post_meta( $post_id, 'nn_articles_201907', true );
 
     if ( $articles ) {
-
-
         foreach ( $articles as $article ) {
-
             if ( isset( $article['pagespeed']['error'] ) ) {
-
                 $pgspeed = $article['pagespeed'];
 
                 if ( ! $pgspeed['error'] ) {
@@ -79,13 +74,9 @@ foreach ( $query->posts as $post ) {
                     $html .= '</tr>';
 
                 }
-
             }
-
         }
-
     }
-
 }
 
 

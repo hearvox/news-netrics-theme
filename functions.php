@@ -180,6 +180,11 @@ function netrcis_archive_sort( $query ) {
         $query->set( 'orderby', array( 'title' => 'ASC' ) );
     }
 
+    if ( $query->is_main_query() && ( is_tax( 'cms' ) ) || is_tax( 'region' ) || is_tax( 'owner' ) ) {
+        $query->set( 'orderby', array( 'title' => 'ASC' ) );
+    }
+
+
     if ( $query->is_main_query() && is_archive() ) {
         // $query->set( 'post_type', array( 'publication' ) );
     }

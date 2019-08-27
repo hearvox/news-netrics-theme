@@ -30,7 +30,7 @@ get_header(); ?>
 				$pubs_data = newsstats_get_pubs_pagespeed();
 				?>
 			<table class="tabular">
-				<caption>U.S. daily newspapers: Averages of Google Pagespeed results (2019-05)</caption>
+				<caption>U.S. daily newspapers: Averages of Google Pagespeed results (2019-08)</caption>
 				<?php netrics_pagespeed_mean( $pubs_data ); ?>
 				<tfoot>
         			<tr>

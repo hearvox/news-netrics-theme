@@ -37,7 +37,6 @@ get_header();
             <th>Site Rank</th>
             <th>Print Yr</th>
             <th>Online</th>
-            <th>Errors</th>
             <th>CMS</th>
             <th style="text-align: left;">Site URL</th>
             <!-- <th style="text-align: left;">RSS Feed URL</th> -->
@@ -77,7 +76,6 @@ foreach ( $query->posts as $post ) {
 
         // Get error count.
         $tags =  wp_get_post_terms( $post_id, 'post_tag', array( 'fields' => 'names' ) );
-        $errors = ( $tags ) ? str_replace( '1905err', '', $tags[0] ) : '';
 
         // Get site data (including Alexa and BuiltWith).
         $nn_site  = get_post_meta( $post->ID, 'nn_site', true);
@@ -102,7 +100,6 @@ foreach ( $query->posts as $post ) {
         $pubs_info .= '<td>' . get_post_meta( $post_id,'nn_rank', true ) . '</td>';
         $pubs_info .= '<td>' . $post_meta['nn_pub_year'][0] . '</td>';
         $pubs_info .= '<td>' . $year . '</td>';
-        $pubs_info .= '<td>' . $errors . '</td>';
         $pubs_info .= '<td style="text-align: left; white-space: nowrap;">' . $pub_cms . '</td>';
         $pubs_info .= '<td style="text-align: left; white-space: nowrap;">' . $post_meta['nn_pub_url'][0] . '</td>';
         // $pubs_info .= '<td style="text-align: left; white-space: nowrap;">' . $post_meta['nn_pub_rss'][0] . '</td>';

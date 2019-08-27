@@ -25,7 +25,7 @@ thead th {
         </main><!-- #main -->
 
 <table class="tabular thead-sticky">
-    <caption>Newspaper average PageSpeed results, with Alexa rank and BuiltWith counts</caption>
+    <caption>Newspaper average PageSpeed results, with Alexa rank and BuiltWith counts (2018-08)</caption>
     <thead>
         <tr style="font-style: italic;">
             <th style="text-align: left;">Domain</th>
@@ -51,13 +51,12 @@ thead th {
     </thead>
     <tbody>
 <?php
-
 $pubs_avgs = '';
-$query     = newsstats_get_pub_posts( 3000 );
+$query     = newsstats_get_pub_posts( 2000 );
 
 foreach ( $query->posts as $post ) {
 
-    $articles = get_post_meta( $post->ID, 'nn_articles_201905', true);
+    $articles = get_post_meta( $post->ID, 'nn_articles_201908', true);
 
     if ( $articles && isset( $articles[0]['pagespeed'] ) ) {
 
@@ -158,6 +157,8 @@ https://docs.google.com/spreadsheets/d/1WPU3ILa6YAFoKwryXQWudXv_MCzCaseBL-Prjlbf
     </tbody>
 </table>
 
+<pre>
+</pre>
 	</div><!-- #primary -->
 
 <?php // get_sidebar(); ?>

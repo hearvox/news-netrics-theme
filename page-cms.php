@@ -36,6 +36,9 @@ get_header(); ?>
             $html   = '';
 
             foreach ( $terms as $term ) {
+                if ( 5815 !== $term->term_id ) { // No article pulled for Escenic papers.
+
+
                 // Get Owner score data.
                 $args = array(
                     'post_type'      => 'publication',
@@ -96,7 +99,7 @@ get_header(); ?>
 
                     $html .= '<table class="tabular">';
                     $html .= '<caption><a href="' . get_term_link( $term ) . "\">{$term->name}</a>: ";
-                    $html .= 'PageSpeed average results (2019-05)</caption>';
+                    $html .= 'PageSpeed average results (2019-08)</caption>';
                     $html .= '<thead><td style=\"width: 11rem;\"></td>' . netrics_pagespeed_thead() . '</thead>';
                     $html .= '<tbody>' . netrics_pagespeed_tbody( $pubs_data, 0 ) . '</tbody>';
                     $html .= '<tfoot><tr><th scope="row">Results for:</th>';
@@ -105,6 +108,7 @@ get_header(); ?>
                     $html .= '</tr></tfoot></table>';
                 } // if ( $pubs_data )
                 wp_reset_postdata();
+                }
 
             } // foreach ( $terms as $term )
 
@@ -253,6 +257,7 @@ get_header(); ?>
             <?php endwhile; // End of the loop. ?>
 
             <section class="content-col">
+                <p><small>Since 2018-06 2e've been unable to run tests on <a href="https://news.pubmedia.us/owner/the-mcclatchy-company/">McClatchy</a> papers using the <a href="https://news.pubmedia.us/cms/escenic/">Escenic</a>, so their articles are not in these results.</small></p>
                 <p>Detailed PageSpeed Insights averages for daily newspapers using each CMS.</p>
                 <?php echo $html; ?>
             </section>

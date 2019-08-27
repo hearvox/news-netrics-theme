@@ -77,6 +77,7 @@ $map_src = $map_api .$map_loc . $map_ctr ;
 $psi_1905 = netrics_site_pagespeed( $post_id, 'nn_articles_201905' ); // si: 13.9, tti: 30.1, speed: 18.8
 $psi_1906 = netrics_site_pagespeed( $post_id, 'nn_articles_201906' ); // si: 13.3, tti: 30.3, speed: 18.8
 $psi_1907 = netrics_site_pagespeed( $post_id, 'nn_articles_201907' ); // si: 13.5, tti: 29.7, speed: 20.4
+$psi_1908 = netrics_site_pagespeed( $post_id, 'nn_articles_201908' ); // si: 13.5, tti: 29.7, speed: 20.4
 
 $lines = $bars = '';
 if ( $psi_1905 ) {
@@ -85,7 +86,7 @@ if ( $psi_1905 ) {
     // Column chart data.
     $bars .= "['5/19', ";
     $bars .= round( $psi_1905['speed'] / 1000, 1 ) . ', ';
-    $bars .= "{v:$tti,f:" . round( $psi_1905['tti'] / 1000, 1 ) . "}, 30.1],\n";
+    $bars .= "{v:$tti,f:" . round( $psi_1905['tti'] / 1000, 1 ) . "}, 31.6],\n"; // Score: 19.6
 
 }
 
@@ -95,7 +96,7 @@ if ( $psi_1906 ) {
     // Column chart data.
     $bars .= "['6/19', ";
     $bars .= round( $psi_1906['speed'] / 1000, 1 ) . ', ';
-    $bars .= "{v:$tti,f:" . round( $psi_1906['tti'] / 1000, 1 ) . "}, 30.3],\n";
+    $bars .= "{v:$tti,f:" . round( $psi_1906['tti'] / 1000, 1 ) . "}, 32.6],\n"; // Score: 19.9
 }
 
 if ( $psi_1907 ) {
@@ -104,15 +105,25 @@ if ( $psi_1907 ) {
     // Column chart data.
     $bars .= "['7/19', ";
     $bars .= round( $psi_1907['speed'] / 1000, 1 ) . ', ';
-    $bars .= "{v:$tti,f:" . round( $psi_1907['tti'] / 1000, 1 ) . "}, 29.7],\n";
+    $bars .= "{v:$tti,f:" . round( $psi_1907['tti'] / 1000, 1 ) . "}, 31.4],\n"; // Score: 21.0
+}
+
+if ( $psi_1908 ) {
+    $tti = round( ( $psi_1908['tti'] - $psi_1908['speed'] ) / 1000, 1 );
+
+    // Column chart data.
+    $bars .= "['8/19', ";
+    $bars .= round( $psi_1908['speed'] / 1000, 1 ) . ', ';
+    $bars .= "{v:$tti,f:" . round( $psi_1908['tti'] / 1000, 1 ) . "}, 32.9],\n"; // Score: 19.9
 }
 
 $articles_1905 = get_post_meta( $post_id, 'nn_articles_201905', true );
 $articles_1906 = get_post_meta( $post_id, 'nn_articles_201906', true );
 $articles_1907 = get_post_meta( $post_id, 'nn_articles_201907', true );
+$articles_1908 = get_post_meta( $post_id, 'nn_articles_201908', true );
 
-$score = ( isset( $psi_1907['score'] ) ) ? number_format( $psi_1907['score'] * 100, 1, '.', ',' ) : '?';
-$deg   = ( isset( $psi_1907['score'] ) ) ? ( $score - 50 ) * 2.7 : -160;
+$score = ( isset( $psi_1908['score'] ) ) ? number_format( $psi_1908['score'] * 100, 1, '.', ',' ) : '?';
+$deg   = ( isset( $psi_1908['score'] ) ) ? ( $score - 50 ) * 2.7 : -160;
 
 ?>
 
@@ -128,7 +139,7 @@ $deg   = ( isset( $psi_1907['score'] ) ) ? ( $score - 50 ) * 2.7 : -160;
             <img class="score-needle" src="/wp-content/themes/newsstats/img/gauge-needle.svg" alt="" style="transform: rotate(<?php echo $deg; ?>deg); z-index: 10;">
             <!-- img class="score-needle" src="/wp-content/themes/newsstats/img/gauge-needle-avg.svg" alt="" style="transform: rotate(<?php echo '-80'; ?>deg);" -->
             <output id="score-num"><?php echo $score; ?></output>
-            <figcaption class="score-all">All papers: <output>21.2</output></figcaption>
+            <figcaption class="score-all">All papers: <output>19.6</output></figcaption>
         </figure>
 		<ul class="media-meta" style="list-style: none; margin: 0; padding: 0;">
             <li><strong><big><?php echo esc_html( $pub_name ) ?></big></strong><?php echo esc_html( $awis_desc ); ?></li>
@@ -146,9 +157,9 @@ $deg   = ( isset( $psi_1907['score'] ) ) ? ( $score - 50 ) * 2.7 : -160;
     if ( $pubs_data ) {
             ?>
         <table class="tabular">
-            <caption>PageSpeed Insights average results for <?php echo count( $pubs_data['score'] ) ?> articles (2019-07)</caption>
+            <caption>PageSpeed Insights average results for <?php echo count( $pubs_data['score'] ) ?> articles (2019-08)</caption>
                 <?php echo netrics_pagespeed_mean( $pubs_data, $tbody = false ); ?>
-                <?php echo netrics_articles_results_table( $post_id, $articles_1907 ); ?>
+                <?php echo netrics_articles_results_table( $post_id, $articles_1908 ); ?>
             </tbody>
         </table>
 
@@ -156,14 +167,16 @@ $deg   = ( isset( $psi_1907['score'] ) ) ? ( $score - 50 ) * 2.7 : -160;
 
         <?php } // if ( $pubs_data )
         ?>
-
+        <!--
+        <p><em>Articles 2019-08:</em>
+        <?php // echo netrics_articles_results( $post_id, $articles_1908 ); ?></p>
         <p><em>Articles 2019-07:</em>
-        <?php echo netrics_articles_results( $post_id, $articles_1907 ); ?></p>
+        <?php // echo netrics_articles_results( $post_id, $articles_1907 ); ?></p>
         <p><em>Articles 2019-06:</em>
-        <?php echo netrics_articles_results( $post_id, $articles_1906 ); ?></p>
+        <?php // echo netrics_articles_results( $post_id, $articles_1906 ); ?></p>
         <p><em>Articles 2019-05:</em>
-        <?php echo netrics_articles_results( $post_id, $articles_1905 ); ?></p>
-
+        <?php // echo netrics_articles_results( $post_id, $articles_1905 ); ?></p>
+        -->
     </section><!-- .content-col -->
 
 	<footer class="entry-footer">

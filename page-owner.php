@@ -341,6 +341,7 @@ function drawMainDashboard() {
 
             <section class="content-col">
                 <h2>PSI averages by Owner</h2>
+                <p><small>Since 2018-06 2e've been unable to run tests on <a href="https://news.pubmedia.us/owner/the-mcclatchy-company/">McClatchy</a> papers using the <a href="https://news.pubmedia.us/cms/escenic/">Escenic</a>, so their articles are not in these results.</small></p>
                 <p>PageSpeed Insights result combined averages for each Owner's daily newspapers</p>
                 <?php echo $html; ?>
 

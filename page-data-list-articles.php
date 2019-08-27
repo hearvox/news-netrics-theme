@@ -9,7 +9,7 @@
 
 get_header();
 
-$pubs_data = newsstats_get_pubs_pagespeed();
+$pubs_data = netrics_get_pubs_query_data();
 ?>
 
 	<div id="primary" class="content-area" style="margin: 0 1rem;">
@@ -23,12 +23,12 @@ $pubs_data = newsstats_get_pubs_pagespeed();
 		<?php endwhile; // End of the loop. ?>
 
             <table class="tabular" style="">
-                <caption>U.S. daily newspapers: Averages of Google Pagespeed results (2019-07)</caption>
+                <caption>U.S. daily newspapers: Averages of Google Pagespeed results (2019-08)</caption>
                 <?php netrics_pagespeed( $pubs_data ); ?>
                 <tfoot>
                     <tr>
                         <th scope="row"><?php esc_attr_e( 'Results for:', 'newsnetrics' ); ?></th>
-                        <td colspan="6" style="text-align: left;">3,070 articles from 1,126 newspapers</td>
+                        <td colspan="6" style="text-align: left;">3,073 articles from 1,043 newspapers</td>
                     </tr>
                 </tfoot>
             </table>

@@ -35,16 +35,16 @@ get_header(); ?>
 			// Output HTML tables of site-wide Pagespeed averages:.
 			if ( 1 == $paged ) {
 				global $wp_query;
-				$pubs_data = netrics_get_pubs_query_data( $wp_query );
+				$pubs_data = netrics_get_pubs_query_data();
 				if ( $pubs_data ) {
 			?>
 			<table class="tabular">
-				<caption><?php the_archive_title(); ?> daily newspapers: Averages of Google Pagespeed results (2019-07)</caption>
+				<caption><?php the_archive_title(); ?> daily newspapers: Averages of Google Pagespeed results (2019-08)</caption>
 				<?php echo netrics_pagespeed( $pubs_data ); ?>
 				<tfoot>
         			<tr>
-            			<th scope="row"><?php esc_attr_e( 'Results from:', 'newsnetrics' ); ?></th>
-            			<td colspan="6" style="text-align: left;"><?php echo $wp_query->found_posts; ?> newspapers</td>
+            			<th scope="row"><?php esc_attr_e( 'Results for:', 'newsnetrics' ); ?></th>
+            			<td colspan="6" style="text-align: left;">3,073 articles from <?php echo $wp_query->found_posts; ?> newspapers</td>
         			</tr>
     			</tfoot>
 			</table>

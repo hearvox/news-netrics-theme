@@ -95,7 +95,7 @@ $map_data = array();
                     <img class="score-needle" src="/wp-content/themes/newsstats/img/gauge-needle.svg" alt="" style="transform: rotate(<?php echo $deg; ?>deg); z-index: 10;">
                     <!-- img class="score-needle" src="/wp-content/themes/newsstats/img/gauge-needle-avg.svg" alt="" style="transform: rotate(<?php echo '-80'; ?>deg);" -->
                     <output id="score-num"><?php echo $score; ?></output>
-                    <figcaption class="score-all">All papers: <output>27.6</output></figcaption>
+                    <figcaption class="score-all">All papers: <output>19.6</output></figcaption>
                 </figure>
                 <p><?php echo single_term_title( '', false ); ?> owns <output><?php echo absint( $wp_query->found_posts ); ?></output> daily <?php echo _n( 'newspaper', 'newspapers', $wp_query->found_posts, 'newsnetrics' ) ?> in <output><?php echo absint( $state_count ); ?></output> <?php echo _n( 'state', 'states',  $state_count, 'newsnetrics' ) ?>: <?php echo implode( ', ', $states ); ?>.</p>
                 <?php if ( $cms_list ) { ?>
