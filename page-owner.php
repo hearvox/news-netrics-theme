@@ -95,7 +95,7 @@ get_header(); ?>
 
             $html .= '<table class="tabular">';
             $html .= '<caption><a href="' . get_term_link( $term ) . "\">{$term->name}</a>: ";
-            $html .= 'PageSpeed average results (2019-07)</caption>';
+            $html .= 'PageSpeed average results (2019-08)</caption>';
             $html .= '<thead><td style=\"width: 11rem;\"></td>' . netrics_pagespeed_thead() . '</thead>';
             $html .= '<tbody>' . netrics_pagespeed_tbody( $pubs_data, 0 ) . '</tbody>';
             $html .= '<tfoot><tr><th scope="row">Results for:</th>';
@@ -341,7 +341,7 @@ function drawMainDashboard() {
 
             <section class="content-col">
                 <h2>PSI averages by Owner</h2>
-                <p><small>Since 2018-06 2e've been unable to run tests on <a href="https://news.pubmedia.us/owner/the-mcclatchy-company/">McClatchy</a> papers using the <a href="https://news.pubmedia.us/cms/escenic/">Escenic</a>, so their articles are not in these results.</small></p>
+                <p><small>Since 2019-06 2e've been unable to run tests on <a href="https://news.pubmedia.us/owner/the-mcclatchy-company/">McClatchy</a> papers using the <a href="https://news.pubmedia.us/cms/escenic/">Escenic</a>, so their articles are not in these results.</small></p>
                 <p>PageSpeed Insights result combined averages for each Owner's daily newspapers</p>
                 <?php echo $html; ?>
 

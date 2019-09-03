@@ -10,14 +10,6 @@
 $custom_fields = get_post_custom();
 $post_id       = get_the_ID();
 
-$server_obj = get_the_terms( $post_id , 'server' );
-$server     = ( $server_obj )
-	? '<a href="' . esc_url( get_term_link( $server_obj[0]->term_id, 'server' ) ) . '">' . $server_obj[0]->name . '</a>'
-	: '(unknown)';
-
-$rss_url  = ( isset( $custom_fields['nn_pub_rss'][0] ) ) ? $custom_fields['nn_pub_rss'][0] : false;
-$rss_link = ( $rss_url ) ? ' | <a href="' . esc_url( $rss_url ) . '">RSS feed</a>' : '';
-
 $site_url  = ( isset( $custom_fields['nn_pub_url'][0] ) ) ? $custom_fields['nn_pub_url'][0] : false;
 $site_link = ( $site_url ) ? ' <a href="' . esc_url( $site_url ) . '">Website</a>' : '';
 

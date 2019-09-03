@@ -79,7 +79,6 @@ foreach ( $query->posts as $post ) {
     }
 }
 
-
 echo $html;
 
 /*
@@ -95,12 +94,6 @@ https://docs.google.com/spreadsheets/d/1WPU3ILa6YAFoKwryXQWudXv_MCzCaseBL-Prjlbf
 
     </tbody>
 </table>
-
-<?php
-
-
-
-?>
 
     </div><!-- #primary -->
 

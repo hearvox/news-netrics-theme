@@ -34,7 +34,7 @@ get_header(); ?>
 			$paged = (get_query_var( 'paged' ) ) ? get_query_var( 'paged' ) : 1;
 			// Output HTML tables of site-wide Pagespeed averages:.
 			if ( 1 == $paged ) {
-				global $wp_query;
+				// global $wp_query;
 				$pubs_data = netrics_get_pubs_query_data();
 				if ( $pubs_data ) {
 			?>
@@ -79,18 +79,8 @@ get_header(); ?>
             <summary><small>(Test: data arrays)</small></summary>
             <pre>
             <?php
-
             // var_dump( $cms_arr );
             ?>
-
-             $queried_object: <?php
-             $queried_object = get_queried_object();
-             var_dump( $queried_object );
-             ?>
-
-            $pubs_data: <?php if ( isset( $pubs_data ) ) { print_r( $pubs_data ); }; ?>
-
-            $pubs_data_new: <?php print_r( netrics_get_pubs_query_data( $wp_query ) ); ?>
             </pre>
         </details>
 <!-- =file: archive -->

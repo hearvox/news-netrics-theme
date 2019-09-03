@@ -74,9 +74,6 @@ foreach ( $query->posts as $post ) {
             ? get_term( $term_county->parent ) : false;
         $state       = ( $term_state && isset( $term_state->name ) ) ? $term_state->name : '';
 
-        // Get error count.
-        $tags =  wp_get_post_terms( $post_id, 'post_tag', array( 'fields' => 'names' ) );
-
         // Get site data (including Alexa and BuiltWith).
         $nn_site  = get_post_meta( $post->ID, 'nn_site', true);
 
@@ -109,7 +106,6 @@ foreach ( $query->posts as $post ) {
 
 echo $pubs_info;
 
-
 /*
 Import into Google Sheet (not sortable):
 https://docs.google.com/spreadsheets/d/1WPU3ILa6YAFoKwryXQWudXv_MCzCaseBL-PrjlbfnFg/edit#gid=2114051459
@@ -120,55 +116,9 @@ Copy for display (sortable):
 https://docs.google.com/spreadsheets/d/1WPU3ILa6YAFoKwryXQWudXv_MCzCaseBL-PrjlbfnFg/edit#gid=2069546496
 */
 
-/*
-$pub_data = newsstats_get_all_publications();
-$html    = '';
-
-$array = print_r( $pub_data, true );
-// echo $array;
-// var_dump( $pub_data, true );
-
-$html .= "<table><thead><tr>\n";
-$html .= "<th>ID</th><th>domain</th><th>publication</th><th>circ</th><th>year</th><th>owner</th>";
-$html .= "<th>city</th><th>pop</th><th>lat|lon</th><th>county</th><th>state</th></tr>\n";
-$html .= "</thead><tbody><tr>\n";
-
-foreach ( $pub_data as $pub ) {
-    $pub_circ  = ( $pub['pub_circ'] ) ? number_format( $pub['pub_circ'] ) : '';
-    $city_pop  = ( $pub['city_pop'] ) ? number_format( $pub['city_pop'] ) : '';
-
-    $html .= "<tr><td class=\"text-right\">{$pub['pub_id']}</td>\n";
-    $html .= "<td><a href=\"{$pub['pub_link']}\">{$pub['pub_title']}</a></td>\n";
-    $html .= "<td>{$pub['pub_name']}</td>\n";
-    $html .= "<td class=\"text-right\">$pub_circ</td>\n";
-    $html .= "<td class=\"text-right\">{$pub['pub_year']}</td>\n";
-    $html .= "<td>{$pub['pub_owner']}</td>\n";
-    $html .= "<td>{$pub['city']}</td>\n";
-    $html .= "<td class=\"text-right\">$city_pop</td>\n";
-    $html .= "<td class=\"text-right\">{$pub['city_latlon']}</td>\n";
-    $html .= "<td>{$pub['county']}</td>\n";
-    $html .= "<td>{$pub['state']}</td></tr>\n";
-
-}
-$html .= "</tbody></table>";
-*/
 ?>
     </tbody>
 </table>
-
-
-<!--style type="text/css">
-    table { width: 95%; }
-
-    h1 { padding-left: 0.5rem; }
-
-    td {
-    	font-size: 0.8rem;
-    	padding: 0.2rem 0.5rem; }
-
-    .text-right { text-align: right; }
-
-</style -->
 
 	</div><!-- #primary -->
 
