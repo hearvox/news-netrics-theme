@@ -7,14 +7,9 @@
  * @package newsstats
  */
 
+// Get meta for circ., year in print, year online, and site rank.
 $custom_fields = get_post_custom();
 $post_id       = get_the_ID();
-
-$rss_url  = ( isset( $custom_fields['nn_pub_rss'][0] ) ) ? $custom_fields['nn_pub_rss'][0] : false;
-$rss_link = ( $rss_url ) ? ' | <a href="' . esc_url( $rss_url ) . '">RSS feed</a>' : '';
-
-$site_url  = ( isset( $custom_fields['nn_pub_url'][0] ) ) ? $custom_fields['nn_pub_url'][0] : false;
-$site_link = ( $site_url ) ? ' <a href="' . esc_url( $site_url ) . '">Website</a>' : '';
 
 $pub_name    = ( isset( $custom_fields['nn_pub_name'][0] ) ) ? $custom_fields['nn_pub_name'][0] : '';
 $pub_year    = ( isset( $custom_fields['nn_pub_year'][0] ) && $custom_fields['nn_pub_year'][0] )
@@ -32,8 +27,7 @@ $psi_1908 = netrics_site_pagespeed( $post_id, 'nn_articles_201908' ); // si: 14.
 
 ?>
 <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
-	<header class="entry-header">
-        <?php the_title( '<h1 class="entry-title">', '</h1>' ); ?>
+	<header class="entry-header" style="margin-bottom: 2rem;">
         <figure id="score" class="alignright" style="width: 180px; height: 200px; margin-right: 0;">
             <?php
             // Gauge/Score CSS Chart data and display.
@@ -44,16 +38,15 @@ $psi_1908 = netrics_site_pagespeed( $post_id, 'nn_articles_201908' ); // si: 14.
             <output id="score-num"><?php echo $score; ?></output>
             <figcaption class="score-all">All papers: <output>19.6</output></figcaption>
         </figure>
+        <?php the_title( '<h1 class="entry-title" style="display: inline-block;">', '</h1>' ); ?>
         <?php $awis = netrics_get_awis_meta( $post_id ); ?>
         <?php $city = netrics_get_city_meta( $post_id ); ?>
-        <?php $geo  = get_term_parents_list( $city['city_term']->term_id, 'region', array( 'format' => 'id', 'separator' => '/') ); ?>
+        <?php $geo  = get_term_parents_list( $city['city_term']->term_id, 'region', array( 'format' => 'id', 'separator' => ' / ') ); ?>
 		<ul class="media-meta" style="list-style: none; margin: 0; padding: 0;">
             <li><strong><big><?php echo esc_html( $pub_name ) ?></big></strong><?php echo esc_html( $awis['desc'] ); ?></li>
-            <li><?php echo trim( $geo, '/' ); ?> <small>(pop. <?php echo number_format( $city['city_meta']['nn_region_pop'][0] ); ?>)</small></li>
-            <li><em>Circulation:</em> <?php echo esc_html( $pub_circ ); ?> / <em>Site rank:</em> <?php echo esc_html( $pub_rank ); ?></li>
-            <li><?php the_terms( $post_id, 'owner', '<em>Owner:</em> ' ); ?></li>
-			<li><em>In print:</em> <?php echo esc_html( $pub_year ); ?> | <em>Online:</em> <?php echo esc_html( $awis['year'] ); ?></li>
-			<li><em>CMS:</em> <?php the_terms( $post_id, 'cms' ); ?> | <?php echo $site_link; ?><?php echo $rss_link; ?></li>
+            <li><?php echo trim( $geo, ' / ' ); ?> <small>(<em>Pop.</em> <?php echo number_format( $city['city_meta']['nn_region_pop'][0] ); ?>)</small></li>
+            <li><em>Circulation:</em> <?php echo esc_html( $pub_circ ); ?> | <em>Site rank:</em> <?php echo esc_html( $pub_rank ); ?> | <em>CMS:</em> <?php the_terms( $post_id, 'cms' ); ?></li>
+            <li><em>In print:</em> <?php echo esc_html( $pub_year ); ?> | <em>Online:</em> <?php echo esc_html( $awis['year'] ); ?> | <?php the_terms( $post_id, 'owner', '<em>Owner:</em> ' ); ?></li>
 		</ul>
 	</header><!-- .entry-header -->
 
@@ -76,8 +69,10 @@ $psi_1908 = netrics_site_pagespeed( $post_id, 'nn_articles_201908' ); // si: 14.
     </section><!-- .content-col -->
 
 	<footer class="entry-footer">
-
-		<p style="padding-top: 2em; padding-right: 1em; display: inline-block; width: 500px;"><img class="screenshot" src="https://s.wordpress.com/mshots/v1/http%3A%2F%2F<?php echo get_the_title() ?>?w=500&h=375" width="500" height="375" alt="Homepage screenshot" /></p>
+        <?php if ( isset( $custom_fields['nn_pub_url'][0] ) ) { // Screenshot of pub homepage. ?>
+		<p style="padding-top: 2em; padding-right: 1em; display: inline-block; width: 500px;">
+            <a href="<?php echo esc_url( $custom_fields['nn_pub_url'][0] ); ?>"><img class="screenshot" src="https://s.wordpress.com/mshots/v1/http%3A%2F%2F<?php echo get_the_title() ?>?w=500&h=375" width="500" height="375" alt="Homepage screenshot" /></a></p>
+        <?php } ?>
 
         <?php
         // Google Map data and display.
@@ -134,8 +129,6 @@ if ( $psi_1908 ) {
     $bars .= "{v:$tti,f:" . round( $psi_1908['tti'] / 1000, 1 ) . "}, 32.9],\n"; // Score: 19.9
 }
 
-
-
 ?>
 <script type="text/javascript">
 	// @see https://developers.google.com/chart/interactive/docs/gallery/gauge
@@ -166,7 +159,6 @@ if ( $psi_1908 ) {
         var bar_chart = new google.visualization.ComboChart(document.getElementById('col_chart'));
         bar_chart.draw(data_trend, options_trend);
     }
-
 </script>
 
 <?php } else {
@@ -174,20 +166,9 @@ if ( $psi_1908 ) {
 }
 ?>
 <!--
-Check:
-https://news.pubmedia.us/publication/abqjournal-com/
-
 // Articles: titles, URLs, PSI results.
-// $articles_1905 = get_post_meta( $post_id, 'nn_articles_201905', true );
-// $articles_1906 = get_post_meta( $post_id, 'nn_articles_201906', true );
 // $articles_1907 = get_post_meta( $post_id, 'nn_articles_201907', true );
-<p><em>Articles 2019-08:</em>
-<?php // echo netrics_articles_results( $post_id, $articles_1908 ); ?></p>
 <p><em>Articles 2019-07:</em>
 <?php // echo netrics_articles_results( $post_id, $articles_1907 ); ?></p>
-<p><em>Articles 2019-06:</em>
-<?php // echo netrics_articles_results( $post_id, $articles_1906 ); ?></p>
-<p><em>Articles 2019-05:</em>
-<?php // echo netrics_articles_results( $post_id, $articles_1905 ); ?></p>
 -->
 

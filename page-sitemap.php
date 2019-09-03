@@ -18,29 +18,6 @@ get_header(); ?>
 
             <?php endwhile; // End of the loop. ?>
 
-			<form class="pub-form" method="post" action="<?php echo get_post_type_archive_link( 'publication' );?>">
-                <h2 class="pub-form-heading">Filter publications by:</h2>
-                <input type="hidden" name="action" id="action" value="find">
-                <nav class="tax-dropdown pub-tax-sel">
-                	<?php echo get_terms_multi_select( 'owner', array( 'orderby' => 'count', 'order' => 'DESC'), 22 ); ?>
-            	</nav>
-            	<nav class="tax-dropdown pub-tax-sel">
-                	<?php echo get_terms_multi_select( 'cms', array( 'orderby' => 'count', 'order' => 'DESC'), 10 ); ?>
-                	<?php echo get_terms_multi_select( 'region', array( 'parent' => 0 ), 10 ); ?>
-            	</nav>
-                <p style="text-align: center;">
-                    <button class="pub-filter-button" type="submit">Filter</button>
-                    <?php if ( isset( $_POST['action'] ) ) { ?>
-                    <a class="pub-all" href="/">All Publications &raquo;</a>
-                    <?php } ?>
-                </p>
-                <?php // var_dump( $_POST['tax_input'] ) ?>
-                <?php // echo $wp_query->query_vars['test']; ?>
-                <?php // var_dump( $wp_query->query_vars['tax_query'] ) ?>
-            </form>
-
-            <hr>
-
 			<nav class="tax-dropdown">
 				<h2 class="widget-title"><?php esc_html_e( 'Owners', 'newsstats' ); ?></h2>
 				<ul style="margin-left: 0.5rem;">
@@ -94,6 +71,29 @@ get_header(); ?>
 				?>
 				</ul>
 			</nav>
+
+            <hr>
+
+            <form class="pub-form" method="post" action="<?php echo get_post_type_archive_link( 'publication' );?>">
+                <h2 class="pub-form-heading">Filter publications by:</h2>
+                <input type="hidden" name="action" id="action" value="find">
+                <nav class="tax-dropdown pub-tax-sel">
+                    <?php echo get_terms_multi_select( 'owner', array( 'orderby' => 'count', 'order' => 'DESC'), 22 ); ?>
+                </nav>
+                <nav class="tax-dropdown pub-tax-sel">
+                    <?php echo get_terms_multi_select( 'cms', array( 'orderby' => 'count', 'order' => 'DESC'), 10 ); ?>
+                    <?php echo get_terms_multi_select( 'region', array( 'parent' => 0 ), 10 ); ?>
+                </nav>
+                <p style="text-align: center;">
+                    <button class="pub-filter-button" type="submit">Filter</button>
+                    <?php if ( isset( $_POST['action'] ) ) { ?>
+                    <a class="pub-all" href="/">All Publications &raquo;</a>
+                    <?php } ?>
+                </p>
+                <?php // var_dump( $_POST['tax_input'] ) ?>
+                <?php // echo $wp_query->query_vars['test']; ?>
+                <?php // var_dump( $wp_query->query_vars['tax_query'] ) ?>
+            </form>
 
         </main><!-- #main -->
 
