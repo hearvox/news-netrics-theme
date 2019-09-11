@@ -76,10 +76,11 @@ $psi_1908 = netrics_site_pagespeed( $post_id, 'nn_articles_201908' ); // si: 14.
 
         <?php
         // Google Map data and display.
-        $map_api = 'https://www.google.com/maps/embed/v1/place?key=AIzaSyCf1_AynFKX8-A4Xh1geGFZwq1kgUYAtZc';
+        $map_api = 'https://www.google.com/maps/embed/v1/place?key=';
+        $map_key =  netrics_get_option( 'gmaps' );
         $map_loc = '&q=' . urlencode( $city['city_term']->name ) . '+' . $city['state_term']->name;
         $map_ctr = '&amp;center=' . str_replace( '|', ',', $city['city_meta']['nn_region_latlon'][0]); // Term meta: lat|lon.
-        $map_src = $map_api . $map_loc . $map_ctr;
+        $map_src = $map_api . $map_key . $map_loc . $map_ctr;
         ?>
 		<iframe style="display: inline-block; width: 500px;" width="500" height="375" frameborder="0" style="border:0" src="<?php echo esc_url( $map_src ); ?>"></iframe>
 

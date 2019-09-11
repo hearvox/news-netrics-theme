@@ -18,9 +18,6 @@ $pub_data = newsstats_get_all_publications();
 
 <div id="map" style="border: 1px solid #f6f6f6; height: 1000px; width: 100%;"></div>
 
-
-<!-- script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCf1_AynFKX8-A4Xh1geGFZwq1kgUYAtZc&callback=initMap" async defer></script -->
-
 <script>
 /* Load map (called by <script> callback) */
 function news_map_init() {
@@ -110,7 +107,7 @@ function news_map_set_markers(map) {
 
 </script>
 
-<script async defer src="//maps.googleapis.com/maps/api/js?key=AIzaSyA5clgBbvCkszTpr0UjyF0cG_Hr21Kd9Pg&callback=news_map_init"></script>
+<script async defer src="//maps.googleapis.com/maps/api/js?key=<?php echo netrics_get_option( 'gmaps' ); ?>&callback=news_map_init"></script>
         <article id="content" class="content">
             <h1>Map: U.S. Daily Newspapers</h1>
             <p><a href="https://mapicons.mapsmarker.com/markers/stores/newsagent/">Newspaper map marker</a> courtesy <a href="https://mapicons.mapsmarker.com">Maps Icons Collection</a>.</p>

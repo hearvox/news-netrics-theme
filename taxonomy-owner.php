@@ -273,7 +273,9 @@ function news_map_set_markers(map) {
 
 </script>
 
-<script async defer src="//maps.googleapis.com/maps/api/js?key=AIzaSyA5clgBbvCkszTpr0UjyF0cG_Hr21Kd9Pg&callback=news_map_init"></script>
+<script async defer src="//maps.googleapis.com/maps/api/js?key=<?php echo netrics_get_option( 'gmaps' ); ?>&callback=news_map_init"></script>
+
+
 
             <nav class="nav-pagination justify">
                 <?php echo paginate_links(); ?>
