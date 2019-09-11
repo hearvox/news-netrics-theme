@@ -79,9 +79,20 @@ function netrics_setup() {
 		'default-color' => 'ffffff',
 		'default-image' => '',
 	) ) );
+
 }
 endif; // newsstats_setup
 add_action( 'after_setup_theme', 'netrics_setup' );
+
+/**
+ * Registers an editor stylesheet for the theme.
+ */
+function netrics_editor_styles() {
+    add_theme_support( 'editor-styles' ); // Enable custom stylesheet for WordPress editors
+    add_editor_style( 'style-editor.css' ); // load the CSS file from template directory
+    add_theme_support( 'align-wide' ); // Support for full and wide blocks
+}
+add_action( 'admin_init', 'netrics_editor_styles' );
 
 /**
  * Set the content width in pixels, based on the theme's design and stylesheet.
@@ -231,10 +242,4 @@ function netrix_filter_previous_post_where( $where ) {
         return $wpdb->prepare( "WHERE p.post_date < '%s' AND p.post_type = '%s' AND p.post_status = 'publish'", $post->post_date, $post->post_type );
     }
 }
-
-
-
-
-
-
 

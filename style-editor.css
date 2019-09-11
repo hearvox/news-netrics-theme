@@ -1,0 +1,25 @@
+
+
+/* Fony family, with fallback if font is not installed on the system */
+body {
+	font-family: "Palatino Linotype", Georgia, sans-serif;
+}
+
+/* Main text column width */
+.editor-writing-flow .wp-block {
+    max-width: 1000px;
+}
+/* Text block paragraph font size */
+.editor-writing-flow .wp-block p {
+	font-size: 18px;
+}
+
+/* Width of "wide" blocks - matches content wrapper width */
+.editor-writing-flow .wp-block[data-align="wide"] {
+    max-width: 1280px;
+}
+
+/* Width of "full-wide" blocks - you need some CSS wizardry to get these blocks to extend outside the wrapper */
+.editor-writing-flow .wp-block[data-align="full"] {
+    max-width: none;
+}
