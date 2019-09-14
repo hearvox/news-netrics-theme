@@ -17,7 +17,7 @@ $json    = '';
 // Get Top 25 Scores with 40K+ circulation.
 $args = array(
     'post_type'      => 'publication',
-    'posts_per_page' => 25,
+    'posts_per_page' => 26,
     'meta_query' => array(
         'relation' => 'AND',
         array(
@@ -137,22 +137,28 @@ wp_reset_postdata();
 
         </main><!-- #main -->
 
+        <section style="margin: auto; width: 1020px;">
+            <h2>Website performance (August 2019)</h2>
+        </section>
+        <?php $pubs_data = netrics_get_pubs_query_data(); ?>
+        <table class="tabular" style="margin-top: 2rem;">
+            <caption>All U.S. daily newspapers: Averages of Google Pagespeed results (2019-08)</caption>
+            <?php netrics_pagespeed_mean( $pubs_data ); ?>
+            <tfoot>
+                <tr>
+                    <th scope="row"><?php esc_attr_e( 'Results for:', 'newsnetrics' ); ?></th>
+                    <td colspan="6" style="text-align: left;">3,073 articles from 1,043 newspapers</td>
+                </tr>
+            </tfoot>
+        </table>
+
+        <section style="margin: auto; width: 1020px;">
+            <h2>Top 25 Scores (August 2019)</h2>
+            <p>These are the best-performing websites of U.S. newspapers (with &gt;40K circulation, ⓘ = results).</p>
+        </section>
         <figure id="table_div" style="display: block; padding-top: 30px; width: 100%"></figure>
 
         <?php endwhile; // End of the loop. ?>
-            <?php $pubs_data = netrics_get_pubs_query_data(); ?>
-            <table class="tabular" style="margin-top: 2rem;">
-                <caption>All U.S. daily newspapers: Averages of Google Pagespeed results (2019-08)</caption>
-                <?php netrics_pagespeed_mean( $pubs_data ); ?>
-                <tfoot>
-                    <tr>
-                        <th scope="row"><?php esc_attr_e( 'Results for:', 'newsnetrics' ); ?></th>
-                        <td colspan="6" style="text-align: left;">3,073 articles from 1,043 newspapers</td>
-                    </tr>
-                </tfoot>
-            </table>
-
-<p class="content-col">(FYI, this page's <a href="https://developers.google.com/speed/pagespeed/insights/?url=https%3A%2F%2Fnews.pubmedia.us%2Fresults%2F&amp;tab=desktop">PSI scores</a> are 69 mobile and 91 desktop.)</p>
 
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type="text/javascript">
