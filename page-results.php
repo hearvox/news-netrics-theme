@@ -17,7 +17,7 @@ $json    = '';
 // Get Top 25 Scores with 40K+ circulation.
 $args = array(
     'post_type'      => 'publication',
-    'posts_per_page' => 26,
+    'posts_per_page' => 25,
     'meta_query' => array(
         'relation' => 'AND',
         array(
@@ -35,10 +35,10 @@ $args = array(
     ),
     'orderby' => array( 'score' => 'DESC', 'title' => 'ASC' ),
 );
-$query = new WP_Query( $args );
+$query_25 = new WP_Query( $args );
 
 // Make array of Publications data.
-foreach ( $query->posts as $post ) {
+foreach ( $query_25->posts as $post ) {
     $post_id   = $post->ID;
     $post_meta = get_post_meta( $post_id );
 
@@ -219,6 +219,24 @@ function drawChart() {
 </script>
 
     </div><!-- #primary -->
+
+<details>
+    <summary><small>(Test: data arrays)</small></summary>
+
+    <pre>
+    <ol>
+    <?php
+
+    foreach ( $query_25->posts as $post ) {
+        echo "<li>{$post->ID}\t{$post->post_title}\t" . get_post_meta( $post->ID, 'nn_circ', true ) . "\t" . get_post_meta( $post->ID, 'nn_psi_score', true ) . '</li>';
+    }
+
+
+    echo $json;
+    ?>
+    </ol>
+    </pre>
+</details>
 
 <?php // get_sidebar(); ?>
 <?php get_footer(); ?>

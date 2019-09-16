@@ -518,12 +518,8 @@ output a:visited { color: royalblue; }
 .tabular thead th { background-color: #ebeff8; }
 table.tabular {	background-color: #fff; }
 
-.tabular thead td, /* No heading in col */
-.tabular caption { background-color: #fbfbfb; }
-
 .tabular tbody th,
-.tabular tfoot tr,
-.tabular tbody tr:hover { background-color: #efefef; } /* lighter grey-red */
+.tabular tbody tr:hover { background-color: #efefef; }
 
 /* Row stripes */
 .tabular .even { background-color:#e5e5e5; }
