@@ -75,14 +75,14 @@ get_header(); ?>
 		</main><!-- #main -->
 	</div><!-- #primary -->
 
-        <details>
-            <summary><small>(Test: data arrays)</small></summary>
-            <pre>
-            <?php
-            // var_dump( $cms_arr );
-            ?>
-            </pre>
-        </details>
+    <details>
+        <summary><small>(Test: data arrays)</small></summary>
+        <pre>
+        <?php
+        // var_dump( $cms_arr );
+        ?>
+        </pre>
+    </details>
 <!-- =file: archive -->
 <?php get_sidebar(); ?>
 <?php get_footer(); ?>

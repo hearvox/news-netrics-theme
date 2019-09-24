@@ -138,11 +138,11 @@ wp_reset_postdata();
         </main><!-- #main -->
 
         <section style="margin: auto; width: 1020px;">
-            <h2>Website performance (August 2019)</h2>
+            <h2>Website performance (2019-08)</h2>
         </section>
         <?php $pubs_data = netrics_get_pubs_query_data(); ?>
         <table class="tabular" style="margin-top: 2rem;">
-            <caption>All U.S. daily newspapers: Averages of Google Pagespeed results (2019-08)</caption>
+            <caption>All U.S. daily newspapers: Averages PSI results (2019-08)</caption>
             <?php netrics_pagespeed_mean( $pubs_data ); ?>
             <tfoot>
                 <tr>
@@ -153,8 +153,8 @@ wp_reset_postdata();
         </table>
 
         <section style="margin: auto; width: 1020px;">
-            <h2>Top 25 Scores (August 2019)</h2>
-            <p>These are the best-performing websites of U.S. newspapers (with &gt;40K circulation, ⓘ = results).</p>
+            <h2>Top 25 Scores (2019-08)</h2>
+            <p>These are the best-performing websites of U.S. newspapers (with &gt;40K circulation, sorted by PSI score: ⓘ = more results).</p>
         </section>
         <figure id="table_div" style="display: block; padding-top: 30px; width: 100%"></figure>
 

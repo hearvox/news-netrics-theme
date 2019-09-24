@@ -33,15 +33,14 @@ get_header(); ?>
 	<pre>
 	<?php
 	$post_id = get_the_ID();
-	$pubs_data = netrics_get_pubs_pagespeed_query( $wp_query );
-	$articles_1908 = get_post_meta( $post_id, 'nn_articles_201908', true );
-	$articles = get_post_meta( $post_id, 'nn_articles', true);
-	echo "\narticles\n";
-	print_r( $articles );
-	echo "\narticles_1908\n";
-	print_r( $articles_1908 );
-	echo "\npubs_data\n";
-	print_r( $pubs_data );
+    echo "\nnn_psi_avgs: ";
+    print_r( get_post_meta( $post_id,'nn_psi_avgs', true ) );
+
+	echo "\nnn_articles_new: ";
+    print_r( get_post_meta( $post_id,'nn_articles_new', true ) );
+
+    echo "\nnn_articles: ";
+    print_r( get_post_meta( $post_id,'nn_articles', true ) );
 
 
 	?>

@@ -1279,10 +1279,15 @@ textarea {
 --------------------------------------------------------------*/
 .site-header-items,
 .entry-header,
-.entry-content,
+.entry-content > p,
+.entry-content > blockquote,
+.entry-content > ul,
+.entry-content > ol,
+.entry-content > dl,
+.entry-content > details,
+.content-col,
 .entry-footer,
 .page-header,
-.content-col,
 .archive .site-main,
 .footer-nav,
 .site-info {
@@ -1290,6 +1295,23 @@ textarea {
 	display: block;
 	margin: auto;
 	width: 1020px;
+}
+
+.nn-block-iframed,
+audio,
+figure,
+img,
+iframe,
+video {
+	display: block;
+	margin: 1rem auto;
+	max-width: 100%;
+}
+
+.wp-block-group,
+.wp-block-columns {
+	max-width: 1020px;
+	margin: auto;
 }
 
 /*--------------------------------------------------------------

@@ -15,8 +15,9 @@ body {
 }
 
 /* Width of "wide" blocks - matches content wrapper width */
+.nn-block-iframed,
 .editor-writing-flow .wp-block[data-align="wide"] {
-    max-width: 1280px;
+    margin: auto;
 }
 
 /* Width of "full-wide" blocks - you need some CSS wizardry to get these blocks to extend outside the wrapper */
