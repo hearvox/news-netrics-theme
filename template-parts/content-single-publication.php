@@ -25,7 +25,7 @@ $psi_1906 = netrics_site_pagespeed( $post_id, 'nn_articles_201906' ); // si: 13.
 $psi_1907 = netrics_site_pagespeed( $post_id, 'nn_articles_201907' ); // si: 13.5, tti: 29.7, speed: 20.4
 $psi_1908 = netrics_site_pagespeed( $post_id, 'nn_articles_201908' ); // si: 14.3, tti: 32.9, speed: 19.6
 
-$psi_articles  = get_post_meta( $post_id, 'nn_articles', true ); // This Pub's PSI monthly results history.
+$psi_articles   = get_post_meta( $post_id, 'nn_articles', true ); // This Pub's PSI monthly results history.
 $psi_pub_all    = get_post_meta( $post_id, 'nn_psi_avgs', true ); // This Pub's PSI monthly results history.
 $psi_pub_month  = end( $psi_pub_all ); // Most recent results for this Pub.
 $psi_site_all   = get_transient( 'netrics_psi' ); // All Pub's PSI monthly results history.
@@ -112,48 +112,22 @@ $psi_site_month = end( $psi_site_all ); // Most recent results for all Pubs.
 	</footer><!-- .entry-footer -->
 </article><!-- #post-## -->
 
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-<?php if ( $psi_1905 || $psi_1906 || $psi_1907 || $psi_1908 ) {
-// Google Chart: Stacked Column data.
-$lines = $bars = '';
-if ( $psi_1905 ) {
-    $tti = round( ( $psi_1905['tti'] - $psi_1905['speed'] ) / 1000, 1 );
+<?php
+$bars = '';
+foreach ( $psi_pub_all as $month => $psi ) {
 
-    // Column chart data.
-    $bars .= "['5/19', ";
-    $bars .= round( $psi_1905['speed'] / 1000, 1 ) . ', ';
-    $bars .= "{v:$tti,f:" . round( $psi_1905['tti'] / 1000, 1 ) . "}, 31.6],\n"; // Score: 19.6
+    if ( $psi ) {
+        $tti_pub = round( ( $psi['tti'] - $psi['speed'] ) / 1000, 1 );
+        $tti_all = round( ( $psi_site_all[ $month ]['tti'] ) / 1000, 1 );
 
+        // Column chart data.
+        $bars .= "['" . date("n/y", strtotime( $month ) ) . "', ";
+        $bars .= round( $psi['speed'] / 1000, 1 ) . ', ';
+        $bars .= "{v:$tti_pub,f:" . round( $psi['tti'] / 1000, 1 ) . "}, " . $tti_all . "],\n"; // Score: 19.6
+    }
 }
-
-if ( $psi_1906 ) {
-    $tti = round( ( $psi_1906['tti'] - $psi_1906['speed'] ) / 1000, 1 );
-
-    // Column chart data.
-    $bars .= "['6/19', ";
-    $bars .= round( $psi_1906['speed'] / 1000, 1 ) . ', ';
-    $bars .= "{v:$tti,f:" . round( $psi_1906['tti'] / 1000, 1 ) . "}, 32.6],\n"; // Score: 19.9
-}
-
-if ( $psi_1907 ) {
-    $tti = round( ( $psi_1907['tti'] - $psi_1907['speed'] ) / 1000, 1 );
-
-    // Column chart data.
-    $bars .= "['7/19', ";
-    $bars .= round( $psi_1907['speed'] / 1000, 1 ) . ', ';
-    $bars .= "{v:$tti,f:" . round( $psi_1907['tti'] / 1000, 1 ) . "}, 31.4],\n"; // Score: 21.0
-}
-
-if ( $psi_1908 ) {
-    $tti = round( ( $psi_1908['tti'] - $psi_1908['speed'] ) / 1000, 1 );
-
-    // Column chart data.
-    $bars .= "['8/19', ";
-    $bars .= round( $psi_1908['speed'] / 1000, 1 ) . ', ';
-    $bars .= "{v:$tti,f:" . round( $psi_1908['tti'] / 1000, 1 ) . "}, 32.9],\n"; // Score: 19.9
-}
-
 ?>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type="text/javascript">
 	// @see https://developers.google.com/chart/interactive/docs/gallery/gauge
     google.charts.load('current', {'packages':['corechart']});
@@ -184,15 +158,3 @@ if ( $psi_1908 ) {
         bar_chart.draw(data_trend, options_trend);
     }
 </script>
-
-<?php } else {
-    echo "<p>No PageSpeed results.</p>";
-}
-?>
-<!--
-// Articles: titles, URLs, PSI results.
-// $articles_1907 = get_post_meta( $post_id, 'nn_articles_201907', true );
-<p><em>Articles 2019-07:</em>
-<?php // echo netrics_articles_results( $post_id, $articles_1907 ); ?></p>
--->
-
