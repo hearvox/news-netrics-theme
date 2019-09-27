@@ -36,12 +36,11 @@ get_header(); ?>
     echo "\nnn_psi_avgs: ";
     print_r( get_post_meta( $post_id,'nn_psi_avgs', true ) );
 
-	echo "\nnn_articles_new: ";
-    print_r( get_post_meta( $post_id,'nn_articles_new', true ) );
+    echo "\nnetrics_psi: ";
+    print_r( get_transient( 'netrics_psi' ) );
 
     echo "\nnn_articles: ";
     print_r( get_post_meta( $post_id,'nn_articles', true ) );
-
 
 	?>
     </pre>

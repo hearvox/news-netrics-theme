@@ -25,27 +25,18 @@ $psi_1906 = netrics_site_pagespeed( $post_id, 'nn_articles_201906' ); // si: 13.
 $psi_1907 = netrics_site_pagespeed( $post_id, 'nn_articles_201907' ); // si: 13.5, tti: 29.7, speed: 20.4
 $psi_1908 = netrics_site_pagespeed( $post_id, 'nn_articles_201908' ); // si: 14.3, tti: 32.9, speed: 19.6
 
-$psi_articles  = get_post_meta( $post_id, 'nn_articles', true ); // This Pub's PSI monthly results history.
-$psi_pub_all    = get_post_meta( $post_id, 'nn_psi_avgs', true ); // This Pub's PSI monthly results history.
-$psi_pub_month  = end( $psi_pub_all ); // Most recent results for this Pub.
-$psi_site_all   = get_transient( 'netrics_psi' ); // All Pub's PSI monthly results history.
-$psi_site_month = end( $psi_site_all ); // Most recent results for all Pubs.
-
-// netrics_pagespeed_format( $metric, $num, 0 )
-
 ?>
 <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 	<header class="entry-header" style="margin-bottom: 2rem;">
         <figure id="score" class="alignright" style="width: 180px; height: 200px; margin-right: 0;">
             <?php
             // Gauge/Score CSS Chart data and display.
-            $score_pub = ( isset( $psi_pub_month['score'] ) ) ? number_format( $psi_pub_month['score'] * 100, 1, '.', ',' ) : '?';
-            $score_deg = ( isset( $psi_pub_month['score'] ) ) ? ( $score_pub - 50 ) * 2.7 : -160;
-            $score_all = number_format( $psi_site_month['score'] * 100, 1, '.', ',' );
+            $score = ( isset( $psi_1908['score'] ) ) ? number_format( $psi_1908['score'] * 100, 1, '.', ',' ) : '?';
+            $deg   = ( isset( $psi_1908['score'] ) ) ? ( $score - 50 ) * 2.7 : -160;
             ?>
-            <img class="score-needle" src="/wp-content/themes/newsstats/img/gauge-needle.svg" alt="" style="transform: rotate(<?php echo $score_deg; ?>deg); z-index: 10;">
-            <output id="score-num"><?php echo $score_pub; ?></output>
-            <figcaption class="score-all">All papers: <output><?php echo $score_all; ?></output></figcaption>
+            <img class="score-needle" src="/wp-content/themes/newsstats/img/gauge-needle.svg" alt="" style="transform: rotate(<?php echo $deg; ?>deg); z-index: 10;">
+            <output id="score-num"><?php echo $score; ?></output>
+            <figcaption class="score-all">All papers: <output>19.6</output></figcaption>
         </figure>
         <?php the_title( '<h1 class="entry-title" style="display: inline-block;">', '</h1>' ); ?>
         <?php $awis = netrics_get_awis_meta( $post_id ); ?>
@@ -65,24 +56,10 @@ $psi_site_month = end( $psi_site_all ); // Most recent results for all Pubs.
     if ( $pubs_data ) {
         ?>
         <?php $articles_1908 = get_post_meta( $post_id, 'nn_articles_201908', true ); ?>
-
         <table class="tabular">
-            <thead>
-                <td></td>
-                <?php echo netrics_pagespeed_thead() ?>
-            </thead>
-            <caption>PageSpeed Insights average and article results (<?php echo $psi_pub_month['results']; ?> articles: <?php echo key( array_slice( $psi_pub_all, -1, 1, true ) ); ?>)</caption>
-            <tbody>
-                <tr>
-                    <th scope="row"><?php esc_attr_e( 'Mean', 'newsnetrics' ); ?></th>
-                    <td><?php echo number_format( $psi_pub_month['dom'], 1, '.', ',' ); ?></td>
-                    <td><?php echo number_format( $psi_pub_month['requests'], 1, '.', ',' ); ?></td>
-                    <td><?php echo size_format( $psi_pub_month['size'], 1 ); ?></td>
-                    <td><?php echo number_format( $psi_pub_month['speed'] / 1000, 1, '.', ',' ); ?></td>
-                    <td><?php echo number_format( $psi_pub_month['tti'] / 1000, 1, '.', ',' ); ?></td>
-                    <td><?php echo number_format( $psi_pub_month['score'] * 100, 1, '.', ',' ); ?></td>
-                </tr>
-                <?php echo netrics_articles_results_table( $post_id, end( $psi_articles ) ); ?>
+            <caption>PageSpeed Insights average results for <?php echo count( $pubs_data['score'] ) ?> articles (2019-08)</caption>
+                <?php echo netrics_pagespeed_mean( $pubs_data, $tbody = false ); ?>
+                <?php echo netrics_articles_results_table( $post_id, $articles_1908 ); ?>
             </tbody>
         </table>
 
