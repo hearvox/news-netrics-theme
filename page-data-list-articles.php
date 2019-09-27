@@ -59,14 +59,27 @@ foreach ( $query->posts as $post ) {
     $edit    = ( is_user_logged_in() ) ? ' | <a href="' . get_edit_post_link( $post_id ) . '">[edit]</a>' : '';
     $urls    = "<small>(<a href=\"{$post->guid}\">$post_id</a> | <a href=\"$site\">site</a>$feed$edit)$tags$flags</small>";
 
-    $list  .= "<li>{$post->post_title} $urls";
+    // $list  .= "<li>{$post->post_title} $urls";
+    $list  .= "<li>$post_id {$post->post_title}";
 
+    $items  = get_post_meta( $post_id, 'nn_articles_new', true );
+    if ( $items && 1 < count( $items ) ) {
+        $list .= '</li>2019-09<ol>';
+        $list .= netrics_pagespeed_results_list( $query, $items );
+        $list .= '</ol>';
+    }
+
+    unset( $items );
+
+    /*
     $items  = get_post_meta( $post_id, 'nn_articles_201908', true );
     if ( $items && 1 < count( $items ) ) {
         $list .= '</li>2019-08<ol>';
         $list .= netrics_pagespeed_results_list( $query, $items );
         $list .= '</ol>';
     }
+
+    unset( $items );
 
     $items  = get_post_meta( $post_id, 'nn_articles_201907', true );
     if ( $items && 1 < count( $items ) ) {
@@ -75,6 +88,8 @@ foreach ( $query->posts as $post ) {
         $list .= '</ol>';
     }
 
+    unset( $items );
+
     $items  = get_post_meta( $post_id, 'nn_articles_201906', true );
     if ( $items && 1 < count( $items ) ) {
         $list .= '</li>2019-06<ol>';
@@ -82,13 +97,15 @@ foreach ( $query->posts as $post ) {
         $list .= '</ol>';
     }
 
+    unset( $items );
+
     $items  = get_post_meta( $post_id, 'nn_articles_201905', true );
     if ( $items && 1 < count( $items ) ) {
         $list .= '</li>2019-05<ol>';
         $list .= netrics_pagespeed_results_list( $query, $items );
         $list .= '</ol>';
     }
-
+    */
 }
 
 echo $list;

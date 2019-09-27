@@ -84,7 +84,10 @@ foreach ( $query_25->posts as $post ) {
             ? '\'<a href="' . get_term_link( $term_cms[0]->term_id ) . '">' . esc_html( $term_cms[0]->name ) . '</a>\',' : "'(unknown)',";
 
         // Add PageSpeed averages to JSON.
-        $psi_data = netrics_site_pagespeed( $post_id ); // PSI averages.
+        // $psi_data = netrics_site_pagespeed( $post_id ); // PSI averages, old vers.
+        $psi_avgs = get_post_meta( $post_id, 'nn_psi_avgs', true );
+        $psi_data = $psi_avgs['2019-09'];
+
         foreach ($metrics as $metric ) {
             $num = ( isset( $psi_data[ $metric ] ) ) ? $psi_data[ $metric ] : null;
 
@@ -153,7 +156,7 @@ wp_reset_postdata();
         </table>
 
         <section style="margin: auto; width: 1020px;">
-            <h2>Top 25 Scores (2019-08)</h2>
+            <h2>Top 25 Scores (2019-09)</h2>
             <p>These are the best-performing websites of U.S. newspapers (with &gt;40K circulation, sorted by PSI score: ⓘ = more results).</p>
         </section>
         <figure id="table_div" style="display: block; padding-top: 30px; width: 100%"></figure>
