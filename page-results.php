@@ -45,8 +45,7 @@ foreach ( $query_25->posts as $post ) {
     // Get publication's PageSpeed result averages.
     $psi_data = netrics_site_pagespeed( $post_id ); // PSI averages.
 
-    // Add to chart if results.
-    if ( isset( $psi_data['score' ] ) ) {
+    // Add PUB and PSI data to chart.
         // Get Region values: city, county and state (tax terms), and city population (term meta).
         $term_city   = get_the_terms( $post_id, 'region' );
         $city_meta   = ( $term_city && isset( $term_city[0]->term_id ) )
@@ -113,7 +112,7 @@ foreach ( $query_25->posts as $post ) {
         }
         $json .= "],\n";
 
-    }
+    // }
 }
 
 /**
@@ -156,8 +155,8 @@ wp_reset_postdata();
         </table>
 
         <section style="margin: auto; width: 1020px;">
-            <h2>Top 25 Scores (2019-09)</h2>
-            <p>These are the best-performing websites of U.S. newspapers (with &gt;40K circulation, sorted by PSI score: ⓘ = more results).</p>
+            <h2>Top 25 Scores</h2>
+            <p>These are the best-performing websites of U.S. newspapers (2019-09). Limited to papers with &gt;40K circulation, sorted by PSI score. ⓘ links to more results).</p>
         </section>
         <figure id="table_div" style="display: block; padding-top: 30px; width: 100%"></figure>
 
@@ -230,12 +229,13 @@ function drawChart() {
     <ol>
     <?php
 
+    print_r( get_transient( 'netrics_psi' ) );
+
     foreach ( $query_25->posts as $post ) {
         echo "<li>{$post->ID}\t{$post->post_title}\t" . get_post_meta( $post->ID, 'nn_circ', true ) . "\t" . get_post_meta( $post->ID, 'nn_psi_score', true ) . '</li>';
     }
 
-
-    echo $json;
+    // echo $json;
     ?>
     </ol>
     </pre>

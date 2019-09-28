@@ -60,12 +60,8 @@ $psi_site_month = end( $psi_site_all ); // Most recent results for all Pubs.
 	</header><!-- .entry-header -->
 
     <section class="content-col">
-    <?php
-    $pubs_data = netrics_get_pubs_pagespeed_query( $wp_query );
-    if ( $pubs_data ) {
-        ?>
-        <?php $articles_1908 = get_post_meta( $post_id, 'nn_articles_201908', true ); ?>
 
+        <?php if ( $psi_pub_month ) { ?>
         <table class="tabular">
             <thead>
                 <td></td>
@@ -87,8 +83,57 @@ $psi_site_month = end( $psi_site_all ); // Most recent results for all Pubs.
         </table>
 
         <figure id="col_chart" class="alignnone" style="width:100%; height: 400px; margin: 0;"></figure>
+        <?php
+        $bars = '';
+        foreach ( $psi_pub_all as $month => $psi ) {
+            $tti_all = round( ( $psi_site_all[ $month ]['tti'] ) / 1000, 1 );
 
-        <?php } // if ( $pubs_data ) ?>
+            if ( $psi ) {
+                $tti_pub = round( ( $psi['tti'] - $psi['speed'] ) / 1000, 1 );
+
+                // Column chart data.
+                $bars .= "['" . date("n/y", strtotime( $month ) ) . "', ";
+                $bars .= round( $psi['speed'] / 1000, 1 ) . ', ';
+                $bars .= "{v:$tti_pub,f:" . round( $psi['tti'] / 1000, 1 ) . "}, " . $tti_all . "],\n";
+            }
+        }
+        ?>
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <script type="text/javascript">
+            // @see https://developers.google.com/chart/interactive/docs/gallery/gauge
+            google.charts.load('current', {'packages':['corechart']});
+            google.charts.setOnLoadCallback(drawChart);
+
+            function drawChart() {
+                bar_width = 30; // NOTE: Decrease or remove after a year to better fit more months.
+
+                var data_trend = google.visualization.arrayToDataTable([
+                    ['Month', 'Speed', 'TTI','TTI avg. for all papers'],
+                    <?php echo $bars; ?>
+                ]);
+
+                // Gauge: #dc3811, #ff9901, #0f9617. New PSI: #ff4e41 #ffa400 #0cce6b
+                var options_trend = {
+                    title: 'Speed-Index and Time-to-Interactive averages (seconds)',
+                    // vAxis: {title: 'Seconds'},
+                    // hAxis: {title: 'Month'},
+                    bar: {groupWidth: bar_width},
+                    colors: ['#ffa400', '#ff4e41', '#696969'],
+                    legend: { position: 'bottom' },
+                    isStacked: true,
+                    seriesType: 'bars',
+                    series: {2: {type: 'line', lineWidth: 3, pointSize: 4}},
+                };
+
+                var bar_chart = new google.visualization.ComboChart(document.getElementById('col_chart'));
+                bar_chart.draw(data_trend, options_trend);
+            }
+        </script>
+
+        <?php } else { ?>
+        <p>No PageSpeed results to date (<?php echo key( array_slice( $psi_pub_all, -1, 1, true ) ); ?>).</p>
+        <?php } ?>
+
     </section><!-- .content-col -->
 
 	<footer class="entry-footer">
@@ -111,50 +156,3 @@ $psi_site_month = end( $psi_site_all ); // Most recent results for all Pubs.
 
 	</footer><!-- .entry-footer -->
 </article><!-- #post-## -->
-
-<?php
-$bars = '';
-foreach ( $psi_pub_all as $month => $psi ) {
-
-    if ( $psi ) {
-        $tti_pub = round( ( $psi['tti'] - $psi['speed'] ) / 1000, 1 );
-        $tti_all = round( ( $psi_site_all[ $month ]['tti'] ) / 1000, 1 );
-
-        // Column chart data.
-        $bars .= "['" . date("n/y", strtotime( $month ) ) . "', ";
-        $bars .= round( $psi['speed'] / 1000, 1 ) . ', ';
-        $bars .= "{v:$tti_pub,f:" . round( $psi['tti'] / 1000, 1 ) . "}, " . $tti_all . "],\n"; // Score: 19.6
-    }
-}
-?>
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-<script type="text/javascript">
-	// @see https://developers.google.com/chart/interactive/docs/gallery/gauge
-    google.charts.load('current', {'packages':['corechart']});
-    google.charts.setOnLoadCallback(drawChart);
-
-    function drawChart() {
-        bar_width = 30; // NOTE: Decrease or remove after a year to better fit more months.
-
-        var data_trend = google.visualization.arrayToDataTable([
-            ['Month', 'Speed', 'TTI','TTI avg. for all papers'],
-            <?php echo $bars; ?>
-        ]);
-
-        // Gauge: #dc3811, #ff9901, #0f9617. New PSI: #ff4e41 #ffa400 #0cce6b
-        var options_trend = {
-            title: 'Speed-Index and Time-to-Interactive averages (seconds)',
-            // vAxis: {title: 'Seconds'},
-            // hAxis: {title: 'Month'},
-            bar: {groupWidth: bar_width},
-            colors: ['#ffa400', '#ff4e41', '#696969'],
-            legend: { position: 'bottom' },
-            isStacked: true,
-            seriesType: 'bars',
-            series: {2: {type: 'line', lineWidth: 3, pointSize: 4}},
-        };
-
-        var bar_chart = new google.visualization.ComboChart(document.getElementById('col_chart'));
-        bar_chart.draw(data_trend, options_trend);
-    }
-</script>
