@@ -103,8 +103,6 @@ $map_data = array();
                 <?php } ?>
                 <p>Pagespeed Insights average Performance Score: <output><?php echo $score; ?></output>.</p>
 
-			</header><!-- .page-header -->
-
             <?php
 			// On first page (only).
 			$paged = (get_query_var( 'paged' ) ) ? get_query_var( 'paged' ) : 1;
@@ -127,7 +125,9 @@ $map_data = array();
 				<?php } ?>
 			<?php } ?>
 
-		<?php while ( have_posts() ) : the_post(); ?>
+        </header><!-- .page-header -->
+
+        <?php while ( have_posts() ) : the_post(); ?>
 
 			<?php get_template_part( 'template-parts/content', 'archive' ); ?>
 
@@ -277,7 +277,7 @@ function news_map_set_markers(map) {
 
 
 
-            <nav class="nav-pagination justify">
+            <nav class="nav-pagination justify content-col">
                 <?php echo paginate_links(); ?>
             </nav><!-- .nav-pagination -->
 
@@ -300,6 +300,6 @@ function news_map_set_markers(map) {
 
             </pre>
         </details>
-<!-- =file: archive -->
+<!-- =file: taxonomy-owner -->
 <?php get_sidebar(); ?>
 <?php get_footer(); ?>

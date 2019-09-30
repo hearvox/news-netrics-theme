@@ -10,7 +10,7 @@
 get_header(); ?>
 
 	<div id="primary" class="content-area">
-        <main id="main" class="site-main content-col" role="main">
+        <main id="main" class="site-main" role="main">
 
             <?php while ( have_posts() ) : the_post(); ?>
 
@@ -18,7 +18,7 @@ get_header(); ?>
 
             <?php endwhile; // End of the loop. ?>
 
-			<nav class="tax-dropdown">
+			<nav class="tax-dropdown content-col">
 				<h2 class="widget-title"><?php esc_html_e( 'Owners', 'newsstats' ); ?></h2>
 				<ul style="margin-left: 0.5rem;">
 				<?php
@@ -39,6 +39,17 @@ get_header(); ?>
 				<ul style="margin-left: 0.5rem;">
 				<?php wp_list_pages( array( 'title_li'   => '' ) ); ?>
 				</ul>
+
+                <h2 class="widget-title"><?php esc_html_e( 'Recent Posts', 'newsstats' ); ?></h2>
+                <ul style="margin-left: 0.5rem;">
+                <?php
+                    $recent_posts = wp_get_recent_posts();
+                    foreach( $recent_posts as $recent ){
+                        echo '<li><a href="' . get_permalink($recent["ID"]) . '">' .   $recent["post_title"].'</a> </li> ';
+                    }
+                    wp_reset_query();
+                ?>
+                </ul>
 
 				<h2 class="widget-title"><?php esc_html_e( 'CMS', 'newsstats' ); ?></h2>
 				<ul style="margin-left: 0.5rem;">
@@ -74,7 +85,7 @@ get_header(); ?>
 
             <hr>
 
-            <form class="pub-form" method="post" action="<?php echo get_post_type_archive_link( 'publication' );?>">
+            <form class="pub-form content-col" method="post" action="<?php echo get_post_type_archive_link( 'publication' );?>">
                 <h2 class="pub-form-heading">Filter publications by:</h2>
                 <input type="hidden" name="action" id="action" value="find">
                 <nav class="tax-dropdown pub-tax-sel">

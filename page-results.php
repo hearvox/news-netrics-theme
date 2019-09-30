@@ -66,7 +66,8 @@ foreach ( $query_25->posts as $post ) {
         // Domain (external link) and name (internal link).
         $json .= '{v:\'' . esc_html( $post->post_title ) .
             '\',f:\'<a href="' . esc_url( $post_meta['nn_pub_url'][0] ) . '">' . esc_html( $post->post_title ) . '</a>\'},';
-        $json .= '\'' . esc_html( $post_meta['nn_pub_name'][0] ) . ' <a class="info-link" href="' . get_post_permalink( $post_id ) . '">&#9432;</a>\',';
+        $json .= '{v:\'' . esc_html( $post_meta['nn_pub_name'][0] ) .
+            '\',f:\'<a href="' . get_post_permalink( $post_id ) . '">' . esc_html( $post_meta['nn_pub_name'][0] ) . '</a>\'},';
         // Circulation and rank meta.
         $json .= absint( get_post_meta( $post_id, 'nn_circ', true ) )  . ',';
         $json .= absint( get_post_meta( $post_id, 'nn_rank', true ) )  . ',';
@@ -139,24 +140,24 @@ wp_reset_postdata();
 
         </main><!-- #main -->
 
-        <section style="margin: auto; width: 1020px;">
-            <h2>Website performance (2019-08)</h2>
+        <section class="content-col">
+            <h2>News website performance</h2>
+            <?php $pubs_data = netrics_get_pubs_query_data(); ?>
+            <table class="tabular" style="margin-top: 2rem;">
+                <caption>All U.S. daily newspapers: Averages PSI results (2019-08)</caption>
+                <?php netrics_pagespeed_mean( $pubs_data ); ?>
+                <tfoot>
+                    <tr>
+                        <th scope="row"><?php esc_attr_e( 'Results for:', 'newsnetrics' ); ?></th>
+                        <td colspan="6" style="text-align: left;">3,073 articles from 1,043 newspapers</td>
+                    </tr>
+                </tfoot>
+            </table>
         </section>
-        <?php $pubs_data = netrics_get_pubs_query_data(); ?>
-        <table class="tabular" style="margin-top: 2rem;">
-            <caption>All U.S. daily newspapers: Averages PSI results (2019-08)</caption>
-            <?php netrics_pagespeed_mean( $pubs_data ); ?>
-            <tfoot>
-                <tr>
-                    <th scope="row"><?php esc_attr_e( 'Results for:', 'newsnetrics' ); ?></th>
-                    <td colspan="6" style="text-align: left;">3,073 articles from 1,043 newspapers</td>
-                </tr>
-            </tfoot>
-        </table>
 
-        <section style="margin: auto; width: 1020px;">
+        <section class="content-col">
             <h2>Top 25 Scores</h2>
-            <p>These are the best-performing websites of U.S. newspapers (2019-09). Limited to papers with &gt;40K circulation, sorted by PSI score. ⓘ links to more results).</p>
+            <p>These are the best-performing websites of U.S. newspapers (2019-09; papers with &gt;40K circulation, sorted by PSI score.</p>
         </section>
         <figure id="table_div" style="display: block; padding-top: 30px; width: 100%"></figure>
 
@@ -172,8 +173,8 @@ function drawChart() {
 
     // Data cols and rows.
     var data = google.visualization.arrayToDataTable([
-        [   {label: 'Domain', id: 'domain', type: 'string'},
-            {label: 'Name&nbsp;&nbsp;&nbsp; &mdash; &nbsp;&nbsp;results link: &#9432;', id: 'name', type: 'string'},
+        [   {label: 'Domain (link to paper)', id: 'domain', type: 'string'},
+            {label: 'Name (link to PSI results)', id: 'name', type: 'string'},
             {label: 'Circulation', id: 'circ', type: 'number'},
             {label: 'Site Rank', id: 'rank', type: 'number'},
             {label: 'State', id: 'state', type: 'string'},

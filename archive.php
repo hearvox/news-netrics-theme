@@ -25,8 +25,6 @@ get_header(); ?>
                 <p><?php echo esc_html( $wp_query->queried_object->description ); ?> has a population of <output><?php echo number_format( $population ); ?></output> with <output><?php echo absint( $wp_query->found_posts ); ?></output> daily <?php echo _n( 'newspaper', 'newspapers', $wp_query->found_posts, 'newsnetrics' ) ?>.</p>
                 <?php } ?>
 
-			</header><!-- .page-header -->
-
 			<?php
             $map_data = array();
 
@@ -54,6 +52,8 @@ get_header(); ?>
 				<?php } ?>
 			<?php } ?>
 
+        </header><!-- .page-header -->
+
 		<?php while ( have_posts() ) : the_post(); ?>
 
 			<?php get_template_part( 'template-parts/content', 'archive' ); ?>
@@ -68,7 +68,7 @@ get_header(); ?>
 
         <?php rewind_posts(); ?>
 
-            <nav class="nav-pagination justify">
+            <nav class="nav-pagination justify content-col">
                 <?php echo paginate_links(); ?>
             </nav><!-- .nav-pagination -->
 
@@ -83,6 +83,6 @@ get_header(); ?>
         ?>
         </pre>
     </details>
-<!-- =file: archive -->
+<!-- =file: archivexxx -->
 <?php get_sidebar(); ?>
 <?php get_footer(); ?>
