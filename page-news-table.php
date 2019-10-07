@@ -31,7 +31,9 @@ get_header();
         $post_meta = get_post_meta( $post_id );
 
         // Get publication's PageSpeed result averages.
-        $psi_data = netrics_site_pagespeed( $post_id ); // PSI averages.
+        $psi_data = netrics_site_pagespeed( $post_id ); // PSI averages, old vers.
+        // $psi_all  = get_post_meta( $id, 'nn_psi_avgs', true );
+        // $psi_data = end( $psi_all );
 
         // Add to chart if results.
         if ( isset( $psi_data['score' ] ) ) {
@@ -72,7 +74,9 @@ get_header();
                 ? '\'<a href="' . get_term_link( $term_cms[0]->term_id ) . '">' . esc_html( $term_cms[0]->name ) . '</a>\',' : "'(unknown)',";
 
             // Add PageSpeed averages to JSON.
-            $psi_data = netrics_site_pagespeed( $post_id ); // PSI averages.
+            $psi_data = netrics_site_pagespeed( $post_id ); // PSI averages, old vers.
+            // $psi_avgs = get_post_meta( $post_id, 'nn_psi_avgs', true );
+            // $psi_data = $psi_avgs['2019-09'];
             foreach ($metrics as $metric ) {
                 $num = ( isset( $psi_data[ $metric ] ) ) ? $psi_data[ $metric ] : null;
 
@@ -122,7 +126,7 @@ get_header();
         <h1>U.S. Daily Newspapers</h1>
         <div id="stringFilter_control_div" style="margin: 1rem 3rem;"></div>
         <figure id="table_div" style="display: block; padding-top: 30px; width: 100%">
-            <p>Loading… <img src="https://news.pubmedia.us/wp-content/themes/newsstats/img/ajax-loader.gif" width="220" height="19"></p>
+            <p>Loading… (1K papers takes a little while)<img src="https://news.pubmedia.us/wp-content/themes/newsstats/img/ajax-loader.gif" width="220" height="19"></p>
             <div class="loader"</div>
         </figure>
     </section><!-- #dashboard_div -->
@@ -222,6 +226,19 @@ function drawMainDashboard() {
 
 		</main><!-- #main -->
 	</div><!-- #primary -->
+
+    <details>
+        <summary><small>(Test: data arrays)</small></summary>
+        <pre>
+<?php
+
+?>
+
+
+<em><?php echo get_num_queries(); ?> queries took <?php timer_stop( 1 ); ?> seconds using <?php echo round( memory_get_peak_usage() / 1024 / 1024, 3 ); ?> MB peak memory.</em>
+        </pre>
+    </details>
+
 
 <?php // get_sidebar(); ?>
 <?php get_footer(); ?>

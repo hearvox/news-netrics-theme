@@ -19,12 +19,6 @@ $pub_circ    = ( isset( $custom_fields['nn_circ'][0] ) && $custom_fields['nn_cir
 $pub_rank    = ( isset( $custom_fields['nn_rank'][0] ) && $custom_fields['nn_rank'][0] )
     ? number_format( absint( $custom_fields['nn_rank'][0] ) ) : '--';
 
-// PSI results.
-$psi_1905 = netrics_site_pagespeed( $post_id, 'nn_articles_201905' ); // si: 13.9, tti: 30.1, speed: 18.8
-$psi_1906 = netrics_site_pagespeed( $post_id, 'nn_articles_201906' ); // si: 13.3, tti: 30.3, speed: 18.8
-$psi_1907 = netrics_site_pagespeed( $post_id, 'nn_articles_201907' ); // si: 13.5, tti: 29.7, speed: 20.4
-$psi_1908 = netrics_site_pagespeed( $post_id, 'nn_articles_201908' ); // si: 14.3, tti: 32.9, speed: 19.6
-
 $psi_articles   = get_post_meta( $post_id, 'nn_articles', true ); // This Pub's PSI monthly results history.
 $psi_pub_all    = get_post_meta( $post_id, 'nn_psi_avgs', true ); // This Pub's PSI monthly results history.
 $psi_pub_month  = end( $psi_pub_all ); // Most recent results for this Pub.
@@ -63,11 +57,11 @@ $psi_site_month = end( $psi_site_all ); // Most recent results for all Pubs.
 
         <?php if ( $psi_pub_month ) { ?>
         <table class="tabular">
+            <caption>PageSpeed Insights average and article results (<?php echo $psi_pub_month['results']; ?> articles: <?php echo key( array_slice( $psi_pub_all, -1, 1, true ) ); ?>)</caption>
             <thead>
                 <td></td>
                 <?php echo netrics_pagespeed_thead() ?>
             </thead>
-            <caption>PageSpeed Insights average and article results (<?php echo $psi_pub_month['results']; ?> articles: <?php echo key( array_slice( $psi_pub_all, -1, 1, true ) ); ?>)</caption>
             <tbody>
                 <tr>
                     <th scope="row"><?php esc_attr_e( 'Mean', 'newsnetrics' ); ?></th>
@@ -82,7 +76,7 @@ $psi_site_month = end( $psi_site_all ); // Most recent results for all Pubs.
             </tbody>
         </table>
 
-        <figure id="col_chart" class="alignnone" style="width:100%; height: 400px; margin: 0;"></figure>
+        <figure id="col_chart" class="alignnone" style="width:100%; height: 400px; margin-bottom: 2rem;"></figure>
         <?php
         $bars = '';
         foreach ( $psi_pub_all as $month => $psi ) {
@@ -138,8 +132,7 @@ $psi_site_month = end( $psi_site_all ); // Most recent results for all Pubs.
 
 	<footer class="entry-footer">
         <?php if ( isset( $custom_fields['nn_pub_url'][0] ) ) { // Screenshot of pub homepage. ?>
-		<p style="padding-top: 2em; padding-right: 1em; display: inline-block; width: 500px;">
-            <a href="<?php echo esc_url( $custom_fields['nn_pub_url'][0] ); ?>"><img class="screenshot" src="https://s.wordpress.com/mshots/v1/http%3A%2F%2F<?php echo get_the_title() ?>?w=500&h=375" width="500" height="375" alt="Homepage screenshot" /></a></p>
+            <a href="<?php echo esc_url( $custom_fields['nn_pub_url'][0] ); ?>"><img style="margin-right: 0.5em; display: inline-block; width: 500px; height: 375px; border: 1px solid #ccc; vertical-align: top; margin-top: 16px;" class="screenshot" src="https://s.wordpress.com/mshots/v1/http%3A%2F%2F<?php echo get_the_title() ?>?w=500&h=375" width="500" height="375" alt="Homepage screenshot" /></a>
         <?php } ?>
 
         <?php
@@ -150,7 +143,7 @@ $psi_site_month = end( $psi_site_all ); // Most recent results for all Pubs.
         $map_ctr = '&amp;center=' . str_replace( '|', ',', $city['city_meta']['nn_region_latlon'][0]); // Term meta: lat|lon.
         $map_src = $map_api . $map_key . $map_loc . $map_ctr;
         ?>
-		<iframe style="display: inline-block; width: 500px;" width="500" height="375" frameborder="0" style="border:0" src="<?php echo esc_url( $map_src ); ?>"></iframe>
+		<iframe style="display: inline-block; width: 500px; height: 375px; border: 1px solid #ccc;" width="500" height="375" frameborder="0" style="border:0" src="<?php echo esc_url( $map_src ); ?>"></iframe>
 
         <?php the_post_navigation( array( 'prev_text' => '&laquo; %title', 'next_text' => '%title &raquo;' ) ); ?>
 

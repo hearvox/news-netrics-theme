@@ -113,7 +113,7 @@ $map_data = array();
 			?>
             <div id="map" style="border: 1px solid #f6f6f6; height: 600px; width: 100%; margin-bottom: 2rem;"></div>
 			<table class="tabular">
-				<caption>Average PSI results (2019-07) for <?php echo single_term_title( '', false ); ?> newspaper articles</caption>
+				<caption>Average PSI results (2019-08) for <?php echo single_term_title( '', false ); ?> newspaper articles</caption>
 				<?php echo netrics_pagespeed( $pubs_data ); ?>
 				<tfoot>
         			<tr>
@@ -287,16 +287,10 @@ function news_map_set_markers(map) {
         <details>
             <summary><small>(Test: data arrays)</small></summary>
             <pre>
-            <?php
 
-            ?>
-
-             $queried_object: <?php
-             $queried_object = get_queried_object();
-             // var_dump( $queried_object );
-             ?>
-
-            $pubs_data: <?php // print_r( $pubs_data ); }; ?>
+$queried_object: <?php $queried_object = get_queried_object(); var_dump( $queried_object ); ?>
+<?php // print_r( $pubs_data ); ?>
+<em><?php echo get_num_queries(); ?> queries took <?php timer_stop( 1 ); ?> seconds using <?php echo round( memory_get_peak_usage() / 1024 / 1024, 3 ); ?> MB peak memory.</em>
 
             </pre>
         </details>

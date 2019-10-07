@@ -38,7 +38,7 @@ get_header(); ?>
 			?>
 			<table class="tabular">
 				<caption><?php the_archive_title(); ?> daily newspapers: Averages of Google Pagespeed results (2019-08)</caption>
-				<?php echo netrics_pagespeed( $pubs_data ); ?>
+				<?php echo netrics_pagespeed_mean( $pubs_data ); ?>
 				<tfoot>
         			<tr>
             			<th scope="row"><?php esc_attr_e( 'Results for:', 'newsnetrics' ); ?></th>
@@ -83,6 +83,6 @@ get_header(); ?>
         ?>
         </pre>
     </details>
-<!-- =file: archivexxx -->
+<!-- =file: archive -->
 <?php get_sidebar(); ?>
 <?php get_footer(); ?>

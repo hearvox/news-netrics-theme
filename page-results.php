@@ -140,24 +140,36 @@ wp_reset_postdata();
 
         </main><!-- #main -->
 
+
+
+
         <section class="content-col">
             <h2>News website performance</h2>
-            <?php $pubs_data = netrics_get_pubs_query_data(); ?>
-            <table class="tabular" style="margin-top: 2rem;">
-                <caption>All U.S. daily newspapers: Averages PSI results (2019-08)</caption>
-                <?php netrics_pagespeed_mean( $pubs_data ); ?>
-                <tfoot>
+            <?php $pubs_avgs  = get_transient( 'netrics_psi' ); ?>
+            <?php $month_avgs = end( $pubs_avgs ); ?>
+            <table class="tabular">
+                <caption>Average PSI results for <output><?php echo $month_avgs['total']; ?></output> U.S. daily newspapers (<output><?php echo $month_avgs['results']; ?></output> articles: <?php echo key( array_slice( $pubs_avgs, -1, 1, true ) ); ?>)</caption>
+                <thead>
+                    <td></td>
+                    <?php echo netrics_pagespeed_thead() ?>
+                </thead>
+                <tbody>
                     <tr>
-                        <th scope="row"><?php esc_attr_e( 'Results for:', 'newsnetrics' ); ?></th>
-                        <td colspan="6" style="text-align: left;">3,073 articles from 1,043 newspapers</td>
+                        <th scope="row"><?php esc_attr_e( 'Mean', 'newsnetrics' ); ?></th>
+                        <td><?php echo number_format( $month_avgs['dom'], 1, '.', ',' ); ?></td>
+                        <td><?php echo number_format( $month_avgs['requests'], 1, '.', ',' ); ?></td>
+                        <td><?php echo size_format( $month_avgs['size'], 1 ); ?></td>
+                        <td><?php echo number_format( $month_avgs['speed'] / 1000, 1, '.', ',' ); ?></td>
+                        <td><?php echo number_format( $month_avgs['tti'] / 1000, 1, '.', ',' ); ?></td>
+                        <td><?php echo number_format( $month_avgs['score'] * 100, 1, '.', ',' ); ?></td>
                     </tr>
-                </tfoot>
+                </tbody>
             </table>
         </section>
 
         <section class="content-col">
             <h2>Top 25 Scores</h2>
-            <p>These are the best-performing websites of U.S. newspapers (2019-09; papers with &gt;40K circulation, sorted by PSI score.</p>
+            <p>These are the best-performing websites of U.S. newspapers (2019-09; papers with &gt;40K circulation, sorted by PSI score).</p>
         </section>
         <figure id="table_div" style="display: block; padding-top: 30px; width: 100%"></figure>
 
@@ -239,6 +251,9 @@ function drawChart() {
     // echo $json;
     ?>
     </ol>
+
+
+    <em><?php echo get_num_queries(); ?> queries took <?php timer_stop( 1 ); ?> seconds using <?php echo round( memory_get_peak_usage() / 1024 / 1024, 3 ); ?> MB peak memory.</em>
     </pre>
 </details>
 
