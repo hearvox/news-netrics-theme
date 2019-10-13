@@ -39,6 +39,9 @@ get_header(); ?>
     echo "\nnetrics_psi: ";
     print_r( get_transient( 'netrics_psi' ) );
 
+    echo "\nnn_articles_new: ";
+    print_r( get_post_meta( $post_id,'nn_articles_new', true ) );
+
     echo "\nnn_articles: ";
     print_r( get_post_meta( $post_id,'nn_articles', true ) );
 

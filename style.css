@@ -376,8 +376,6 @@ big {
 output {
     font-family: "Lucida Console", Monaco, Consolas, "Andale Mono", "DejaVu Sans Mono", monospace;
     font-weight: 600;
-    padding: 2px 5px;
-    border-radius: 3px;
 }
 
 /*--------------------------------------------------------------
@@ -506,7 +504,7 @@ h6,
 .site-footer a:hover {}
 
 output {
-	background-color: #fbfbfb;
+	background-color: #ececec;
 	color: darkred;
 }
 
@@ -747,7 +745,7 @@ a:active {
 }
 
 /*--------------------------------------------------------------
-==Footer light e6dedd, red 8f1d14, dark 1b120f, orange f89d13
+==Footer
 --------------------------------------------------------------*/
 .site-footer {
 	border-top: 0.1em solid silver;
@@ -1273,6 +1271,15 @@ textarea {
 	margin: auto;*/
 }
 
+/* =Quotes */
+.wp-block-quote p:last-of-type { margin-bottom: 0; }
+
+cite {
+	font-family: Verdana, Geneva, sans-serif;
+	font-size: 0.95rem;	
+}
+
+cite:before { content: '—'; }
 
 /*--------------------------------------------------------------
 ==Layout

@@ -10,8 +10,50 @@ get_header();
 
 ?>
 
+	<div id="primary" class="content-area">
+
+		<main id="main" class="site-main" role="main">
+
+        <?php while ( have_posts() ) : the_post(); ?>
+
+            <?php get_template_part( 'template-parts/content', 'page' ); ?>
+
+        </main><!-- #main -->
+
+        <section class="content-col">
+            <h2>News website performance</h2>
+            <?php $pubs_avgs  = get_transient( 'netrics_psi' ); ?>
+            <?php $month_avgs = end( $pubs_avgs ); ?>
+            <table class="tabular">
+                <caption>Average PSI results for <output><?php echo $month_avgs['total']; ?></output> U.S. daily newspapers (<output><?php echo $month_avgs['results']; ?></output> articles: <?php echo key( array_slice( $pubs_avgs, -1, 1, true ) ); ?>)</caption>
+                <thead>
+                    <td></td>
+                    <?php echo netrics_pagespeed_thead() ?>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row"><?php esc_attr_e( 'Mean', 'newsnetrics' ); ?></th>
+                        <td><?php echo number_format( $month_avgs['dom'], 1, '.', ',' ); ?></td>
+                        <td><?php echo number_format( $month_avgs['requests'], 1, '.', ',' ); ?></td>
+                        <td><?php echo size_format( $month_avgs['size'], 1 ); ?></td>
+                        <td><?php echo number_format( $month_avgs['speed'] / 1000, 1, '.', ',' ); ?></td>
+                        <td><?php echo number_format( $month_avgs['tti'] / 1000, 1, '.', ',' ); ?></td>
+                        <td><?php echo number_format( $month_avgs['score'] * 100, 1, '.', ',' ); ?></td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><?php esc_attr_e( 'Median', 'newsnetrics' ); ?></th>
+                        <td><?php echo number_format( $month_avgs['dom-q2'], 1, '.', ',' ); ?></td>
+                        <td><?php echo number_format( $month_avgs['requests-q2'], 1, '.', ',' ); ?></td>
+                        <td><?php echo size_format( $month_avgs['size-q2'], 1 ); ?></td>
+                        <td><?php echo number_format( $month_avgs['speed-q2'] / 1000, 1, '.', ',' ); ?></td>
+                        <td><?php echo number_format( $month_avgs['tti-q2'] / 1000, 1, '.', ',' ); ?></td>
+                        <td><?php echo number_format( $month_avgs['score-q2'] * 100, 1, '.', ',' ); ?></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
 <?php
-$metrics = netrics_get_pagespeed_metrics(); // Array of PageSpeed metric names (score, size, etc.)
 $json    = '';
 
 // Get Top 25 Scores with 40K+ circulation.
@@ -46,74 +88,76 @@ foreach ( $query_25->posts as $post ) {
     $psi_data = netrics_site_pagespeed( $post_id ); // PSI averages.
 
     // Add PUB and PSI data to chart.
-        // Get Region values: city, county and state (tax terms), and city population (term meta).
-        $term_city   = get_the_terms( $post_id, 'region' );
-        $city_meta   = ( $term_city && isset( $term_city[0]->term_id ) )
-            ? get_term_meta( $term_city[0]->term_id ) : false;
-        $city_pop    = ( $city_meta && isset( $city_meta['nn_region_pop'][0] ) )
-            ? $city_meta['nn_region_pop'][0] : 0;
-        $term_county = ( $term_city && isset( $term_city[0]->parent ) )
-            ? get_term( $term_city[0]->parent ) : false;
-        $term_state  = ( $term_county && isset( $term_county->parent ) )
-            ? get_term( $term_county->parent ) : false;
+    // Get Region values: city, county and state (tax terms), and city population (term meta).
+    $term_city   = get_the_terms( $post_id, 'region' );
+    $city_meta   = ( $term_city && isset( $term_city[0]->term_id ) )
+        ? get_term_meta( $term_city[0]->term_id ) : false;
+    $city_pop    = ( $city_meta && isset( $city_meta['nn_region_pop'][0] ) )
+        ? $city_meta['nn_region_pop'][0] : 0;
+    $term_county = ( $term_city && isset( $term_city[0]->parent ) )
+        ? get_term( $term_city[0]->parent ) : false;
+    $term_state  = ( $term_county && isset( $term_county->parent ) )
+        ? get_term( $term_county->parent ) : false;
 
-        // Get owner and CMS tax term objects.
-        $term_owner = get_the_terms( $post_id, 'owner' );
-        $term_cms   = get_the_terms( $post_id, 'cms' );
+    // Get owner and CMS tax term objects.
+    $term_owner = get_the_terms( $post_id, 'owner' );
+    $term_cms   = get_the_terms( $post_id, 'cms' );
 
-        // JSON with sanitized data values for rows in Google chart.
-        $json .= '[';
-        // Domain (external link) and name (internal link).
-        $json .= '{v:\'' . esc_html( $post->post_title ) .
-            '\',f:\'<a href="' . esc_url( $post_meta['nn_pub_url'][0] ) . '">' . esc_html( $post->post_title ) . '</a>\'},';
-        $json .= '{v:\'' . esc_html( $post_meta['nn_pub_name'][0] ) .
-            '\',f:\'<a href="' . get_post_permalink( $post_id ) . '">' . esc_html( $post_meta['nn_pub_name'][0] ) . '</a>\'},';
-        // Circulation and rank meta.
-        $json .= absint( get_post_meta( $post_id, 'nn_circ', true ) )  . ',';
-        $json .= absint( get_post_meta( $post_id, 'nn_rank', true ) )  . ',';
-        // Region tax terms (linked): state, county, city and city population (term meta).
-        $json .= ( $term_state && isset( $term_state->name ) )
-            ? '\'<a href="' . get_term_link( $term_state->term_id ) . '">' . esc_html( $term_state->name ) . '</a>\',' : ',';
-        $json .= ( $term_city && isset( $term_city[0]->name ) )
-            ? '\'<a href="' . get_term_link( $term_city[0]->term_id ) . '">' . esc_html( $term_city[0]->name ) . '</a>\',' : ',';
-        $json .= esc_html( $city_pop )  . ',';
-        // Owner and CMS tax terms (linked).
-        $json .= ( $term_owner && isset( $term_owner[0]->name ) )
-            ? '\'<a href="' . get_term_link( $term_owner[0]->term_id ) . '">' . esc_html( $term_owner[0]->name ) . '</a>\',' : "'',";
-        $json .=( $term_cms && isset( $term_cms[0]->name ) )
-            ? '\'<a href="' . get_term_link( $term_cms[0]->term_id ) . '">' . esc_html( $term_cms[0]->name ) . '</a>\',' : "'(unknown)',";
+    // JSON with sanitized data values for rows in Google chart.
+    $json .= '[';
+    // Domain (external link) and name (internal link).
+    $json .= '{v:\'' . esc_html( $post->post_title ) .
+        '\',f:\'<a href="' . esc_url( $post_meta['nn_pub_url'][0] ) . '">' . esc_html( $post->post_title ) . '</a>\'},';
+    $json .= '{v:\'' . esc_html( $post_meta['nn_pub_name'][0] ) .
+        '\',f:\'<a href="' . get_post_permalink( $post_id ) . '">' . esc_html( $post_meta['nn_pub_name'][0] ) . '</a>\'},';
+    // Circulation and rank meta.
+    $json .= absint( get_post_meta( $post_id, 'nn_circ', true ) )  . ',';
+    $json .= absint( get_post_meta( $post_id, 'nn_rank', true ) )  . ',';
+    // Region tax terms (linked): state, county, city and city population (term meta).
+    $json .= ( $term_state && isset( $term_state->name ) )
+        ? '\'<a href="' . get_term_link( $term_state->term_id ) . '">' . esc_html( $term_state->name ) . '</a>\',' : ',';
+    $json .= ( $term_city && isset( $term_city[0]->name ) )
+        ? '\'<a href="' . get_term_link( $term_city[0]->term_id ) . '">' . esc_html( $term_city[0]->name ) . '</a>\',' : ',';
+    // $json .= esc_html( $city_pop )  . ','; // Remove pop. from table.
+    // Owner and CMS tax terms (linked).
+    $json .= ( $term_owner && isset( $term_owner[0]->name ) )
+        ? '\'<a href="' . get_term_link( $term_owner[0]->term_id ) . '">' . esc_html( $term_owner[0]->name ) . '</a>\',' : "'',";
+    $json .=( $term_cms && isset( $term_cms[0]->name ) )
+        ? '\'<a href="' . get_term_link( $term_cms[0]->term_id ) . '">' . esc_html( $term_cms[0]->name ) . '</a>\',' : "'(unknown)',";
 
-        // Add PageSpeed averages to JSON.
-        // $psi_data = netrics_site_pagespeed( $post_id ); // PSI averages, old vers.
-        $psi_avgs = get_post_meta( $post_id, 'nn_psi_avgs', true );
-        $psi_data = $psi_avgs['2019-09'];
+    // Add PageSpeed averages to JSON.
+    // $psi_data = netrics_site_pagespeed( $post_id ); // PSI averages, old vers.
+    $psi_avgs = get_post_meta( $post_id, 'nn_psi_avgs', true );
+    $psi_data = $psi_avgs['2019-10'];
 
-        foreach ($metrics as $metric ) {
-            $num = ( isset( $psi_data[ $metric ] ) ) ? $psi_data[ $metric ] : null;
+    // Array of PageSpeed metric names (score, size, etc.)
+    $metrics_psi = netrics_get_pagespeed_metrics();
+    $metrics     =  array_diff( $metrics_psi, array( 'dom' ) ); // Skip these metrics.
 
-            switch ( $metric ) {
-                case 'score':
-                    $num = $num * 100;
-                    break;
-                case 'speed':
-                    $num = $num / 1000;
-                    break;
-                case 'tti':
-                    $num = $num / 1000;
-                    break;
-                case 'size':
-                    $num = $num / 1000000;
-                    break;
-                default:
-                    $num = $num;
-                    break;
-            }
+    foreach ($metrics as $metric ) {
+        $num = ( isset( $psi_data[ $metric ] ) ) ? $psi_data[ $metric ] : null;
 
-            $json .= "{v:$num, f:'" . number_format( $num, 1 ) . '\'},';
+        switch ( $metric ) {
+            case 'score':
+                $num = $num * 100;
+                break;
+            case 'speed':
+                $num = $num / 1000;
+                break;
+            case 'tti':
+                $num = $num / 1000;
+                break;
+            case 'size':
+                $num = $num / 1000000;
+                break;
+            default:
+                $num = $num;
+                break;
         }
-        $json .= "],\n";
 
-    // }
+        $json .= "{v:$num, f:'" . number_format( $num, 1 ) . '\'},';
+    }
+    $json .= "],\n";
 }
 
 /**
@@ -129,47 +173,10 @@ function netrix_google_chart_link ( $string, $url ) {
 
 wp_reset_postdata();
 ?>
-
-	<div id="primary" class="content-area">
-
-		<main id="main" class="site-main" role="main">
-
-        <?php while ( have_posts() ) : the_post(); ?>
-
-            <?php get_template_part( 'template-parts/content', 'page' ); ?>
-
-        </main><!-- #main -->
-
-
-
-
-        <section class="content-col">
-            <h2>News website performance</h2>
-            <?php $pubs_avgs  = get_transient( 'netrics_psi' ); ?>
-            <?php $month_avgs = end( $pubs_avgs ); ?>
-            <table class="tabular">
-                <caption>Average PSI results for <output><?php echo $month_avgs['total']; ?></output> U.S. daily newspapers (<output><?php echo $month_avgs['results']; ?></output> articles: <?php echo key( array_slice( $pubs_avgs, -1, 1, true ) ); ?>)</caption>
-                <thead>
-                    <td></td>
-                    <?php echo netrics_pagespeed_thead() ?>
-                </thead>
-                <tbody>
-                    <tr>
-                        <th scope="row"><?php esc_attr_e( 'Mean', 'newsnetrics' ); ?></th>
-                        <td><?php echo number_format( $month_avgs['dom'], 1, '.', ',' ); ?></td>
-                        <td><?php echo number_format( $month_avgs['requests'], 1, '.', ',' ); ?></td>
-                        <td><?php echo size_format( $month_avgs['size'], 1 ); ?></td>
-                        <td><?php echo number_format( $month_avgs['speed'] / 1000, 1, '.', ',' ); ?></td>
-                        <td><?php echo number_format( $month_avgs['tti'] / 1000, 1, '.', ',' ); ?></td>
-                        <td><?php echo number_format( $month_avgs['score'] * 100, 1, '.', ',' ); ?></td>
-                    </tr>
-                </tbody>
-            </table>
-        </section>
-
         <section class="content-col">
             <h2>Top 25 Scores</h2>
-            <p>These are the best-performing websites of U.S. newspapers (2019-09; papers with &gt;40K circulation, sorted by PSI score).</p>
+            <p>Congrats to this month's best-performing U.S. newspaper websites (2019-10).<br>
+                <small>Papers with &gt;40K circulation, sorted by PSI score — average results of 3 articles per paper.</small></p>
         </section>
         <figure id="table_div" style="display: block; padding-top: 30px; width: 100%"></figure>
 
@@ -191,10 +198,10 @@ function drawChart() {
             {label: 'Site Rank', id: 'rank', type: 'number'},
             {label: 'State', id: 'state', type: 'string'},
             {label: 'City', id: 'city', type: 'string'},
-            {label: 'Population', id: 'pop', type: 'number'},
+            // {label: 'Population', id: 'pop', type: 'number'},
             {label: 'Owner', id: 'owner', type: 'string'},
             {label: 'CMS', id: 'cms', type: 'string'},
-            {label: 'DOM', id: 'dom', type: 'number'},
+            // {label: 'DOM', id: 'dom', type: 'number'},
             {label: 'Requests', id: 'requests', type: 'number'},
             {label: 'Size (MB)', id: 'size', type: 'number'},
             {label: 'Speed (s)', id: 'speed', type: 'number'},
@@ -202,18 +209,13 @@ function drawChart() {
             {label: 'Score', id: 'score', type: 'number'} ],
 <?php echo $json; ?>
     ]);
+
 /*
     // Format number to one decimal place; apply to specified columns.
     var numdecFormat = new google.visualization.NumberFormat({fractionDigits: 1});
     numdecFormat.format(data, 3);
-    numdecFormat.format(data, 4);
-    numdecFormat.format(data, 5);
-    numdecFormat.format(data, 6);
-    numdecFormat.format(data, 7);
-    numdecFormat.format(data, 8);
-    numdecFormat.format(data, 9);
-
 */
+
     // Google Visualization: Table chart.
     var wrapper = new google.visualization.ChartWrapper({
         chartType:   'Table',
@@ -221,7 +223,7 @@ function drawChart() {
         dataTable: data,
         options: {
             'allowHtml': true,
-            'sortColumn': 14,
+            'sortColumn': 11,
             'sortAscending': false,
             'showRowNumber': true,
             'width': '100%',
@@ -239,21 +241,25 @@ function drawChart() {
     <summary><small>(Test: data arrays)</small></summary>
 
     <pre>
-    <ol>
-    <?php
 
-    print_r( get_transient( 'netrics_psi' ) );
+<?php
+echo '$netrics_psi: ';
+print_r( get_transient( 'netrics_psi' ) );
+?>
 
-    foreach ( $query_25->posts as $post ) {
-        echo "<li>{$post->ID}\t{$post->post_title}\t" . get_post_meta( $post->ID, 'nn_circ', true ) . "\t" . get_post_meta( $post->ID, 'nn_psi_score', true ) . '</li>';
-    }
+<ol>
+<?php
 
-    // echo $json;
-    ?>
-    </ol>
+foreach ( $query_25->posts as $post ) {
+    echo "<li>{$post->ID}\t{$post->post_title}\t" . get_post_meta( $post->ID, 'nn_circ', true ) . "\t" . get_post_meta( $post->ID, 'nn_psi_score', true ) . '</li>';
+}
+
+// echo $json;
+?>
+</ol>
 
 
-    <em><?php echo get_num_queries(); ?> queries took <?php timer_stop( 1 ); ?> seconds using <?php echo round( memory_get_peak_usage() / 1024 / 1024, 3 ); ?> MB peak memory.</em>
+<em><?php echo get_num_queries(); ?> queries took <?php timer_stop( 1 ); ?> seconds using <?php echo round( memory_get_peak_usage() / 1024 / 1024, 3 ); ?> MB peak memory.</em>
     </pre>
 </details>
 

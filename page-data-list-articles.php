@@ -33,6 +33,8 @@ $pubs_data = netrics_get_pubs_query_data();
                 </tfoot>
             </table>
 
+            <h2>Articles and PSI results (2019-10)</h2>
+
             <?php // netrics_pagespeed_corr( $pubs_data );  ?>
 
 <?php
@@ -49,6 +51,7 @@ $query_args = array(
 $query = new WP_Query( $query_args );
 
 $list = '<ol>';
+$done = $none = $papers = $articles = $errors = $scores = 0;
 foreach ( $query->posts as $post ) {
     $post_id = $post->ID;
     $site    = get_post_meta( $post_id, 'nn_pub_url', true );
@@ -64,51 +67,49 @@ foreach ( $query->posts as $post ) {
 
     $items  = get_post_meta( $post_id, 'nn_articles_new', true );
     if ( $items && 1 < count( $items ) ) {
-        $list .= '</li>2019-09<ol>';
+        $list .= '</li><ol>';
         $list .= netrics_pagespeed_results_list( $query, $items );
         $list .= '</ol>';
+
+        if ( isset( $item['pagespeed']['error'] ) ) {
+            $done++;
+        }
+
+        // Count articles and errors.
+        $articles += count( $items );
+        foreach ( $items as $key => $item ) {
+            if ( isset( $item['pagespeed']['error'] ) ) {
+                $errors  += $item['pagespeed']['error'];
+            }
+
+            if ( isset( $item['pagespeed']['score'] ) ) {
+                $scores++;
+            }
+        }
+
+        $papers++; // Pub has articles.
+    } else {
+        $list .= ' <em>(0 articles)</em></li>';
+        $none++; // Pub has no articles.
     }
 
-    unset( $items );
-
     /*
+    unset( $items );
     $items  = get_post_meta( $post_id, 'nn_articles_201908', true );
     if ( $items && 1 < count( $items ) ) {
         $list .= '</li>2019-08<ol>';
         $list .= netrics_pagespeed_results_list( $query, $items );
         $list .= '</ol>';
     }
-
-    unset( $items );
-
-    $items  = get_post_meta( $post_id, 'nn_articles_201907', true );
-    if ( $items && 1 < count( $items ) ) {
-        $list .= '</li>2019-07<ol>';
-        $list .= netrics_pagespeed_results_list( $query, $items );
-        $list .= '</ol>';
-    }
-
-    unset( $items );
-
-    $items  = get_post_meta( $post_id, 'nn_articles_201906', true );
-    if ( $items && 1 < count( $items ) ) {
-        $list .= '</li>2019-06<ol>';
-        $list .= netrics_pagespeed_results_list( $query, $items );
-        $list .= '</ol>';
-    }
-
-    unset( $items );
-
-    $items  = get_post_meta( $post_id, 'nn_articles_201905', true );
-    if ( $items && 1 < count( $items ) ) {
-        $list .= '</li>2019-05<ol>';
-        $list .= netrics_pagespeed_results_list( $query, $items );
-        $list .= '</ol>';
-    }
     */
 }
 
+echo "<p>Running tests for <output>$papers</output> papers on <output>$articles</output> articles. (Could not pull articles from <output>$none</output> papers.)<br>
+Done: <output>$done</output> papers with <output>$scores</output> results and <output>$errors</output> errors.</p>";
+
 echo $list;
+
+
 // $query->rewind_posts();
 wp_reset_postdata();
 
