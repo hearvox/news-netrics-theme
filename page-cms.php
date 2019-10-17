@@ -269,6 +269,9 @@ get_header(); ?>
 <details>
     <summary><small>(Test: data arrays)</small></summary>
     <pre>
+        <?php
+
+        ?>
     </pre>
 </details>
 <?php // get_sidebar(); ?>

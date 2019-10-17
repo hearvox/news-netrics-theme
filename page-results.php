@@ -22,35 +22,7 @@ get_header();
 
         <section class="content-col">
             <h2>News website performance</h2>
-            <?php $pubs_avgs  = get_transient( 'netrics_psi' ); ?>
-            <?php $month_avgs = end( $pubs_avgs ); ?>
-            <table class="tabular">
-                <caption>Average PSI results for <output><?php echo $month_avgs['total']; ?></output> U.S. daily newspapers (<output><?php echo $month_avgs['results']; ?></output> articles: <?php echo key( array_slice( $pubs_avgs, -1, 1, true ) ); ?>)</caption>
-                <thead>
-                    <td></td>
-                    <?php echo netrics_pagespeed_thead() ?>
-                </thead>
-                <tbody>
-                    <tr>
-                        <th scope="row"><?php esc_attr_e( 'Mean', 'newsnetrics' ); ?></th>
-                        <td><?php echo number_format( $month_avgs['dom'], 1, '.', ',' ); ?></td>
-                        <td><?php echo number_format( $month_avgs['requests'], 1, '.', ',' ); ?></td>
-                        <td><?php echo size_format( $month_avgs['size'], 1 ); ?></td>
-                        <td><?php echo number_format( $month_avgs['speed'] / 1000, 1, '.', ',' ); ?></td>
-                        <td><?php echo number_format( $month_avgs['tti'] / 1000, 1, '.', ',' ); ?></td>
-                        <td><?php echo number_format( $month_avgs['score'] * 100, 1, '.', ',' ); ?></td>
-                    </tr>
-                    <tr>
-                        <th scope="row"><?php esc_attr_e( 'Median', 'newsnetrics' ); ?></th>
-                        <td><?php echo number_format( $month_avgs['dom-q2'], 1, '.', ',' ); ?></td>
-                        <td><?php echo number_format( $month_avgs['requests-q2'], 1, '.', ',' ); ?></td>
-                        <td><?php echo size_format( $month_avgs['size-q2'], 1 ); ?></td>
-                        <td><?php echo number_format( $month_avgs['speed-q2'] / 1000, 1, '.', ',' ); ?></td>
-                        <td><?php echo number_format( $month_avgs['tti-q2'] / 1000, 1, '.', ',' ); ?></td>
-                        <td><?php echo number_format( $month_avgs['score-q2'] * 100, 1, '.', ',' ); ?></td>
-                    </tr>
-                </tbody>
-            </table>
+            <?php netrics_print_pubs_avgs_table(); ?>
         </section>
 
 <?php

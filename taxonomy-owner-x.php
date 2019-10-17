@@ -69,19 +69,23 @@ $states = array_unique( $states );
 asort( $states );
 $state_count = count( $states );
 
-// Track archive pages.
-$paged = (get_query_var( 'paged' ) ) ? get_query_var( 'paged' ) : 1;
+/*
+<th scope="row"><?php esc_attr_e( 'Results for:', 'newsnetrics' ); ?></th>
+<td colspan="6" style="text-align: left;"><?php echo count( $pubs_data['score'] ) ?> articles from <?php echo $wp_query->found_posts; ?> newspapers</td>
 
-// Get current combined means and medians for Owners Pubs.
+*/
+$pubs_data = netrics_get_pubs_query_data( $wp_query );
+$mean  = ( isset( $pubs_data['score'] ) ) ? nstats_mean( $pubs_data['score'] ) : null;
+$score = ( $mean ) ? number_format( $mean * 100, 1, '.', ',' ) : '?';
+$deg   = ( $mean ) ? ( $score - 50 ) * 2.7 : -160;
+
 $queried_object = get_queried_object();
 $term_pub_ids   = netrics_get_term_pub_ids( $queried_object );
 $pubs_avgs      = netrics_pubs_psi_avgs( $term_pub_ids->posts );
 
-// Get PSI score for gauge viz.
-$mean  = ( isset( $pubs_avgs['score'] ) ) ? $pubs_avgs['score'] : null;
-$score = ( $mean ) ? number_format( $mean * 100, 1, '.', ',' ) : '?';
-$deg   = ( $mean ) ? ( $score - 50 ) * 2.7 : -160;
+$map_data = array();
 ?>
+
 
 	<div id="primary" class="content-area">
 		<main id="main" class="site-main" role="main">
@@ -93,7 +97,7 @@ $deg   = ( $mean ) ? ( $score - 50 ) * 2.7 : -160;
                 <?php if ( $pubs_avgs ) { ?>
                 <?php netrics_print_pubs_avgs_table( $pubs_avgs ); ?>
                 <?php } ?>
-				<?php // the_archive_description( '<div class="taxonomy-description">', '</div>' ); ?>
+				<?php// the_archive_description( '<div class="taxonomy-description">', '</div>' ); ?>
                 <figure id="score" class="alignright" style="width: 180px; height: 200px; margin-right: 0;">
                     <img class="score-needle" src="/wp-content/themes/newsstats/img/gauge-needle.svg" alt="" style="transform: rotate(<?php echo $deg; ?>deg); z-index: 10;">
                     <!-- img class="score-needle" src="/wp-content/themes/newsstats/img/gauge-needle-avg.svg" alt="" style="transform: rotate(<?php echo '-80'; ?>deg);" -->
@@ -105,9 +109,18 @@ $deg   = ( $mean ) ? ( $score - 50 ) * 2.7 : -160;
                 <p>Their CMS is: <?php echo rtrim( $cms_list, ', '); ?>.</p>
                 <?php } ?>
                 <p>Pagespeed Insights average Performance Score: <output><?php echo $score; ?></output>.</p>
-                <?php if ( 1 == $paged ) { // Draw map only on first page. ?>
-                <div id="map" style="border: 1px solid #f6f6f6; height: 600px; width: 100%; margin-bottom: 2rem;"></div>
-                <?php } // if ( 1 == $paged ) ?>
+
+            <?php
+            $queried_object = get_queried_object();
+            $term_pub_ids   = netrics_get_term_pub_ids( $queried_object );
+            $pubs_avgs = netrics_pubs_psi_avgs( $term_pub_ids->posts );
+
+            if ( $pubs_avgs ) {
+			?>
+            <div id="map" style="border: 1px solid #f6f6f6; height: 600px; width: 100%; margin-bottom: 2rem;"></div>
+            <?php netrics_print_pubs_avgs_table( $pubs_avgs ); ?>
+            <?php } ?>
+
         </header><!-- .page-header -->
 
         <?php while ( have_posts() ) : the_post(); ?>
@@ -257,6 +270,8 @@ function news_map_set_markers(map) {
 </script>
 
 <script async defer src="//maps.googleapis.com/maps/api/js?key=<?php echo netrics_get_option( 'gmaps' ); ?>&callback=news_map_init"></script>
+
+
 
             <nav class="nav-pagination justify content-col">
                 <?php echo paginate_links(); ?>

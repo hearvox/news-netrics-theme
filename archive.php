@@ -13,11 +13,11 @@ get_header(); ?>
 		<main id="main" class="site-main" role="main">
 
 		<?php if ( have_posts() ) : ?>
-
 			<header class="page-header">
 				<?php
 				the_archive_title( '<h1 class="page-title">', ' <span class="found-count">(' . $wp_query->found_posts . ')</span></h1>' );
 				// the_archive_description( '<div class="taxonomy-description">', '</div>' );
+                // netrics_print_pubs_avgs_table();
 
                 if ( is_tax( 'region' ) ) {
                     $population   = get_term_meta( $wp_query->queried_object_id, 'nn_region_pop', true );
@@ -26,30 +26,18 @@ get_header(); ?>
                 <?php } ?>
 
 			<?php
-            $map_data = array();
+			// $paged = (get_query_var( 'paged' ) ) ? get_query_var( 'paged' ) : 1;
+			// if ( 1 == $paged ) {}  // On first page (only).
+            // if ( is_tax( 'cms' ) ) {}
+            // single_term_title( '', false );
 
-			// On first page (only).
-			$paged = (get_query_var( 'paged' ) ) ? get_query_var( 'paged' ) : 1;
-			// Output HTML tables of site-wide Pagespeed averages:.
-			if ( 1 == $paged ) {
-				// global $wp_query;
-				$pubs_data = netrics_get_pubs_query_data();
-				if ( $pubs_data ) {
+			$queried_object = get_queried_object();
+            $term_pub_ids   = netrics_get_term_pub_ids( $queried_object );
+            $pubs_avgs      = netrics_pubs_psi_avgs( $term_pub_ids->posts );
+
+			if ( $pubs_avgs ) {
 			?>
-			<table class="tabular">
-				<caption><?php the_archive_title(); ?> daily newspapers: Averages of Google Pagespeed results (2019-08)</caption>
-				<?php echo netrics_pagespeed_mean( $pubs_data ); ?>
-				<tfoot>
-        			<tr>
-            			<th scope="row"><?php esc_attr_e( 'Results for:', 'newsnetrics' ); ?></th>
-            			<td colspan="6" style="text-align: left;">3,073 articles from <?php echo $wp_query->found_posts; ?> newspapers</td>
-        			</tr>
-    			</tfoot>
-			</table>
-                    <?php if ( is_tax( 'owner' ) ) { ?>
-            <div id="map" style="border: 1px solid #f6f6f6; height: 600px; width: 100%;"></div>
-                    <?php } ?>
-				<?php } ?>
+            <?php netrics_print_pubs_avgs_table( $pubs_avgs ); ?>
 			<?php } ?>
 
         </header><!-- .page-header -->
@@ -78,9 +66,9 @@ get_header(); ?>
     <details>
         <summary><small>(Test: data arrays)</small></summary>
         <pre>
-        <?php
-        // var_dump( $cms_arr );
-        ?>
+<?php
+
+?>
         </pre>
     </details>
 <!-- =file: archive -->
