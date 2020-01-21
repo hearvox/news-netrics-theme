@@ -49,7 +49,7 @@ foreach ( $terms as $term ) {
 
 $cms_list = '';
 foreach ($cms_arr as $cms => $cms_count ) {
-    $cms_list .= '<output><a href="' . get_term_link( $cms_count[1] ) . "\">$cms</a> <small>({$cms_count[0]})</output></small>, ";
+    $cms_list .= '<output><a href="' . get_term_link( $cms_count[1] ) . "\">$cms</a></output> <small>({$cms_count[0]})</small>, ";
 }
 
 wp_reset_query();
@@ -61,7 +61,7 @@ foreach ( $wp_query->posts as  $post ) {
     $city     = get_the_terms( $post->ID, 'region' );
     $regions  = get_ancestors( $city[0]->term_id, 'region', 'taxonomy' );
     $state    = get_term( $regions[1] );
-    $link     = '<output><a href="' . get_term_link( $state->term_id ) . '">' . $state->name . '</a></output>';
+    $link     = '<a href="' . get_term_link( $state->term_id ) . '">' . $state->name . '</a>';
     $states[] = $link;
 }
 // Count states only once.
@@ -81,6 +81,9 @@ $pubs_avgs      = netrics_pubs_psi_avgs( $term_pub_ids->posts );
 $mean  = ( isset( $pubs_avgs['score'] ) ) ? $pubs_avgs['score'] : null;
 $score = ( $mean ) ? number_format( $mean * 100, 1, '.', ',' ) : '?';
 $deg   = ( $mean ) ? ( $score - 50 ) * 2.7 : -160;
+
+// Array for Google Map viz marker data.
+$map_data   = array();
 ?>
 
 	<div id="primary" class="content-area">
@@ -100,7 +103,7 @@ $deg   = ( $mean ) ? ( $score - 50 ) * 2.7 : -160;
                     <output id="score-num"><?php echo $score; ?></output>
                     <figcaption class="score-all">All papers: <output>19.6</output></figcaption>
                 </figure>
-                <p><?php echo single_term_title( '', false ); ?> owns <output><?php echo absint( $wp_query->found_posts ); ?></output> daily <?php echo _n( 'newspaper', 'newspapers', $wp_query->found_posts, 'newsnetrics' ) ?> in <output><?php echo absint( $state_count ); ?></output> <?php echo _n( 'state', 'states',  $state_count, 'newsnetrics' ) ?>: <?php echo implode( ', ', $states ); ?>.</p>
+                <p><?php echo single_term_title( '', false ); ?> owns <output><?php echo absint( $wp_query->found_posts ); ?></output> daily <?php echo _n( 'newspaper', 'newspapers', $wp_query->found_posts, 'newsnetrics' ) ?> in <output><?php echo absint( $state_count ); ?></output> <?php echo _n( 'state', 'states',  $state_count, 'newsnetrics' ) ?> <small>(<?php echo implode( ', ', $states ); ?>)</small>.</p>
                 <?php if ( $cms_list ) { ?>
                 <p>Their CMS is: <?php echo rtrim( $cms_list, ', '); ?>.</p>
                 <?php } ?>

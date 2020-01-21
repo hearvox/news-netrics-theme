@@ -12,6 +12,7 @@ get_header(); ?>
 	<div id="primary" class="content-area">
 
     <?php
+    $month  = '2020-01';
     $terms  = get_terms( 'owner' );
     $num    = null;
     $name   = '';
@@ -95,7 +96,7 @@ get_header(); ?>
 
             $html .= '<table class="tabular">';
             $html .= '<caption><a href="' . get_term_link( $term ) . "\">{$term->name}</a>: ";
-            $html .= 'PageSpeed average results (2019-08)</caption>';
+            $html .= 'PageSpeed average results</caption>';
             $html .= '<thead><td style=\"width: 11rem;\"></td>' . netrics_pagespeed_thead() . '</thead>';
             $html .= '<tbody>' . netrics_pagespeed_tbody( $pubs_data, 0 ) . '</tbody>';
             $html .= '<tfoot><tr><th scope="row">Results for:</th>';
@@ -161,7 +162,7 @@ get_header(); ?>
                     <ul style="margin: 0;">
                         <li><strong>Papers</strong> and <strong>Circulation</strong></li>
                         <li>Average global <strong>Rank</strong> (Alexa)</li>
-                        <li>Average PageSpeed Insights results, sorted by <strong>Score</strong> (2015-05, 3 articles per paper).</li>
+                        <li>Average PageSpeed Insights results (<?php echo $month; ?>, 3 articles per paper) sorted by <strong>Score</strong> </li>
                     </ul>
                 </p>
             </section>
@@ -342,7 +343,7 @@ function drawMainDashboard() {
             <section class="content-col">
                 <h2>PSI averages by Owner</h2>
                 <p><small>Since 2019-06 PSI tests on <a href="https://news.pubmedia.us/owner/the-mcclatchy-company/">McClatchy</a> papers using the <a href="https://news.pubmedia.us/cms/escenic/">Escenic</a> have failed, so their articles are not in these results.</small></p>
-                <p>PageSpeed Insights result combined averages for each Owner's daily newspapers</p>
+                <p>PageSpeed Insights results combined averages <?php echo $month; ?> for each Owner's daily newspapers</p>
                 <?php echo $html; ?>
 
 
@@ -356,6 +357,8 @@ function drawMainDashboard() {
     <summary><small>(Test: data arrays)</small></summary>
     <pre>
         <?php
+        print_r( $pubs_data );
+
         ksort( $count_arr );
         ksort( $count_vals );
         print_r( $count_arr );

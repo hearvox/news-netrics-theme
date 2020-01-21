@@ -21,18 +21,18 @@ $pub_circ  = ( isset( $custom_fields['nn_circ'][0] ) )
 $pub_rank  = ( isset( $custom_fields['nn_rank'][0] ) )
 	? number_format( absint( $custom_fields['nn_rank'][0] ) ) : '--';
 
-$site_ps = netrics_site_pagespeed( $post_id );
-$pgspeed = '';
+$psi_avgs = get_post_meta( $post_id, 'nn_psi_avgs', true ); // History of Pub's results.
+$psi_avg  = end( $psi_avgs ); // Most recent results for this Pub.
+$psi_html = '';
 
-if ( $site_ps  && isset( $site_ps['score'] ) ) {
-	$pgspeed .=  '<em>Score:</em> ' . round( $site_ps['score'] * 100, 1 );
-	$pgspeed .=  ' | <em>Speed/TTI:</em> ' . round( $site_ps['speed'] / 1000, 1 ) . 's';
-	$pgspeed .=  ' / ' . round( $site_ps['tti']  / 1000, 1 ) . 's';
-	$pgspeed .=  ' | <em>Size</em>: ' . size_format( $site_ps['size'], 1 );
+if ( isset( $psi_avg['score'] ) ) {
+	$psi_html .=  '<em>Score:</em> ' . round( $psi_avg['score'] * 100, 1 );
+	$psi_html .=  ' | <em>Speed/TTI:</em> ' . round( $psi_avg['speed'] / 1000, 1 ) . 's';
+	$psi_html .=  ' / ' . round( $psi_avg['tti']  / 1000, 1 ) . 's';
+	$psi_html .=  ' | <em>Size</em>: ' . size_format( $psi_avg['size'], 1 );
 } else {
-	$pgspeed = '<em>Score:</em> [No Pagespeed results.]';
+	$psi_html = '<em>Score:</em> [No Pagespeed results.]';
 }
-
 ?>
 
 <article id="post-<?php the_ID(); ?>" <?php post_class( 'clear' ); ?> style="border-top: 1px solid #c9cdda;">
@@ -45,7 +45,7 @@ if ( $site_ps  && isset( $site_ps['score'] ) ) {
 		<ul class="media-meta" style="font-size: 0.8rem; list-style: none; margin: 0; padding: 0;">
 			<li><?php echo trim( $geo, ' / ' ); ?> <small>(<em>Pop.</em> <?php echo number_format( $city['city_meta']['nn_region_pop'][0] ); ?>)</small></li>
 			<li><?php the_terms( $post_id, 'owner', '<em>Owner:</em> ' ); ?> | <?php echo $site_link; ?><?php the_terms( $post_id, 'cms', ' (<em>CMS:</em> ', '/', ')' ); ?><?php edit_post_link( __( 'edit', 'textdomain' ), ' <em>[', ']</em>' ); ?></li>
-			<li><?php echo $pgspeed; ?></li>
+			<li><?php echo $psi_html; ?></li>
 		</ul>
 	</header><!-- .entry-header -->
 <!-- img class="" src="https://s.wordpress.com/mshots/v1/http%3A%2F%2F<?php echo get_the_title() ?>?w=200&h=150" width="200" height="150" alt="<?php the_title(); ?>" /></a -->

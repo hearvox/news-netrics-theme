@@ -31,14 +31,15 @@ get_header(); ?>
             // if ( is_tax( 'cms' ) ) {}
             // single_term_title( '', false );
 
-			$queried_object = get_queried_object();
-            $term_pub_ids   = netrics_get_term_pub_ids( $queried_object );
-            $pubs_avgs      = netrics_pubs_psi_avgs( $term_pub_ids->posts );
-
-			if ( $pubs_avgs ) {
-			?>
-            <?php netrics_print_pubs_avgs_table( $pubs_avgs ); ?>
-			<?php } ?>
+            if ( is_tax() ) {
+                $queried_object = get_queried_object();
+                $term_pub_ids   = netrics_get_term_pub_ids( $queried_object );
+                $pubs_avgs      = netrics_pubs_psi_avgs( $term_pub_ids->posts );
+                netrics_print_pubs_avgs_table( $pubs_avgs );
+            } else {
+                netrics_print_pubs_avgs_table();
+            }
+            ?>
 
         </header><!-- .page-header -->
 

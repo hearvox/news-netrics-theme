@@ -28,92 +28,92 @@ get_header(); ?>
 </style>
 	<div id="primary" class="content-area">
 
-            <?php
-            $terms  = get_terms( 'cms' );
-            $num    = null;
-            $name   = '';
-            $json   = '';
-            $html   = '';
+        <?php
+        $month  = '2020-01';
+        $terms  = get_terms( 'cms' );
+        $num    = null;
+        $name   = '';
+        $json   = '';
+        $html   = '';
 
-            foreach ( $terms as $term ) {
-                if ( 5815 !== $term->term_id ) { // No article pulled for Escenic papers.
+        foreach ( $terms as $term ) {
+            if ( 5815 !== $term->term_id ) { // No articles pulled for Escenic CMS papers.
 
-
-                // Get Owner score data.
-                $args = array(
-                    'post_type'      => 'publication',
-                    'posts_per_page' => 500,
-                    'tax_query'      => array(
-                        array(
-                            'taxonomy' => 'cms',
-                            'field'    => 'id',
-                            'terms'    => $term->term_id,
-                        )
+            // Get Owner score data.
+            $args = array(
+                'post_type'      => 'publication',
+                'posts_per_page' => 500,
+                'tax_query'      => array(
+                    array(
+                        'taxonomy' => 'cms',
+                        'field'    => 'id',
+                        'terms'    => $term->term_id,
                     )
-                );
-                $query = new WP_Query( $args );
+                )
+            );
+            $query = new WP_Query( $args );
 
-                $pubs_data = netrics_get_pubs_query_data( $query, 1, 0 );
+            $pubs_data = netrics_get_pubs_query_data( $query, 1, 0 );
 
-                if ( $pubs_data ) {
-                    $name = '<a href="' . get_term_link( $term->term_id ) . '">' . "{$term->name}</a>";
-                    $json .= "['{$term->name}',{$term->count},";
+            if ( $pubs_data ) {
+                $name = '<a href="' . get_term_link( $term->term_id ) . '">' . "{$term->name}</a>";
+                $json .= "['{$term->name}',{$term->count},";
 
-                    // JSON data for each CMS, used by Google Chart visualizations.
-                    foreach ( $pubs_data as $key => $data ) {
+                // JSON data for each CMS, used by Google Chart visualizations.
+                foreach ( $pubs_data as $key => $data ) {
 
-                        if ( 'results' === $key ) {
-                            continue;
-                        }
-
-                        switch ( $key ) {
-                            case 'circ':
-                                $num = array_sum( $data );
-                                break;
-                            case 'rank':
-                                $num = nstats_mean( $data );
-                                break;
-                            case 'score':
-                                $num = nstats_mean( $data ) * 100;
-                                break;
-                            case 'speed':
-                                $num = nstats_mean( $data ) / 1000;
-                                break;
-                            case 'tti':
-                                $num = nstats_mean( $data ) / 1000;
-                                break;
-                            case 'size':
-                                $num = nstats_mean( $data ) / 1000000;
-                                break;
-                            case 'results':
-                                break;
-                            default:
-                                $num = nstats_mean( $data );
-                                break;
-                        }
-
-                        $json .= $num . ',';
-
+                    if ( 'results' === $key ) {
+                        continue;
                     }
-                    $json .= "'$name'],\n";
 
-                    $html .= '<table class="tabular">';
-                    $html .= '<caption><a href="' . get_term_link( $term ) . "\">{$term->name}</a>: ";
-                    $html .= 'PageSpeed average results (2019-08)</caption>';
-                    $html .= '<thead><td style=\"width: 11rem;\"></td>' . netrics_pagespeed_thead() . '</thead>';
-                    $html .= '<tbody>' . netrics_pagespeed_tbody( $pubs_data, 0 ) . '</tbody>';
-                    $html .= '<tfoot><tr><th scope="row">Results for:</th>';
-                    $html .= '<td colspan="6" style="text-align: left;">' . array_sum( $pubs_data['results'] );
-                    $html .= " articles from {$query->found_posts} newspapers</td>";
-                    $html .= '</tr></tfoot></table>';
-                } // if ( $pubs_data )
-                wp_reset_postdata();
+                    switch ( $key ) {
+                        case 'circ':
+                            $num = array_sum( $data );
+                            break;
+                        case 'rank':
+                            $num = nstats_mean( $data );
+                            break;
+                        case 'score':
+                            $num = nstats_mean( $data ) * 100;
+                            break;
+                        case 'speed':
+                            $num = nstats_mean( $data ) / 1000;
+                            break;
+                        case 'tti':
+                            $num = nstats_mean( $data ) / 1000;
+                            break;
+                        case 'size':
+                            $num = nstats_mean( $data ) / 1000000;
+                            break;
+                        case 'results':
+                            break;
+                        default:
+                            $num = nstats_mean( $data );
+                            break;
+                    }
+
+                    $json .= $num . ',';
+
                 }
+                $json .= "'$name'],\n";
 
-            } // foreach ( $terms as $term )
-
+                $html .= '<table class="tabular">';
+                $html .= '<caption><a href="' . get_term_link( $term ) . "\">{$term->name}</a>: ";
+                $html .= 'PageSpeed average results</caption>';
+                $html .= '<thead><td style=\"width: 11rem;\"></td>' . netrics_pagespeed_thead() . '</thead>';
+                $html .= '<tbody>' . netrics_pagespeed_tbody( $pubs_data, 0 ) . '</tbody>';
+                $html .= '<tfoot><tr><th scope="row">Results for:</th>';
+                $html .= '<td colspan="6" style="text-align: left;">' . array_sum( $pubs_data['results'] );
+                $html .= " articles from {$query->found_posts} newspapers</td>";
+                $html .= '</tr></tfoot></table>';
+            } // if ( $pubs_data )
             wp_reset_postdata();
-            ?>
+            }
+
+        } // foreach ( $terms as $term )
+
+        wp_reset_postdata();
+        ?>
 
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <section id="dashboard_div" class="chart-dashboard">
@@ -257,8 +257,8 @@ get_header(); ?>
             <?php endwhile; // End of the loop. ?>
 
             <section class="content-col">
-                <p><small>Since 2018-06 2e've been unable to run tests on <a href="https://news.pubmedia.us/owner/the-mcclatchy-company/">McClatchy</a> papers using the <a href="https://news.pubmedia.us/cms/escenic/">Escenic</a>, so their articles are not in these results.</small></p>
-                <p>Detailed PageSpeed Insights averages for daily newspapers using each CMS.</p>
+                <p><small>Since 2018-06 we've been unable to run tests on <a href="https://news.pubmedia.us/owner/the-mcclatchy-company/">McClatchy</a> papers using the <a href="https://news.pubmedia.us/cms/escenic/">Escenic</a>, so their articles are not in these results.</small></p>
+                <p>Detailed PageSpeed Insights averages (<?php echo $month; ?>) for daily newspapers using each CMS.</p>
                 <?php echo $html; ?>
             </section>
 
@@ -270,6 +270,11 @@ get_header(); ?>
     <summary><small>(Test: data arrays)</small></summary>
     <pre>
         <?php
+       // print_r( netrics_site_pagespeed( 4031 ) );
+        $pub_avgs_mo = get_post_meta( 4031, 'nn_psi_avgs', true );
+        print_r( end( $pub_avgs_mo ) );
+
+        // print_r( $pubs_data );
 
         ?>
     </pre>

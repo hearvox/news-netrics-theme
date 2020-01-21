@@ -43,7 +43,7 @@ get_header(); ?>
                 <h2 class="widget-title"><?php esc_html_e( 'Recent Posts', 'newsstats' ); ?></h2>
                 <ul style="margin-left: 0.5rem;">
                 <?php
-                    $recent_posts = wp_get_recent_posts();
+                    $recent_posts = wp_get_recent_posts( array( 'post_status' => 'publish' ) );
                     foreach( $recent_posts as $recent ){
                         echo '<li><a href="' . get_permalink($recent["ID"]) . '">' .   $recent["post_title"].'</a> </li> ';
                     }

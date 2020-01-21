@@ -24,8 +24,6 @@ get_header(); ?>
 			?>
 		<?php endwhile; // End of the loop. ?>
 
-
-
 		</main><!-- #main -->
 	</div><!-- #primary -->
 <details>
@@ -33,10 +31,10 @@ get_header(); ?>
 	<pre>
 	<?php
 	$post_id = get_the_ID();
-    echo "\nnn_psi_avgs: ";
+    echo "\nnn_psi_avgs (this Pub): ";
     print_r( get_post_meta( $post_id,'nn_psi_avgs', true ) );
 
-    echo "\nnetrics_psi: ";
+    echo "\nnetrics_psi (all Pubs): ";
     print_r( get_transient( 'netrics_psi' ) );
 
     echo "\nnn_articles_new: ";
@@ -44,6 +42,10 @@ get_header(); ?>
 
     echo "\nnn_articles: ";
     print_r( get_post_meta( $post_id,'nn_articles', true ) );
+    // $items     = end( $items_all );
+
+    echo "\nnnn_articles_201908: ";
+    print_r( get_post_meta( $post_id,'nn_articles_201908', true ) );
 
 	?>
     </pre>

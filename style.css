@@ -1122,6 +1122,39 @@ table,
     width: 4rem;
 }
 
+/* Google scale: fast: #178239, avg: #e67700, slow: #c7221f. */
+.googlesitekit-pagespeed-report__scale {
+    color: #757575;
+    font-family: Roboto,"Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 0.75rem;
+    text-align: right;
+}
+
+.googlesitekit-pagespeed-report__scale-range {
+    color: #757575;
+}
+
+.googlesitekit-pagespeed-report__scale-range::before {
+    border-radius: 4px;
+    content: "";
+    display: inline-block;
+    height: 8px;
+    margin: 1px 8px;
+    width: 16px;
+}
+
+.googlesitekit-pagespeed-report__scale-range--fast::before {
+    background-color: #0cce6b;
+}
+
+.googlesitekit-pagespeed-report__scale-range--average::before {
+    background-color: #ffa400;
+}
+
+.googlesitekit-pagespeed-report__scale-range--slow::before {
+    background-color: #ff4e42;
+}
+
 /* Loading animation */
 .loader {
   border: 48px solid #f3f3f3;
@@ -1276,7 +1309,7 @@ textarea {
 
 cite {
 	font-family: Verdana, Geneva, sans-serif;
-	font-size: 0.95rem;	
+	font-size: 0.95rem;
 }
 
 cite:before { content: '—'; }
@@ -1285,28 +1318,21 @@ cite:before { content: '—'; }
 ==Layout
 --------------------------------------------------------------*/
 .site-header-items,
-.hentry,
+.single .hentry,
+.archive .hentry,
 .archive .page-header,
+.page .entry-title,
+.page .entry-content,
 .entry-footer,
 .content-col,
 .footer-nav,
 .site-info {
 	clear: both;
 	display: block;
-	margin-left: 2rem;
+	margin-left: 1rem;
 	width: 1020px;
     position: relative;
 }
-
-
-.entry-content,
-.content-col,
-
-.archive .site-main,
-.footer-nav,
-.site-info,
-.entry-header,
-.page-header {}
 
 audio,
 figure,
@@ -1475,6 +1501,10 @@ object {
 /*--------------------------------------------------------------
 =Archives
 --------------------------------------------------------------*/
+.category .entry-title { font-size: 1.25rem; }
+
+.category .hentry p { margin-top: 0.1rem; text-indent: 1rem; }
+
 .found-count {
 	font-size: 1rem;
 	font-weight: 600;

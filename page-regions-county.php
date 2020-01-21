@@ -204,6 +204,7 @@ function drawMainDashboard() {
     var sliderPop = new google.visualization.ControlWrapper({
         'controlType': 'NumberRangeFilter',
         'containerId': 'slider_pop',
+        'minValue': 1000,
         'options': {
             'filterColumnIndex': 3,
             'ui': {
